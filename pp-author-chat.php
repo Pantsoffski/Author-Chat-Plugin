@@ -33,15 +33,15 @@ function author_chat_setup_init(){
 }
 
 function author_chat(){
+	global $current_user;
+	get_currentuserinfo();
 	?>
-	
-
 
 <frame onload="setInterval('chat.update()', 1000)">
 
     <div id="page-wrap">
     
-        <h2>jQuery/PHP Chat</h2>
+        <h2>Author Chat</h2>
         
         <p id="name-area"></p>
         
@@ -55,21 +55,11 @@ function author_chat(){
     </div>
 
 </frame>
-
-</html>
 	
     <script type="text/javascript">
     
-        // ask user for name with popup prompt    
-        var name = prompt("Enter your chat name:", "Guest");
-        
-        // default name is 'Guest'
-    	if (!name || name === ' ') {
-    	   name = "Guest";	
-    	}
-    	
-    	// strip tags
-    	name = name.replace(/(<([^>]+)>)/ig,"");
+        // shows current user name as name
+        var name = "<?php echo "$current_user->user_login"; ?>";
     	
     	// display name on page
     	jQuery("#name-area").html("You are: <span>" + name + "</span>");
