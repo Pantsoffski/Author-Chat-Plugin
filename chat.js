@@ -1,9 +1,3 @@
-/* 
-Created by: Kenrick Beckett
-
-Name: Chat Engine
-*/
-
 var instanse = false;
 var state;
 var mes;
@@ -13,6 +7,7 @@ function Chat () {
     this.update = updateChat;
     this.send = sendChat;
 	this.getState = getStateOfChat;
+	this.initiate = initiateChat;
 }
 
 //gets the state of the chat
@@ -50,7 +45,7 @@ function updateChat(){
 						},
 			   dataType: "json",
 			   success: function(data){
-				   if(data.text){
+				   if(data.text != null){
 						for (var i = 0; i < data.text.length; i++) {
                             jQuery('#chat-area').append(jQuery("<p>"+ data.text[i] +"</p>"));
                         }								  
@@ -60,8 +55,7 @@ function updateChat(){
 				   state = data.state;
 			   },
 			});
-	 }
-	 else {
+	 }else {
 		 setTimeout(updateChat, 1500);
 	 }
 }
@@ -84,4 +78,30 @@ function sendChat(message, nickname)
 			   updateChat();
 		   },
 		});
+}
+
+function initiateChat(){
+	 if(!instanse){
+		 instanse = true;
+	     jQuery.ajax({
+			   type: "POST",
+			   url: "http://localhost/www/WP/wp-content/plugins/author-chat/process.php",
+			   data: {  
+			   			'function': 'initiate',
+						'state': state,
+						'file': file
+						},
+			   dataType: "json",
+			   success: function(data){
+				   if(data.text != null){
+						for (var i = 0; i < data.text.length; i++) {
+                            jQuery('#chat-area').append(jQuery("<p>"+ data.text[i] +"</p>"));
+                        }								  
+				   }
+				   document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
+				   instanse = false;
+				   state = data.state;
+			   },
+			});
+	 }
 }

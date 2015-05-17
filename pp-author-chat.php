@@ -36,8 +36,15 @@ function author_chat(){
 	global $current_user;
 	get_currentuserinfo();
 	?>
-
-<frame onload="setInterval('chat.update()', 1000)">
+	
+	<script type="text/javascript">
+	
+		jQuery(window).load(function(){
+			initiateChat();
+			setInterval(function(){ updateChat() }, 1000);
+		});
+	
+	</script>
 
     <div id="page-wrap">
     
@@ -53,8 +60,6 @@ function author_chat(){
         </form>
     
     </div>
-
-</frame>
 	
     <script type="text/javascript">
     
@@ -67,11 +72,11 @@ function author_chat(){
     	// kick off chat
         var chat =  new Chat();
     	jQuery(function() {
-    	
-    		 chat.getState(); 
+    		
+    		chat.getState();
     		 
     		 // watch textarea for key presses
-             jQuery("#sendie").keydown(function(event) {  
+			jQuery("#sendie").keydown(function(event) {  
              
                  var key = event.which;  
            
@@ -84,9 +89,9 @@ function author_chat(){
                      // don't allow new content if length is maxed out
                      if (length >= maxLength) {  
                          event.preventDefault();  
-                     }  
-                  }  
-    		 																																																});
+                     }
+                  }
+			});
     		 // watch textarea for release of key press
     		 jQuery('#sendie').keyup(function(e) {	
     		 					 
@@ -102,16 +107,14 @@ function author_chat(){
     			        chat.send(text, name);	
     			        jQuery(this).val("");
     			        
-                    } else {
+                    }else {
                     
     					jQuery(this).val(text.substring(0, maxLength));
     					
-    				}	
-    				
-    				
+    				}
     			  }
              });
-            
+            chat.initiate();
     	});
     </script>
 	
