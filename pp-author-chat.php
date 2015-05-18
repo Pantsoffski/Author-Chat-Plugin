@@ -55,8 +55,7 @@ function author_chat(){
         <div id="chat-wrap"><div id="chat-area"></div></div>
         
         <form id="send-message-area">
-            <p>Your message: </p>
-            <textarea id="sendie" maxlength = '100' ></textarea>
+            <textarea id="sendie" maxlength = "1000" placeholder="Your message..."></textarea>
         </form>
     
     </div>
