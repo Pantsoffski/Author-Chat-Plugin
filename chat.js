@@ -1,7 +1,8 @@
 var instanse = false;
 var state;
-var mes;
 var file;
+
+window.alert(pluginurl);
 
 function Chat () {
     this.update = updateChat;

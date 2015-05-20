@@ -3,9 +3,9 @@
 #page-wrap                      { width: 90%; margin: 1% auto; position: relative; }
 #chat-wrap                      { border: 1px solid #eee; margin: 0 0 2% 0; }
 #chat-area                      { height: 300px; overflow: auto; border: 1px solid #666; padding: 20px; background: white; }
-#nick			                { color: white; background: #333; padding: 4px 8px; -moz-border-radius: 5px; -webkit-border-radius: 8px; margin: 0 5px 0 0; }
-#time			                { font-size: 70%; color: white; background: #67665a; padding: 4px 8px; -moz-border-radius: 5px; -webkit-border-radius: 8px; margin: 0 5px 0 0; }
-#chat-area p                    { padding: 8px 0; border-bottom: 1px solid #ccc; }
+#nick			                { color: white; background: #333; padding: 1px 8px; -margin: 0 5px 0 0; margin-right: 4px; }
+#time			                { font-size: 70%; padding: 4px 1px; margin: 0 5px 0 3px; line-height: 1px; }
+#chat-area p                    { padding: 8px 0; border-bottom: 1px solid #ccc; margin-top: 1px; }
 #name-area                      { position: absolute; top: 12px; right: 0; font: bold 12px "Lucida Grande", Sans-Serif; text-align: right; }   
 #name-area span                 { color: #fa9f00; }
 #sendie                         { border: 3px solid #999; width: 100%; padding: 1%; font: 12px "Lucida Grande", Sans-Serif; }

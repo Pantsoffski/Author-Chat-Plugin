@@ -20,7 +20,7 @@ function scripts_admin_chat(){
 }
 
 function author_chat_setup_menu(){
-	add_menu_page( 'Author Chat Options', 'Author Chat', 'manage_options', 'author-chat-options', 'author_chat_setup_init' );
+//	add_menu_page( 'Author Chat Options', 'Author Chat', 'manage_options', 'author-chat-options', 'author_chat_setup_init' );
 	add_dashboard_page('Author Chat Window', 'Author Chat', 'read', 'author-chat', 'author_chat');
 }
 
@@ -28,22 +28,22 @@ function wp_dashboard_author_chat(){
 	wp_add_dashboard_widget('author-chat-widget', 'Author Chat', 'author_chat');
 }
 
-function author_chat_setup_init(){
-	include('admin-menu.php');
-}
+//function author_chat_setup_init(){
+//	include('admin-menu.php');
+//}
 
 function author_chat(){
 	global $current_user;
 	get_currentuserinfo();
-	?>
+?>
 	
 	<script type="text/javascript">
-	
+
 		jQuery(window).load(function(){
 			initiateChat();
 			setInterval(function(){ updateChat() }, 1000);
 		});
-	
+
 	</script>
 
     <div id="page-wrap">
@@ -61,10 +61,12 @@ function author_chat(){
     </div>
 	
     <script type="text/javascript">
-    
+
         // shows current user name as name
         var name = "<?php echo "$current_user->user_login"; ?>";
-    	
+        
+        var pluginurl = "<?php echo plugins_url('process.php', __FILE__); ?>";
+
     	// display name on page
     	jQuery("#name-area").html("You are: <span>" + name + "</span>");
     	
@@ -73,7 +75,7 @@ function author_chat(){
     	jQuery(function() {
     		
     		chat.getState();
-    		 
+
     		 // watch textarea for key presses
 			jQuery("#sendie").keydown(function(event) {  
              

@@ -1,5 +1,9 @@
 <?php
 
+if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) && $_SERVER['HTTP_REFERER']!="chat.js") {
+	die();
+}
+
 $function = $_POST['function'];
     
 $log = array();
@@ -44,7 +48,7 @@ switch($function) {
 			if(preg_match($reg_exUrl, $message, $url)) {
 				$message = preg_replace($reg_exUrl, '<a href="'.$url[0].'" target="_blank">'.$url[0].'</a>', $message);
 			} 
-         	fwrite(fopen('chat.txt', 'a'), "<span id=\"time\">" . $time1 . "</ br>" . $time2 . "</span><span id=\"nick\"> ". $nickname . "</span>" . $message = str_replace("\n", " ", $message) . "\n");
+         	fwrite(fopen('chat.txt', 'a'), "<span id=\"time\">" . $time1 . "<br>" . $time2 . "</span><span id=\"nick\"> ". $nickname . "</span>" . $message = str_replace("\n", " ", $message) . "\n");
 		}
 	break;
         	 
