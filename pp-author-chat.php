@@ -75,13 +75,14 @@ function author_chat(){
     		 // watch textarea for key presses
 			jQuery("#sendie").keydown(function(event) {  
              
-                 var key = event.which;  
+                 var key = event.which;
+                 var pluginurl = "<?php echo plugins_url('process.php', __FILE__); ?>";
            
                  //all keys including return.  
                  if (key >= 33) {
                    
-                     var maxLength = jQuery(this).attr("maxlength");  
-                     var length = this.value.length;  
+                     var maxLength = jQuery(this).attr("maxlength");
+                     var length = this.value.length;
                      
                      // don't allow new content if length is maxed out
                      if (length >= maxLength) {  

@@ -17,7 +17,7 @@ function getStateOfChat(){
 		 instanse = true;
 		 jQuery.ajax({
 			   type: "POST",
-			   url: "http://localhost/www/WP/wp-content/plugins/author-chat/process.php",
+			   url: pluginurl,
 			   data: {  
 			   			'function': 'getState',
 						'file': file
@@ -38,7 +38,7 @@ function updateChat(){
 		 instanse = true;
 	     jQuery.ajax({
 			   type: "POST",
-			   url: "http://localhost/www/WP/wp-content/plugins/author-chat/process.php",
+			   url: pluginurl,
 			   data: {  
 			   			'function': 'update',
 						'state': state,
@@ -67,7 +67,7 @@ function sendChat(message, nickname)
     updateChat();
      jQuery.ajax({
 		   type: "POST",
-		   url: "http://localhost/www/WP/wp-content/plugins/author-chat/process.php",
+		   url: pluginurl,
 		   data: {  
 		   			'function': 'send',
 					'message': message,
@@ -86,7 +86,7 @@ function initiateChat(){
 		 instanse = true;
 	     jQuery.ajax({
 			   type: "POST",
-			   url: "http://localhost/www/WP/wp-content/plugins/author-chat/process.php",
+			   url: pluginurl,
 			   data: {  
 			   			'function': 'initiate',
 						'state': state,
