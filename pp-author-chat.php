@@ -4,7 +4,7 @@ Plugin Name: Author Chat Plugin
 Plugin URI: http://smartfan.pl/
 Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).'
 Author: Piotr Pesta
-Version: 0.7
+Version: 0.9
 Author URI: http://smartfan.pl/
 License: GPL12
 */
@@ -27,10 +27,6 @@ function author_chat_setup_menu(){
 function wp_dashboard_author_chat(){
 	wp_add_dashboard_widget('author-chat-widget', 'Author Chat', 'author_chat');
 }
-
-//function author_chat_setup_init(){
-//	include('admin-menu.php');
-//}
 
 function author_chat(){
 	global $current_user;
