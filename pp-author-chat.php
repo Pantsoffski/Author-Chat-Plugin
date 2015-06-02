@@ -2,7 +2,7 @@
 /*
 Plugin Name: Author Chat Plugin
 Plugin URI: http://smartfan.pl/
-Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).'
+Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
 Author: Piotr Pesta
 Version: 0.9
 Author URI: http://smartfan.pl/
@@ -10,8 +10,34 @@ License: GPL12
 */
 
 add_action('admin_menu', 'author_chat_setup_menu');
-add_action( 'wp_dashboard_setup', 'wp_dashboard_author_chat' );
-add_action( 'admin_enqueue_scripts', 'scripts_admin_chat' );
+add_action('wp_dashboard_setup', 'wp_dashboard_author_chat');
+add_action('admin_enqueue_scripts', 'scripts_admin_chat');
+register_activation_hook(__FILE__, 'pp_author_chat_activate');
+register_uninstall_hook(__FILE__, 'pp_author_chat_uninstall');
+
+// create wp-content/uploads/author-chat-plugin folder and chat.txt file in wp-content/uploads/author-chat-plugin folder
+function pp_author_chat_activate() {
+	$upload_dir = wp_upload_dir();
+	$upload_dir = $upload_dir['basedir'].'/author-chat-plugin';
+	if (!file_exists($upload_dir)) {
+		wp_mkdir_p($upload_dir);
+	}
+	if (!file_exists($upload_dir."/chat.txt")) {
+		fopen($upload_dir."/chat.txt", "w");
+	}
+}
+
+// delete wp-content/uploads/author-chat-plugin folder and chat.txt file in wp-content/uploads/author-chat-plugin folder
+function pp_author_chat_uninstall() {
+	$upload_dir = wp_upload_dir();
+	$upload_dir = $upload_dir['basedir'].'/author-chat-plugin';
+	if (file_exists($upload_dir."/chat.txt")) {
+		unlink($upload_dir."/chat.txt");
+	}
+	if (file_exists($upload_dir)) {
+		rmdir($upload_dir);
+	}
+}
 
 function scripts_admin_chat(){
 	wp_register_script('chat-script', plugins_url('chat.js', __FILE__ ));
@@ -20,7 +46,6 @@ function scripts_admin_chat(){
 }
 
 function author_chat_setup_menu(){
-//	add_menu_page( 'Author Chat Options', 'Author Chat', 'manage_options', 'author-chat-options', 'author_chat_setup_init' );
 	add_dashboard_page('Author Chat Window', 'Author Chat', 'read', 'author-chat', 'author_chat');
 }
 
@@ -53,7 +78,7 @@ function author_chat(){
         <form id="send-message-area">
             <textarea id="sendie" maxlength = "1000" placeholder="Your message..."></textarea>
         </form>
-    
+
     </div>
 	
     <script type="text/javascript">
@@ -61,7 +86,7 @@ function author_chat(){
         // shows current user name as name
         var name = "<?php echo "$current_user->user_login"; ?>";
         
-        var pluginurl = "<?php echo plugins_url('process.php', __FILE__); ?>";
+        var pluginurl = "<?php echo plugins_url('pp-process.php', __FILE__); ?>";
 
     	// display name on page
     	jQuery("#name-area").html("You are: <span>" + name + "</span>");
@@ -76,7 +101,7 @@ function author_chat(){
 			jQuery("#sendie").keydown(function(event) {  
              
                  var key = event.which;
-                 var pluginurl = "<?php echo plugins_url('process.php', __FILE__); ?>";
+                 var pluginurl = "<?php echo plugins_url('pp-process.php', __FILE__); ?>";
            
                  //all keys including return.  
                  if (key >= 33) {

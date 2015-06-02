@@ -2,9 +2,7 @@ var instanse = false;
 var state;
 var file;
 
-window.alert(pluginurl);
-
-function Chat () {
+function Chat (){
     this.update = updateChat;
     this.send = sendChat;
 	this.getState = getStateOfChat;
