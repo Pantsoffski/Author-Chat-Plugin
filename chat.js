@@ -3,10 +3,10 @@ var state;
 var file;
 
 function Chat (){
-    this.update = updateChat;
-    this.send = sendChat;
+    this.update = ppUpdateChat;
+    this.send = ppSendChat;
 	this.getState = getStateOfChat;
-	this.initiate = initiateChat;
+	this.initiate = ppInitiateChat;
 }
 
 //gets the state of the chat
@@ -31,7 +31,7 @@ function getStateOfChat(){
 }
 
 //Updates the chat
-function updateChat(){
+function ppUpdateChat(){
 	 if(!instanse){
 		 instanse = true;
 	     jQuery.ajax({
@@ -55,14 +55,14 @@ function updateChat(){
 			   },
 			});
 	 }else {
-		 setTimeout(updateChat, 1500);
+		 setTimeout(ppUpdateChat, 1500);
 	 }
 }
 
 //send the message
-function sendChat(message, nickname)
+function ppSendChat(message, nickname)
 {       
-    updateChat();
+    ppUpdateChat();
      jQuery.ajax({
 		   type: "POST",
 		   url: pluginurl,
@@ -74,13 +74,12 @@ function sendChat(message, nickname)
 				 },
 		   dataType: "json",
 		   success: function(data){
-			   updateChat();
+			   ppUpdateChat();
 		   },
 		});
 }
 
-function initiateChat(){
-	 if(!instanse){
+function ppInitiateChat(){
 		 instanse = true;
 	     jQuery.ajax({
 			   type: "POST",
@@ -102,5 +101,4 @@ function initiateChat(){
 				   state = data.state;
 			   },
 			});
-	 }
 }

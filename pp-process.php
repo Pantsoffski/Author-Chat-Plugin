@@ -41,7 +41,7 @@ switch($function) {
 	case('send'):
 		$nickname = htmlentities(strip_tags(filter_var($_POST['nickname'], FILTER_SANITIZE_STRING)));
 		$reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
-		$message = htmlentities(strip_tags($_POST['message']), ENT_COMPAT, "UTF-8");
+		$message = htmlentities(strip_tags(filter_var($_POST['message'], FILTER_SANITIZE_STRING)), ENT_COMPAT, "UTF-8");
 		$time1 = date('H:i:s');
 		$time2 = date('j/n/Y');
 		if(($message) != "\n"){

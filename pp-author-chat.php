@@ -9,9 +9,9 @@ Author URI: http://smartfan.pl/
 License: GPL12
 */
 
-add_action('admin_menu', 'author_chat_setup_menu');
-add_action('wp_dashboard_setup', 'wp_dashboard_author_chat');
-add_action('admin_enqueue_scripts', 'scripts_admin_chat');
+add_action('admin_menu', 'pp_author_chat_setup_menu');
+add_action('wp_dashboard_setup', 'pp_wp_dashboard_author_chat');
+add_action('admin_enqueue_scripts', 'pp_scripts_admin_chat');
 register_activation_hook(__FILE__, 'pp_author_chat_activate');
 register_uninstall_hook(__FILE__, 'pp_author_chat_uninstall');
 
@@ -39,21 +39,21 @@ function pp_author_chat_uninstall() {
 	}
 }
 
-function scripts_admin_chat(){
+function pp_scripts_admin_chat(){
 	wp_register_script('chat-script', plugins_url('chat.js', __FILE__ ));
 	wp_enqueue_script('chat-script');
 	wp_enqueue_style('author-chat-style', plugins_url('author-chat-style.css', __FILE__));
 }
 
-function author_chat_setup_menu(){
-	add_dashboard_page('Author Chat Window', 'Author Chat', 'read', 'author-chat', 'author_chat');
+function pp_author_chat_setup_menu(){
+	add_dashboard_page('Author Chat Window', 'Author Chat', 'read', 'author-chat', 'pp_author_chat');
 }
 
-function wp_dashboard_author_chat(){
-	wp_add_dashboard_widget('author-chat-widget', 'Author Chat', 'author_chat');
+function pp_wp_dashboard_author_chat(){
+	wp_add_dashboard_widget('author-chat-widget', 'Author Chat', 'pp_author_chat');
 }
 
-function author_chat(){
+function pp_author_chat(){
 	global $current_user;
 	get_currentuserinfo();
 ?>
@@ -61,8 +61,8 @@ function author_chat(){
 	<script type="text/javascript">
 
 		jQuery(window).load(function(){
-			initiateChat();
-			setInterval(function(){ updateChat() }, 1000);
+			ppInitiateChat();
+			setInterval(function(){ ppUpdateChat() }, 1000);
 		});
 
 	</script>
@@ -85,7 +85,7 @@ function author_chat(){
 
         // shows current user name as name
         var name = "<?php echo "$current_user->user_login"; ?>";
-        
+
         var pluginurl = "<?php echo plugins_url('pp-process.php', __FILE__); ?>";
 
     	// display name on page
@@ -101,7 +101,6 @@ function author_chat(){
 			jQuery("#sendie").keydown(function(event) {  
              
                  var key = event.which;
-                 var pluginurl = "<?php echo plugins_url('pp-process.php', __FILE__); ?>";
            
                  //all keys including return.  
                  if (key >= 33) {
