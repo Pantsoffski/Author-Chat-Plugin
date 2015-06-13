@@ -10,11 +10,11 @@ Stable tag: 0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Author Chat is an internal chat that let's your authors (users with access to dashboard) to chat with each other. It is easy to use - no settings, just install. All chat data is hidden in txt file, so there is no need to access database.
+Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use - no settings, just install. All chat data is hidden in database.
 
 == Description ==
 
-Author Chat is an internal chat that let's your authors (users with access to dashboard) to chat with each other. It is easy to use - no settings, just install. All chat data is hidden in txt file, so there is no need to access database.
+Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use - no settings, just install. All chat data is hidden in database.
 
 If you would like to show your support for this software, please consider donating: [Donate via PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EEDF5TV3M2WVG&lc=US).
 

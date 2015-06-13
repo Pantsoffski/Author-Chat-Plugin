@@ -1,104 +1,102 @@
-var instanse = false;
-var state;
-var file;
+var linesnumber;
 
-function Chat (){
+function Chat(){
     this.update = ppUpdateChat;
     this.send = ppSendChat;
 	this.getState = getStateOfChat;
 	this.initiate = ppInitiateChat;
+	this.updateCount = ppUpdateCountNumber;
 }
 
-//gets the state of the chat
+// update lines number
+function ppUpdateCountNumber(){
+	jQuery.ajax({
+		type: "POST",
+		data:{
+				'function': 'updateCount'
+			},
+		dataType: "json",
+		success: function(data){
+			linesnumber = data;
+		},
+	});
+}
+
+//update chat if needed
 function getStateOfChat(){
-	if(!instanse){
-		 instanse = true;
-		 jQuery.ajax({
-			   type: "POST",
-			   url: pluginurl,
+	var count = count;
+	jQuery.ajax({
+		type: "POST",
 			   data: {  
-			   			'function': 'getState',
-						'file': file
-						},
-			   dataType: "json",
-			
-			   success: function(data){
-				   state = data.state;
-				   instanse = false;
+			   			'function': 'getState'
 			   },
-			});
-	}	 
-}
-
-//Updates the chat
-function ppUpdateChat(){
-	 if(!instanse){
-		 instanse = true;
-	     jQuery.ajax({
-			   type: "POST",
-			   url: pluginurl,
-			   data: {  
-			   			'function': 'update',
-						'state': state,
-						'file': file
-						},
 			   dataType: "json",
 			   success: function(data){
-				   if(data.text != null){
-						for (var i = 0; i < data.text.length; i++) {
-                            jQuery('#chat-area').append(jQuery("<p>"+ data.text[i] +"</p>"));
-                        }								  
-				   }
-				   document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
-				   instanse = false;
-				   state = data.state;
+					if(data != null){
+							idnumber = data;
+							if(idnumber != linesnumber){
+								ppUpdateChat();
+							}
+					}
 			   },
 			});
-	 }else {
-		 setTimeout(ppUpdateChat, 1500);
-	 }
 }
 
 //send the message
-function ppSendChat(message, nickname)
-{       
-    ppUpdateChat();
-     jQuery.ajax({
-		   type: "POST",
-		   url: pluginurl,
-		   data: {  
-		   			'function': 'send',
-					'message': message,
-					'nickname': nickname,
-					'file': file
-				 },
-		   dataType: "json",
-		   success: function(data){
-			   ppUpdateChat();
-		   },
-		});
+function ppSendChat(message, nickname){
+	jQuery.ajax({
+		type: "POST",
+		data:{
+				'function': 'send',
+				'message': message,
+				'nickname': nickname
+			},
+		dataType: "json",
+		success: function(data){
+			ppUpdateChat();
+		},
+	});
 }
 
-function ppInitiateChat(){
-		 instanse = true;
+//updates the chat
+function ppUpdateChat(){
 	     jQuery.ajax({
 			   type: "POST",
-			   url: pluginurl,
 			   data: {  
-			   			'function': 'initiate',
-						'state': state,
-						'file': file
+			   			'function': 'update'
 						},
 			   dataType: "json",
 			   success: function(data){
-				   if(data.text != null){
-						for (var i = 0; i < data.text.length; i++) {
-                            jQuery('#chat-area').append(jQuery("<p>"+ data.text[i] +"</p>"));
+				   if(data != null){
+						for (var i = 0; i < data.length; i++){
+                            jQuery('#chat-area').append(jQuery("<p>"+ data[i] +"</p>"));
                         }								  
 				   }
 				   document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
-				   instanse = false;
-				   state = data.state;
+				   ppUpdateCountNumber();
+			   },
+			});
+}
+
+function ppInitiateChat(){
+	     jQuery.ajax({
+			   type: "POST",
+			   data: {  
+			   			'function': 'initiate'
+					 },
+			   dataType: "json",
+			   success: function(data){
+				   if(data != null){
+						for (var i = 0; i < data.length; i++){
+                            jQuery('#chat-area').append(jQuery("<p>"+ data[i] +"</p>"));
+                        }			  
+				   }
+				   document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
+				   ppUpdateCountNumber();
+			   },
+			   error: function(){
+				   jQuery('#chat-area').append(jQuery("<p>Error</p>"));
+				   document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
 			   },
 			});
 }
