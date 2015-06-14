@@ -24,7 +24,6 @@ function ppUpdateCountNumber(){
 
 //update chat if needed
 function getStateOfChat(){
-	var count = count;
 	jQuery.ajax({
 		type: "POST",
 			   data: {  
@@ -68,9 +67,9 @@ function ppUpdateChat(){
 			   dataType: "json",
 			   success: function(data){
 				   if(data != null){
-						for (var i = 0; i < data.length; i++){
-                            jQuery('#chat-area').append(jQuery("<p>"+ data[i] +"</p>"));
-                        }								  
+						for (var i = 0; i < data.result1.length; i++){
+                            jQuery('#chat-area').append(jQuery("<p>" + "<span id=\"nick\">" + data.result1[i] + "</span>" + data.result2[i] + "</p>"));
+                        }
 				   }
 				   document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
 				   ppUpdateCountNumber();
@@ -87,9 +86,9 @@ function ppInitiateChat(){
 			   dataType: "json",
 			   success: function(data){
 				   if(data != null){
-						for (var i = 0; i < data.length; i++){
-                            jQuery('#chat-area').append(jQuery("<p>"+ data[i] +"</p>"));
-                        }			  
+						for (var i = 0; i < data.result1.length; i++){
+                            jQuery('#chat-area').append(jQuery("<p>" + "<span id=\"nick\">" + data.result1[i] + "</span>" + data.result2[i] + "</p>"));
+                        }
 				   }
 				   document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
 				   ppUpdateCountNumber();

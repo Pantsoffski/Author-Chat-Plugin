@@ -23,9 +23,11 @@ function pp_author_chat_activate() {
 	$author_chat_table = $wpdb->prefix . 'author_chat';
 	$wpdb->query("CREATE TABLE IF NOT EXISTS $author_chat_table (
 		id BIGINT(50) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+		nickname TINYTEXT NOT NULL,
 		content TEXT NOT NULL,
-		date DATETIME
-		);");
+		date DATETIME)
+		CHARACTER SET utf8 COLLATE utf8_bin
+		;");
 }
 
 // delete author_chat table
