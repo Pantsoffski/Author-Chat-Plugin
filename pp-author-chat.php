@@ -14,8 +14,6 @@ include 'pp-process.php';
 add_action('admin_menu', 'pp_author_chat_setup_menu');
 add_action('wp_dashboard_setup', 'pp_wp_dashboard_author_chat');
 add_action('admin_enqueue_scripts', 'pp_scripts_admin_chat');
-// create custom plugin settings menu
-add_action('admin_menu', 'baw_create_menu');
 register_activation_hook(__FILE__, 'pp_author_chat_activate');
 register_uninstall_hook(__FILE__, 'pp_author_chat_uninstall');
 
@@ -30,8 +28,7 @@ function pp_author_chat_activate() {
 		date DATETIME)
 		CHARACTER SET utf8 COLLATE utf8_bin
 		;");
-//	$defaults = array('chathistorydays' => '30');
-	add_option('baw_settings', 30);
+	add_option('author_chat_settings', 30);
 }
 
 // delete author_chat table
@@ -39,7 +36,7 @@ function pp_author_chat_uninstall() {
 	global $wpdb;
 	$author_chat_table = $wpdb->prefix . 'author_chat';
 	$wpdb->query( "DROP TABLE IF EXISTS $author_chat_table" );
-	delete_option('baw_settings');
+	delete_option('author_chat_settings');
 }
 
 function pp_scripts_admin_chat(){
@@ -48,26 +45,18 @@ function pp_scripts_admin_chat(){
 }
 
 function pp_author_chat_setup_menu(){
-	add_dashboard_page('Author Chat Window', 'Author Chat', 'read', 'author-chat', 'pp_author_chat');
+	include 'pp-options.php';
+	add_dashboard_page('Author Chat', 'Author Chat', 'read', 'author-chat', 'pp_author_chat');
+	add_menu_page('Author Chat Options', 'Author Chat Options', 'administrator', 'acset', 'author_chat_settings');
+	add_action( 'admin_init', 'register_author_chat_settings' );
 }
 
 function pp_wp_dashboard_author_chat(){
 	wp_add_dashboard_widget('author-chat-widget', 'Author Chat', 'pp_author_chat');
 }
 
-function baw_create_menu(){
-	include 'pp-options.php';
-	
-	//create new top-level menu
-	add_menu_page('BAW Plugin Settings', 'BAW Settings', 'administrator', 'bawpp', 'baw_settings_page');
-
-	//call register settings function
-	add_action( 'admin_init', 'register_mysettings' );
-}
-
-function register_mysettings() {
-	//register our settings
-	register_setting( 'baw_settings_group', 'baw_settings');
+function register_author_chat_settings() {
+	register_setting( 'author_chat_settings_group', 'author_chat_settings');
 }
 
 function pp_author_chat(){
@@ -155,6 +144,15 @@ function pp_author_chat(){
     </script>
 	
 	<?php
+	
+	clean_up_chat_history();
+}
+
+function clean_up_chat_history() {
+	global $wpdb;
+	$daystoclear = get_option('author_chat_settings');
+	$author_chat_table = $wpdb->prefix . 'author_chat';
+	$wpdb->query("DELETE FROM $author_chat_table WHERE date <= NOW() - INTERVAL $daystoclear DAY");
 }
 
 ?>

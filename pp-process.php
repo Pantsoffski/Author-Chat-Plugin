@@ -16,8 +16,8 @@ if(isset($_POST['function'])){
 		case('getState'):
 			global $wpdb;
 			$author_chat_table = $wpdb->prefix . 'author_chat';
-			$newLinesCount = $wpdb->get_results("SELECT id FROM $author_chat_table ORDER BY id DESC LIMIT 1", ARRAY_A);
-			$log = array_column($newLinesCount, 'id');
+			$newLinesCount = $wpdb->get_var("SELECT COUNT(*) FROM $author_chat_table");
+			$log = $newLinesCount;
 		break;
 		
 		case('send'):
@@ -30,7 +30,11 @@ if(isset($_POST['function'])){
 				}
 				global $wpdb;
 				$author_chat_table = $wpdb->prefix . 'author_chat';
-				$wpdb->query($wpdb->prepare("INSERT INTO $author_chat_table (nickname, content, date) VALUES ('$nickname', '$message', NOW())"));
+				$wpdb->query($wpdb->prepare(
+					"INSERT INTO $author_chat_table (nickname, content, date) VALUES (%s, %s, NOW())",
+					$nickname,
+					$message
+					));
 			}
 		break;
 		
