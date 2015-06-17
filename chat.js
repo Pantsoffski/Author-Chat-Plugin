@@ -87,15 +87,11 @@ function ppInitiateChat(){
 			   success: function(data){
 				   if(data != null){
 						for (var i = 0; i < data.result1.length; i++){
-                            jQuery('#chat-area').append(jQuery("<p>" + "<span id=\"nick\">" + data.result1[i] + "</span>" + data.result2[i] + "</p>"));
+                            jQuery('#chat-area').append(jQuery("<p>" + "<span id=\"date\">" + data.result3[i] + "</span>" + "<span id=\"nick\">" + data.result1[i] + "</span>" + data.result2[i] + "</p>"));
                         }
 				   }
 				   document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
 				   ppUpdateCountNumber();
-			   },
-			   error: function(){
-				   jQuery('#chat-area').append(jQuery("<p>Error</p>"));
-				   document.getElementById('chat-area').scrollTop = document.getElementById('chat-area').scrollHeight;
 			   },
 			});
 }
