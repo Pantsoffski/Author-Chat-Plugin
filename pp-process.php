@@ -41,18 +41,18 @@ if(isset($_POST['function'])){
 		case('update'):
 			global $wpdb;
 			$author_chat_table = $wpdb->prefix . 'author_chat';
-			$lines = $wpdb->get_results("SELECT nickname, content, date FROM $author_chat_table ORDER BY id DESC LIMIT 1", ARRAY_A);
+			$lines = $wpdb->get_results("SELECT nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
 				$text = array();
 				foreach ($lines as $line){
 						$text[] = $line;
-			}
+				}
 			$log = array_column($text, 'nickname');
 			$log2 = array_column($text, 'content');
 			$log3 = array_column($text, 'date');
 			array_walk_recursive($log3, function(&$element){
 				$element = strtotime($element);
-				$element = date('j-m-Y <\b\r> G:i:s', $element);
-				});
+				$element = date('j-m-Y </\s\p\a\n> <\s\p\a\n \i\d="\t\i\m\e">G:i:s', $element);
+			});
 		break;
 
 		case('initiate'):
@@ -69,7 +69,7 @@ if(isset($_POST['function'])){
 				array_walk_recursive($log3, function(&$element){
 					$element = strtotime($element);
 					$element = date('j-m-Y </\s\p\a\n> <\s\p\a\n \i\d="\t\i\m\e">G:i:s', $element);
-					});
+				});
 		break;
 	}
 	if(isset($log2)){

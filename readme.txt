@@ -6,15 +6,15 @@ Tags: plugin, chat, author, for authors, admin, messages, internal chat
 Author: Piotr Pesta
 Requires at least: 2.8.0
 Tested up to: 4.2
-Stable tag: 0.9
+Stable tag: 0.9.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use - no settings, just install. All chat data is hidden in database.
+Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use. All chat data is stored in database.
 
 == Description ==
 
-Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use - no settings, just install. All chat data is hidden in database.
+Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use. All chat data is stored in database.
 
 If you would like to show your support for this software, please consider donating: [Donate via PayPal](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EEDF5TV3M2WVG&lc=US).
 
@@ -33,5 +33,5 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 
 == Changelog ==
 
-= 0.9 =
+= 0.9.9 =
 * Initial Release
