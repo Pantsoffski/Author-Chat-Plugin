@@ -15,6 +15,12 @@ function author_chat_settings(){
 		<input type="number" name="author_chat_settings" value="<?php echo esc_attr(get_option('author_chat_settings')); ?>" />
 		</td>
 		</tr>
+<!--		<tr valign="top">
+		<th scope="row"><b>Permanently</b> delete chat history</th>
+		<td>
+		<input type="checkbox" name="author_chat_settings_delete" value="<?php echo esc_attr(get_option('author_chat_settings_delete')); ?>" />
+		</td>
+		</tr>-->
 	</table>
     
 	<?php submit_button(); ?>
