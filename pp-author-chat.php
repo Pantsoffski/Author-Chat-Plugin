@@ -4,7 +4,7 @@ Plugin Name: Author Chat Plugin
 Plugin URI: http://smartfan.pl/
 Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
 Author: Piotr Pesta
-Version: 1.1.0
+Version: 1.2.0
 Author URI: http://smartfan.pl/
 License: GPL12
 */
@@ -37,7 +37,7 @@ function pp_author_chat_uninstall() {
 	$author_chat_table = $wpdb->prefix . 'author_chat';
 	$wpdb->query( "DROP TABLE IF EXISTS $author_chat_table" );
 	delete_option('author_chat_settings');
-//	delete_option('author_chat_settings_delete');
+	delete_option('author_chat_settings_delete');
 }
 
 function pp_scripts_admin_chat(){
@@ -58,7 +58,7 @@ function pp_wp_dashboard_author_chat(){
 
 function register_author_chat_settings() {
 	register_setting( 'author_chat_settings_group', 'author_chat_settings');
-//	register_setting( 'author_chat_settings_group', 'author_chat_settings_delete');
+	register_setting( 'author_chat_settings_group', 'author_chat_settings_delete');
 }
 
 function pp_author_chat(){
@@ -147,14 +147,27 @@ function pp_author_chat(){
 	
 	<?php
 	
-	clean_up_chat_history();
+	pp_author_chat_clean_up_chat_history();
+	
+	if (get_option('author_chat_settings_delete') == 1){
+		pp_author_chat_clean_up_database();
+	}
 }
 
-function clean_up_chat_history() {
+function pp_author_chat_clean_up_chat_history(){
 	global $wpdb;
 	$daystoclear = get_option('author_chat_settings');
 	$author_chat_table = $wpdb->prefix . 'author_chat';
 	$wpdb->query("DELETE FROM $author_chat_table WHERE date <= NOW() - INTERVAL $daystoclear DAY");
+}
+
+function pp_author_chat_clean_up_database(){
+	global $wpdb;
+	$author_chat_table = $wpdb->prefix . 'author_chat';
+	$wpdb->query("TRUNCATE TABLE $author_chat_table");
+	$update_options = get_option('author_chat_settings_delete');
+	$update_options = '';
+	update_option('author_chat_settings_delete', $update_options);
 }
 
 ?>

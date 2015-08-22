@@ -6,7 +6,7 @@ Tags: plugin, chat, author, for authors, admin, messages, internal chat
 Author: Piotr Pesta
 Requires at least: 2.8.0
 Tested up to: 4.3
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -33,6 +33,8 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 2. Screenshot 2 - Admin Chat in a dashboard.
 
 == Changelog ==
+= 1.2.0 =
+* In settings you can delete chat history
 = 1.1.0 =
 * Added information about new messages: number of messages in browser tab title and sound signal
 = 1.0.0 =
