@@ -38,6 +38,10 @@ function pp_author_chat_uninstall() {
 	$wpdb->query( "DROP TABLE IF EXISTS $author_chat_table" );
 	delete_option('author_chat_settings');
 	delete_option('author_chat_settings_delete');
+	delete_option('author_chat_settings_access_editor');
+	delete_option('author_chat_settings_access_author');
+	delete_option('author_chat_settings_access_contributor');
+	delete_option('author_chat_settings_access_subscriber');
 }
 
 function pp_scripts_admin_chat(){
@@ -59,6 +63,10 @@ function pp_wp_dashboard_author_chat(){
 function register_author_chat_settings() {
 	register_setting( 'author_chat_settings_group', 'author_chat_settings');
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_delete');
+	register_setting( 'author_chat_settings_group', 'author_chat_settings_access_editor');
+	register_setting( 'author_chat_settings_group', 'author_chat_settings_access_author');
+	register_setting( 'author_chat_settings_group', 'author_chat_settings_access_contributor');
+	register_setting( 'author_chat_settings_group', 'author_chat_settings_access_subscriber');
 }
 
 function pp_author_chat(){
@@ -94,7 +102,7 @@ function pp_author_chat(){
     <script type="text/javascript">
 
         // shows current user name as name
-        var name = "<?php echo "$current_user->user_login"; ?>";
+        var name = "<?php echo "$current_user->user_login"." $current_user->user_level"; ?>";
 
     	// display name on page
     	jQuery("#name-area").html("You are: <span>" + name + "</span>");
