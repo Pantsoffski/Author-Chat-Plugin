@@ -16,16 +16,16 @@ function author_chat_settings(){
 		</td>
 		</tr>
 		<tr valign="top">
-		<th scope="row">Who should have access to Admin Chat?</th>
+		<th scope="row">Who should have access to Author Chat?</th>
 		<td>
-		<input type="checkbox" name="author_chat_settings_access_editor" value="1" <?php checked(get_option('author_chat_settings_access_editor', '1'), 1); ?>/>Editor<br>
-		<input type="checkbox" name="author_chat_settings_access_author" value="1" <?php checked(get_option('author_chat_settings_access_author', '1'), 1); ?>/>Author<br>
-		<input type="checkbox" name="author_chat_settings_access_contributor" value="1" <?php checked(get_option('author_chat_settings_access_contributor', '1'), 1); ?>/>Contributor<br>
-		<input type="checkbox" name="author_chat_settings_access_subscriber" value="1" <?php checked(get_option('author_chat_settings_access_subscriber', '1'), 1); ?>/>Subscriber<br>
+		<input type="checkbox" name="author_chat_settings_access_editor" value="1" <?php checked(get_option('author_chat_settings_access_editor', '1')); ?>/>Editor<br>
+		<input type="checkbox" name="author_chat_settings_access_author" value="1" <?php checked(get_option('author_chat_settings_access_author', '1')); ?>/>Author<br>
+		<input type="checkbox" name="author_chat_settings_access_contributor" value="1" <?php checked(get_option('author_chat_settings_access_contributor', '1')); ?>/>Contributor<br>
+		<input type="checkbox" name="author_chat_settings_access_subscriber" value="1" <?php checked(get_option('author_chat_settings_access_subscriber', '1')); ?>/>Subscriber<br>
 		</td>
 		</tr>
 		<tr valign="top">
-		<th scope="row">Permanently delete chat history? (data will be deleted when you check this box and click ("Save Changes")</th>
+		<th scope="row">Permanently delete chat history? (data will be deleted when you check this box and click "Save Changes"</th>
 		<td>
 		<input type="checkbox" name="author_chat_settings_delete" value="1" <?php checked(get_option('author_chat_settings_delete'), 1); ?>/>
 		</td>
