@@ -4,7 +4,7 @@ Plugin Name: Author Chat Plugin
 Plugin URI: http://smartfan.pl/
 Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
 Author: Piotr Pesta
-Version: 1.3.0
+Version: 1.4.0
 Author URI: http://smartfan.pl/
 License: GPL12
 */
@@ -29,10 +29,12 @@ function pp_author_chat_activate() {
 		CHARACTER SET utf8 COLLATE utf8_bin
 		;");
 	add_option('author_chat_settings', 30);
-	add_option('author_chat_settings_access_editor', 1);
-	add_option('author_chat_settings_access_author', 1);
-	add_option('author_chat_settings_access_contributor', 1);
-	add_option('author_chat_settings_access_subscriber', 1);
+	add_option('author_chat_settings_access_editor', 0);
+	add_option('author_chat_settings_access_author', 0);
+	add_option('author_chat_settings_access_contributor', 0);
+	add_option('author_chat_settings_access_subscriber', 0);
+        add_option('author_chat_settings_access_all_users', 1);
+        add_option('author_chat_settings_name', 0);
 }
 
 // delete author_chat table
@@ -46,6 +48,8 @@ function pp_author_chat_uninstall() {
 	delete_option('author_chat_settings_access_author');
 	delete_option('author_chat_settings_access_contributor');
 	delete_option('author_chat_settings_access_subscriber');
+        delete_option('author_chat_settings_access_all_users');
+        delete_option('author_chat_settings_name');
 }
 
 function pp_scripts_admin_chat(){
@@ -71,12 +75,14 @@ function register_author_chat_settings() {
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_access_author');
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_access_contributor');
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_access_subscriber');
+        register_setting( 'author_chat_settings_group', 'author_chat_settings_access_all_users');
+        register_setting( 'author_chat_settings_group', 'author_chat_settings_name');
 }
 
 function pp_author_chat(){
 	global $current_user;
 	get_currentuserinfo();
-	if((get_option('author_chat_settings_access_subscriber') == '1' && $current_user->user_level == '0') || (get_option('author_chat_settings_access_contributor') == '1' && $current_user->user_level == '1') || (get_option('author_chat_settings_access_author') == '1' && $current_user->user_level == '2') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '3') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '4') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '5') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '6') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '7') || $current_user->user_level == '8' || $current_user->user_level == '9' || $current_user->user_level == '10'){
+	if((get_option('author_chat_settings_access_subscriber') == '1' && $current_user->user_level == '0') || (get_option('author_chat_settings_access_contributor') == '1' && $current_user->user_level == '1') || (get_option('author_chat_settings_access_author') == '1' && $current_user->user_level == '2') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '3') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '4') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '5') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '6') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '7' || $current_user->user_level == '8' || $current_user->user_level == '9' || $current_user->user_level == '10') || get_option('author_chat_settings_access_all_users') == '1'){
 ?>
 	
 	<script type="text/javascript">
@@ -107,7 +113,7 @@ function pp_author_chat(){
     <script type="text/javascript">
 
         // shows current user name as name
-        var name = "<?php echo "$current_user->user_login"; ?>";
+        var name = "<?php echo $username = (get_option('author_chat_settings_name') == 0) ? $current_user->user_login : $current_user->display_name; ?>";
 
     	// display name on page
     	jQuery("#name-area").html("You are: <span>" + name + "</span>");
