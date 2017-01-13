@@ -5,8 +5,8 @@ Plugin Name: Author Chat
 Tags: plugin, chat, author, for authors, admin, messages, internal chat
 Author: Piotr Pesta
 Requires at least: 2.8.0
-Tested up to: 4.5
-Stable tag: 1.4.1
+Tested up to: 4.7
+Stable tag: 1.4.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,8 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 2. Screenshot 2 - Admin Chat in a dashboard.
 
 == Changelog ==
+= 1.4.3 =
+* Updated for Wordpress 4.7 (replaced deprecated get_currentuserinfo function by wp_get_current_user)
 = 1.4.1 =
 * Support for language files (now you can translate plugin via e.g. Poedit, just add your translation file to /lang/ folder)
 * Polish translation included

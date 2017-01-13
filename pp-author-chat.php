@@ -1,13 +1,14 @@
 <?php
 /*
-  Plugin Name: Author Chat Plugin
-  Plugin URI: http://ordin.pl/
-  Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
-  Author: Piotr Pesta
-  Version: 1.4.1
-  Author URI: http://ordin.pl/
-  License: GPL12
-  Text Domain: pp-author-chat
+ * Plugin Name: Author Chat Plugin
+ * Plugin URI: http://ordin.pl/
+ * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
+ * Author: Piotr Pesta
+ * Version: 1.4.3
+ * Author URI: http://ordin.pl/
+ * License: GPL12
+ * Text Domain: author-chat
+ * Domain Path: /lang
  */
 
 include 'pp-process.php';
@@ -18,9 +19,10 @@ add_action('admin_enqueue_scripts', 'pp_scripts_admin_chat');
 register_activation_hook(__FILE__, 'pp_author_chat_activate');
 register_uninstall_hook(__FILE__, 'pp_author_chat_uninstall');
 add_action('plugins_loaded', 'pp_author_chat_load_textdomain');
+add_action('in_admin_footer', 'pp_author_chat_chat_on_top');
 
 function pp_author_chat_load_textdomain() {
-    load_plugin_textdomain('pp-author-chat', false, dirname(plugin_basename(__FILE__)) . '/lang/');
+    load_plugin_textdomain('author-chat', false, dirname(plugin_basename(__FILE__)) . '/lang/');
 }
 
 // create author_chat table
@@ -65,7 +67,7 @@ function pp_scripts_admin_chat() {
 
 function pp_author_chat_setup_menu() {
     include 'pp-options.php';
-    $optionsTitle = __( 'Author Chat Options', 'pp-author-chat' );
+    $optionsTitle = __('Author Chat Options', 'author-chat');
     add_dashboard_page('Author Chat', 'Author Chat', 'read', 'author-chat', 'pp_author_chat');
     add_menu_page($optionsTitle, $optionsTitle, 'administrator', 'acset', 'author_chat_settings', 'dashicons-carrot');
     add_action('admin_init', 'register_author_chat_settings');
@@ -86,9 +88,12 @@ function register_author_chat_settings() {
     register_setting('author_chat_settings_group', 'author_chat_settings_name');
 }
 
+class author_chat {
+    
+}
+
 function pp_author_chat() {
-    global $current_user;
-    get_currentuserinfo();
+    $current_user = wp_get_current_user();
     if ((get_option('author_chat_settings_access_subscriber') == '1' && $current_user->user_level == '0') || (get_option('author_chat_settings_access_contributor') == '1' && $current_user->user_level == '1') || (get_option('author_chat_settings_access_author') == '1' && $current_user->user_level == '2') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '3') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '4') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '5') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '6') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '7' || $current_user->user_level == '8' || $current_user->user_level == '9' || $current_user->user_level == '10') || get_option('author_chat_settings_access_all_users') == '1') {
         ?>
 
@@ -105,14 +110,14 @@ function pp_author_chat() {
 
         <div id="page-wrap">
 
-            <h2><?php _e( 'Author Chat', 'pp-author-chat' ); ?></h2>
+            <h2><?php _e('Author Chat', 'author-chat'); ?></h2>
 
             <p id="name-area"></p>
 
             <div id="chat-wrap"><div id="chat-area"></div></div>
 
             <form id="send-message-area">
-                <textarea id="sendie" maxlength = "1000" placeholder="<?php _e( 'Your message...', 'pp-author-chat' ); ?>"></textarea>
+                <textarea id="sendie" maxlength = "1000" placeholder="<?php _e('Your message...', 'author-chat'); ?>"></textarea>
             </form>
 
         </div>
@@ -123,7 +128,7 @@ function pp_author_chat() {
             var name = "<?php echo $username = (get_option('author_chat_settings_name') == 0) ? $current_user->user_login : $current_user->display_name; ?>";
 
             // display name on page
-            jQuery("#name-area").html("<?php _e( 'You are:', 'pp-author-chat' ); ?> <span>" + name + "</span>");
+            jQuery("#name-area").html("<?php _e('You are:', 'author-chat'); ?> <span>" + name + "</span>");
 
             // kick off chat
             var chat = new Chat();
@@ -178,6 +183,10 @@ function pp_author_chat() {
     if (get_option('author_chat_settings_delete') == 1) {
         pp_author_chat_clean_up_database();
     }
+}
+
+function pp_author_chat_chat_on_top() {
+
 }
 
 function pp_author_chat_clean_up_chat_history() {
