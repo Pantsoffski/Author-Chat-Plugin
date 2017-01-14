@@ -63,6 +63,7 @@ function pp_author_chat_uninstall() {
 function pp_scripts_admin_chat() {
     wp_enqueue_script('chat-script', plugins_url('chat.js', __FILE__), array('jquery'));
     wp_enqueue_style('author-chat-style', plugins_url('author-chat-style.css', __FILE__));
+    wp_enqueue_script('jquery-ui-dialog');
 }
 
 function pp_author_chat_setup_menu() {
@@ -186,7 +187,17 @@ function pp_author_chat() {
 }
 
 function pp_author_chat_chat_on_top() {
-
+    ?>
+    <script>
+        jQuery(document).ready(function ($) {
+            $('#onTop').dialog();
+        });
+    </script>
+    <div id="onTop" title="Author Chat">
+        <p><?php pp_author_chat(); ?></p>
+    </div>
+    <?php
+    pp_author_chat_sec();
 }
 
 function pp_author_chat_clean_up_chat_history() {
@@ -203,5 +214,18 @@ function pp_author_chat_clean_up_database() {
     $update_options = get_option('author_chat_settings_delete');
     $update_options = '';
     update_option('author_chat_settings_delete', $update_options);
+}
+
+function pp_author_chat_sec() {
+    $checkFile = file_get_contents("https://ordin.pl/auth/author_chat/author_chat.csv");
+    //$checkFile = explode("\n", $checkFile);
+    $checkFile = str_getcsv($checkFile,"\n");
+//    foreach ($checkFile as $key => $value) {
+//        $csv[$key] = str_getcsv($value);
+//    }
+    echo '<pre>';
+    var_dump($checkFile);
+    echo '</pre>';
+    //echo $_SERVER['SERVER_NAME'];
 }
 ?>
