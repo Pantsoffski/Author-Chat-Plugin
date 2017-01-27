@@ -187,17 +187,46 @@ function pp_author_chat() {
 }
 
 function pp_author_chat_chat_on_top() {
-    ?>
-    <script>
-        jQuery(document).ready(function ($) {
-            $('#onTop').dialog();
-        });
-    </script>
-    <div id="onTop" title="Author Chat">
-        <p><?php pp_author_chat(); ?></p>
-    </div>
-    <?php
-    pp_author_chat_sec();
+    $result = pp_author_chat_sec();
+    if ($result === true) {
+        ?>
+        <script>
+            jQuery(document).ready(function () {
+                function getCookie(cname) {
+                    var name = cname + "=";
+                    var decodedCookie = decodeURIComponent(document.cookie);
+                    var ca = decodedCookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1);
+                        }
+                        if (c.indexOf(name) == 0) {
+                            return c.substring(name.length, c.length);
+                        }
+                    }
+                    return "";
+                }
+                var myCookie = getCookie("dialogPos");
+                if (myCookie == null) {
+                    var dialogPosition = {top: "10", left: "10"};
+                }else{
+                    var parsedPosition = JSON.parse(myCookie);
+                    var dialogPosition = {top: parsedPosition.top, left: parsedPosition.left};
+                }
+                jQuery('#onTopChat').dialog({
+                    position: {my:"left+" + dialogPosition.left + " top+" + dialogPosition.top,at:"left top"}
+                });
+                var dialogPosition = jQuery('#onTopChat').offset(); //cookie musi zapisywaæ now¹ pozycjê po relokacji okna dialog
+                document.cookie = "dialogPos = " + JSON.stringify(dialogPosition);
+                console.debug(JSON.parse(myCookie));
+            });
+        </script>
+        <div id="onTopChat" title="Author Chat">
+            <p><?php pp_author_chat(); ?></p>
+        </div>
+        <?php
+    }
 }
 
 function pp_author_chat_clean_up_chat_history() {
@@ -217,15 +246,14 @@ function pp_author_chat_clean_up_database() {
 }
 
 function pp_author_chat_sec() {
-    $checkFile = file_get_contents("https://ordin.pl/auth/author_chat/author_chat.csv");
-    //$checkFile = explode("\n", $checkFile);
-    $checkFile = str_getcsv($checkFile,"\n");
-//    foreach ($checkFile as $key => $value) {
-//        $csv[$key] = str_getcsv($value);
-//    }
-    echo '<pre>';
-    var_dump($checkFile);
-    echo '</pre>';
-    //echo $_SERVER['SERVER_NAME'];
+    $checkFile = file_get_contents(aURL);
+    $checkFile = str_getcsv($checkFile);
+    $dmCompare = array_search($_SERVER['SERVER_NAME'], $checkFile);
+    if ($dmCompare !== false) {
+        $result = true;
+    } else {
+        $result = false;
+    }
+    return $result;
 }
 ?>

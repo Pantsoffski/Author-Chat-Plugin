@@ -1,5 +1,7 @@
 <?php
 
+define('aURL', 'https://ordin.pl/auth/author_chat/author_chat.csv');
+
 if (!function_exists('array_column')) {
 
     function array_column(array $input, $columnKey, $indexKey = null) {

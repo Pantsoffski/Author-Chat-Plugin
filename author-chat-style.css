@@ -1,5 +1,5 @@
 #page-wrap body                 { font: 12px "Lucida Grande", Sans-Serif; }
-#page-wrap h2                   { color: #fa9f00; font: 30px Helvetica, Sans-Serif; margin: 0 0 2px 0; }
+#page-wrap h2                   { color: #fa9f00; font: 20px Helvetica, Sans-Serif; margin: 0 0 2px 0; }
 #page-wrap                      { width: 90%; margin: 1% auto; position: relative; }
 #chat-wrap                      { border: 1px solid #eee; margin: 0 0 2% 0; }
 #chat-area                      { height: 300px; overflow: auto; border: 1px solid #666; padding: 20px; background: white; }
