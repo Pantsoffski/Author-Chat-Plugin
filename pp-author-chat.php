@@ -43,6 +43,7 @@ function pp_author_chat_activate() {
     add_option('author_chat_settings_access_subscriber', 0);
     add_option('author_chat_settings_access_all_users', 1);
     add_option('author_chat_settings_name', 0);
+    add_option('author_chat_settings_window', 0);
 }
 
 // delete author_chat table
@@ -58,6 +59,7 @@ function pp_author_chat_uninstall() {
     delete_option('author_chat_settings_access_subscriber');
     delete_option('author_chat_settings_access_all_users');
     delete_option('author_chat_settings_name');
+    delete_option('author_chat_settings_window');
 }
 
 function pp_scripts_admin_chat() {
@@ -87,6 +89,7 @@ function register_author_chat_settings() {
     register_setting('author_chat_settings_group', 'author_chat_settings_access_subscriber');
     register_setting('author_chat_settings_group', 'author_chat_settings_access_all_users');
     register_setting('author_chat_settings_group', 'author_chat_settings_name');
+    register_setting('author_chat_settings_group', 'author_chat_settings_window');
 }
 
 class author_chat {
@@ -187,45 +190,55 @@ function pp_author_chat() {
 }
 
 function pp_author_chat_chat_on_top() {
-    $result = pp_author_chat_sec();
-    if ($result === true) {
-        ?>
-        <script>
-            jQuery(document).ready(function () {
-                function getCookie(cname) {
-                    var name = cname + "=";
-                    var decodedCookie = decodeURIComponent(document.cookie);
-                    var ca = decodedCookie.split(';');
-                    for (var i = 0; i < ca.length; i++) {
-                        var c = ca[i];
-                        while (c.charAt(0) == ' ') {
-                            c = c.substring(1);
+    if (get_option('author_chat_settings_window') == 1) {
+        $result = pp_author_chat_sec();
+        if ($result === true) {
+            ?>
+            <script>
+                jQuery(document).ready(function () {
+                    function getCookie(cname) {
+                        var name = cname + "=";
+                        var decodedCookie = decodeURIComponent(document.cookie);
+                        var ca = decodedCookie.split(';');
+                        for (var i = 0; i < ca.length; i++) {
+                            var c = ca[i];
+                            while (c.charAt(0) == ' ') {
+                                c = c.substring(1);
+                            }
+                            if (c.indexOf(name) == 0) {
+                                return c.substring(name.length, c.length);
+                            }
                         }
-                        if (c.indexOf(name) == 0) {
-                            return c.substring(name.length, c.length);
-                        }
+                        return "";
                     }
-                    return "";
-                }
-                var myCookie = getCookie("dialogPos");
-                if (myCookie == null) {
-                    var dialogPosition = {top: "10", left: "10"};
-                }else{
-                    var parsedPosition = JSON.parse(myCookie);
-                    var dialogPosition = {top: parsedPosition.top, left: parsedPosition.left};
-                }
-                jQuery('#onTopChat').dialog({
-                    position: {my:"left+" + dialogPosition.left + " top+" + dialogPosition.top,at:"left top"}
+                    var myCookie = getCookie("dialogPos");
+                    if (myCookie == "") {
+                        var dialogPosition = {top: "10", left: "10"};
+                    } else {
+                        var parsedPosition = JSON.parse(myCookie);
+                        var dialogPosition = {top: parsedPosition.top - 38, left: parsedPosition.left};
+                    }
+                    jQuery('#onTopChat').dialog({
+                        resizable: false,
+                        position: {
+                            my: "left+" + dialogPosition.left + " top+" + dialogPosition.top,
+                            at: "left top"
+                        },
+                        dragStop: function (event, ui) {
+                            var dialogPosition = jQuery('#onTopChat').offset();
+                            document.cookie = "dialogPos = " + JSON.stringify(dialogPosition);
+                            //$.cookie('dialog-pos-my', $(this).dialog('option', 'position').my);
+                            //$.cookie('dialog-pos-at', $(this).dialog('option', 'position').at);
+                        }
+                    });
+                    console.log(myCookie);
                 });
-                var dialogPosition = jQuery('#onTopChat').offset(); //cookie musi zapisywaæ now¹ pozycjê po relokacji okna dialog
-                document.cookie = "dialogPos = " + JSON.stringify(dialogPosition);
-                console.debug(JSON.parse(myCookie));
-            });
-        </script>
-        <div id="onTopChat" title="Author Chat">
-            <p><?php pp_author_chat(); ?></p>
-        </div>
-        <?php
+            </script>
+            <div id="onTopChat" title="Author Chat">
+                <p><?php pp_author_chat(); ?></p>
+            </div>
+            <?php
+        }
     }
 }
 
