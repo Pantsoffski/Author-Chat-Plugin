@@ -10,7 +10,22 @@
 #name-area                      { position: absolute; top: 12px; right: 0; font: bold 12px "Lucida Grande", Sans-Serif; text-align: right; }   
 #name-area span                 { color: #fa9f00; }
 #sendie                         { border: 3px solid #999; width: 100%; padding: 1%; font: 12px "Lucida Grande", Sans-Serif; }
+#sendie-overlay                 { border: 3px solid #999; width: 96%; padding: 1%; font: 12px "Lucida Grande", Sans-Serif; }
+#author-chat-pp                 {     margin:0 auto;
+    text-align:center; }
 
-.ui-dialog .ui-dialog-titlebar-close span {
+.ui-dialog-titlebar-close span {
     margin: -8px !important;
+}
+
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable {
+    z-index: 10000 !important;
+}
+
+.ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front{
+    z-index: 10001 !important;
+}
+
+.ui-widget-overlay {
+    position: fixed !important;
 }

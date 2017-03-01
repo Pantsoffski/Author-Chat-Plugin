@@ -97,7 +97,9 @@ class author_chat {
 }
 
 function pp_author_chat() {
+    $resultA = pp_author_chat_sec();
     $current_user = wp_get_current_user();
+    $current_screen = get_current_screen();
     if ((get_option('author_chat_settings_access_subscriber') == '1' && $current_user->user_level == '0') || (get_option('author_chat_settings_access_contributor') == '1' && $current_user->user_level == '1') || (get_option('author_chat_settings_access_author') == '1' && $current_user->user_level == '2') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '3') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '4') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '5') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '6') || (get_option('author_chat_settings_access_editor') == '1' && $current_user->user_level == '7' || $current_user->user_level == '8' || $current_user->user_level == '9' || $current_user->user_level == '10') || get_option('author_chat_settings_access_all_users') == '1') {
         ?>
 
@@ -118,11 +120,17 @@ function pp_author_chat() {
 
             <p id="name-area"></p>
 
-            <div id="chat-wrap"><div id="chat-area"></div></div>
+            <div id="chat-wrap">
+                <div id="chat-area"></div>
+            </div>
 
-            <form id="send-message-area">
-                <textarea id="sendie" maxlength = "1000" placeholder="<?php _e('Your message...', 'author-chat'); ?>"></textarea>
-            </form>
+            <?php if ($resultA === true || $current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard') { ?>
+                <form id="send-message-area">
+                    <textarea id="sendie" maxlength = "1000" placeholder="<?php _e('Your message...', 'author-chat'); ?>"></textarea>
+                </form>
+            <?php } elseif ($resultA === false) { ?>
+                <div id="sendie-overlay"><p>To send text from here you need to buy premium version of that plugin (click button above to buy, <b>$10.99 for lifetime 1 domain licence</b>).</p></div>
+            <?php } ?>
 
         </div>
 
@@ -190,55 +198,75 @@ function pp_author_chat() {
 }
 
 function pp_author_chat_chat_on_top() {
-    if (get_option('author_chat_settings_window') == 1) {
-        $result = pp_author_chat_sec();
-        if ($result === true) {
-            ?>
-            <script>
-                jQuery(document).ready(function () {
-                    function getCookie(cname) {
-                        var name = cname + "=";
-                        var decodedCookie = decodeURIComponent(document.cookie);
-                        var ca = decodedCookie.split(';');
-                        for (var i = 0; i < ca.length; i++) {
-                            var c = ca[i];
-                            while (c.charAt(0) == ' ') {
-                                c = c.substring(1);
-                            }
-                            if (c.indexOf(name) == 0) {
-                                return c.substring(name.length, c.length);
-                            }
+    $current_screen = get_current_screen();
+    if (get_option('author_chat_settings_window') == 1 && $current_screen->base != 'dashboard' && $current_screen->base != 'dashboard_page_author-chat') {
+        ?>
+        <script>
+            jQuery(document).ready(function () {
+                function getCookie(cname) {
+                    var name = cname + "=";
+                    var decodedCookie = decodeURIComponent(document.cookie);
+                    var ca = decodedCookie.split(';');
+                    for (var i = 0; i < ca.length; i++) {
+                        var c = ca[i];
+                        while (c.charAt(0) == ' ') {
+                            c = c.substring(1);
                         }
-                        return "";
-                    }
-                    var myCookie = getCookie("dialogPos");
-                    if (myCookie == "") {
-                        var dialogPosition = {top: "10", left: "10"};
-                    } else {
-                        var parsedPosition = JSON.parse(myCookie);
-                        var dialogPosition = {top: parsedPosition.top - 38, left: parsedPosition.left};
-                    }
-                    jQuery('#onTopChat').dialog({
-                        resizable: false,
-                        position: {
-                            my: "left+" + dialogPosition.left + " top+" + dialogPosition.top,
-                            at: "left top"
-                        },
-                        dragStop: function (event, ui) {
-                            var dialogPosition = jQuery('#onTopChat').offset();
-                            document.cookie = "dialogPos = " + JSON.stringify(dialogPosition);
-                            //$.cookie('dialog-pos-my', $(this).dialog('option', 'position').my);
-                            //$.cookie('dialog-pos-at', $(this).dialog('option', 'position').at);
+                        if (c.indexOf(name) == 0) {
+                            return c.substring(name.length, c.length);
                         }
-                    });
-                    console.log(myCookie);
+                    }
+                    return "";
+                }
+                var myCookie = getCookie("dialogPos");
+                if (myCookie == "") {
+                    var dialogPosition = {top: "10", left: "10"};
+                } else {
+                    var parsedPosition = JSON.parse(myCookie);
+                    var dialogPosition = {top: parsedPosition.top - 38, left: parsedPosition.left};
+                }
+                jQuery('#onTopChat').dialog({
+                    resizable: false,
+                    position: {
+                        my: "left+" + dialogPosition.left + " top+" + dialogPosition.top,
+                        at: "left top"
+                    },
+                    dragStop: function (event, ui) {
+                        var dialogPosition = jQuery('#onTopChat').offset();
+                        document.cookie = "dialogPos = " + JSON.stringify(dialogPosition);
+                    }
                 });
-            </script>
-            <div id="onTopChat" title="Author Chat">
-                <p><?php pp_author_chat(); ?></p>
+                jQuery('#onTopChat2').dialog({
+                    autoOpen: false,
+                    modal: true,
+                    draggable: false,
+                    resizable: false
+                });
+                jQuery("#onTopChat").click(function () {
+                    jQuery("#onTopChat2").dialog('open');
+                });
+                //var height = jQuery("wpwrap").height();
+                //jQuery(".ui-widget-overlay").css('height', height);
+                //console.log(myCookie);
+            });
+        </script>
+        <div id="onTopChat" title="Author Chat">
+            <p><?php pp_author_chat(); ?></p>
+        </div>
+        <div id="onTopChat2" title="Buy Premium Version">
+            <div id="author-chat-pp">
+                <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                    <input type="hidden" name="cmd" value="_s-xclick">
+                    <input type="hidden" name="hosted_button_id" value="5TGRZ4BSETP9G">
+                    <table>
+                        <tr><td><input type="hidden" name="on0" value="Installation domain name">Your domain name (where plugin is installed, e.g. "google.com")</td></tr><tr><td><input type="text" name="os0" maxlength="200"></td></tr>
+                    </table>
+                    <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                    <img alt="" border="0" src="https://www.paypalobjects.com/pl_PL/i/scr/pixel.gif" width="1" height="1">
+                </form>
             </div>
-            <?php
-        }
+        </div>
+        <?php
     }
 }
 
