@@ -4,7 +4,7 @@
  * Plugin URI: http://ordin.pl/
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.4.3
+ * Version: 1.5.1
  * Author URI: http://ordin.pl/
  * License: GPL12
  * Text Domain: author-chat
@@ -44,6 +44,7 @@ function pp_author_chat_activate() {
     add_option('author_chat_settings_access_all_users', 1);
     add_option('author_chat_settings_name', 0);
     add_option('author_chat_settings_window', 0);
+    add_option('author_chat_settings_val', 0);
 }
 
 // delete author_chat table
@@ -60,11 +61,14 @@ function pp_author_chat_uninstall() {
     delete_option('author_chat_settings_access_all_users');
     delete_option('author_chat_settings_name');
     delete_option('author_chat_settings_window');
+    delete_option('author_chat_settings_val');
 }
 
 function pp_scripts_admin_chat() {
+
     wp_enqueue_script('chat-script', plugins_url('chat.js', __FILE__), array('jquery'));
     wp_enqueue_style('author-chat-style', plugins_url('author-chat-style.css', __FILE__));
+    wp_enqueue_style('wp-jquery-ui-dialog');
     wp_enqueue_script('jquery-ui-dialog');
 }
 
@@ -90,6 +94,7 @@ function register_author_chat_settings() {
     register_setting('author_chat_settings_group', 'author_chat_settings_access_all_users');
     register_setting('author_chat_settings_group', 'author_chat_settings_name');
     register_setting('author_chat_settings_group', 'author_chat_settings_window');
+    register_setting('author_chat_settings_group', 'author_chat_settings_val');
 }
 
 class author_chat {
@@ -198,6 +203,7 @@ function pp_author_chat() {
 }
 
 function pp_author_chat_chat_on_top() {
+    $resultA = pp_author_chat_sec();
     $current_screen = get_current_screen();
     if (get_option('author_chat_settings_window') == 1 && $current_screen->base != 'dashboard' && $current_screen->base != 'dashboard_page_author-chat') {
         ?>
@@ -236,6 +242,7 @@ function pp_author_chat_chat_on_top() {
                         document.cookie = "dialogPos = " + JSON.stringify(dialogPosition);
                     }
                 });
+        <?php if ($resultA === false) {  ?>
                 jQuery('#onTopChat2').dialog({
                     autoOpen: false,
                     modal: true,
@@ -248,24 +255,27 @@ function pp_author_chat_chat_on_top() {
                 //var height = jQuery("wpwrap").height();
                 //jQuery(".ui-widget-overlay").css('height', height);
                 //console.log(myCookie);
+        <?php }  ?>
             });
         </script>
         <div id="onTopChat" title="Author Chat">
             <p><?php pp_author_chat(); ?></p>
         </div>
+        <?php if ($resultA === false) {  ?>
         <div id="onTopChat2" title="Buy Premium Version">
             <div id="author-chat-pp">
                 <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                     <input type="hidden" name="cmd" value="_s-xclick">
                     <input type="hidden" name="hosted_button_id" value="5TGRZ4BSETP9G">
                     <table>
-                        <tr><td><input type="hidden" name="on0" value="Installation domain name">Your domain name (where plugin is installed, e.g. "google.com")</td></tr><tr><td><input type="text" name="os0" maxlength="200"></td></tr>
+                        <tr><td><input type="hidden" name="on0" value="Domain name">If your domain name is correct, do not change it.</td></tr><tr><td><input type="text" name="os0" maxlength="200" value="<?php echo $_SERVER['HTTP_HOST']; ?>"></td></tr>
                     </table>
                     <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
                     <img alt="" border="0" src="https://www.paypalobjects.com/pl_PL/i/scr/pixel.gif" width="1" height="1">
                 </form>
             </div>
         </div>
+        <?php }  ?>
         <?php
     }
 }
@@ -287,14 +297,29 @@ function pp_author_chat_clean_up_database() {
 }
 
 function pp_author_chat_sec() {
-    $checkFile = file_get_contents(aURL);
-    $checkFile = str_getcsv($checkFile);
-    $dmCompare = array_search($_SERVER['SERVER_NAME'], $checkFile);
-    if ($dmCompare !== false) {
+    $valOption = explode(",", get_option('author_chat_settings_val'));
+    if ($valOption[0] == 0 || $valOption[0] <= time() - (1 * 24 * 60 * 60)) {
+        $checkFile = file_get_contents(aURL);
+        if ($checkFile === false) {
+            return true;
+        }
+        $checkFile = str_getcsv($checkFile);
+        $dmCompare = array_search($_SERVER['HTTP_HOST'], $checkFile);
+        if ($dmCompare !== false) {
+            $toUpdate = time() . ",1";
+            update_option('author_chat_settings_val', $toUpdate);
+            $result = true;
+        } else {
+            $toUpdate = time() . ",0";
+            update_option('author_chat_settings_val', $toUpdate);
+            $result = false;
+        }
+    } elseif ($valOption[1] == 1) {
         $result = true;
-    } else {
+    } elseif ($valOption[1] == 0) {
         $result = false;
     }
+    $checkFile = file_get_contents(aURL);
     return $result;
 }
 ?>

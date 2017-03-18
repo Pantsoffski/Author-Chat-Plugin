@@ -11,11 +11,10 @@
 #name-area span                 { color: #fa9f00; }
 #sendie                         { border: 3px solid #999; width: 100%; padding: 1%; font: 12px "Lucida Grande", Sans-Serif; }
 #sendie-overlay                 { border: 3px solid #999; width: 96%; padding: 1%; font: 12px "Lucida Grande", Sans-Serif; }
-#author-chat-pp                 {     margin:0 auto;
-    text-align:center; }
+#author-chat-pp                 { margin:0 auto; text-align:center; }
 
 .ui-dialog-titlebar-close span {
-    margin: -8px !important;
+/*    margin: -8px !important;*/
 }
 
 .ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable {

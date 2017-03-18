@@ -36,7 +36,7 @@ function author_chat_settings() {
                 </tr>
 
                 <tr valign="top">
-                    <th scope="row"><?php _e('Show chat window everywhere?', 'author-chat'); ?></th>
+                    <th scope="row"><?php _e('Show chat window everywhere (Premium Function)?', 'author-chat'); ?></th>
                     <td>
                         <input type="checkbox" name="author_chat_settings_window" value="1" <?php checked(get_option('author_chat_settings_window'), 1); ?>/>
                     </td>
