@@ -35,7 +35,7 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 2. Screenshot 2 - Admin Chat in a dashboard.
 
 == Changelog ==
-= 1.5.1 +
+= 1.5.1 =
 * Now chat can be visible everywhere (in small draggable window), so you can chat within any page inside the admin
 = 1.4.3 =
 * Updated for Wordpress 4.7 (replaced deprecated get_currentuserinfo function by wp_get_current_user)
