@@ -36,7 +36,7 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 
 == Changelog ==
 = 1.5.1 +
-* Now chat can be visible everywhere in small window
+* Now chat can be visible everywhere (in small draggable window), so you can chat within any page inside the admin
 = 1.4.3 =
 * Updated for Wordpress 4.7 (replaced deprecated get_currentuserinfo function by wp_get_current_user)
 = 1.4.1 =

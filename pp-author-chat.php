@@ -134,7 +134,7 @@ function pp_author_chat() {
                     <textarea id="sendie" maxlength = "1000" placeholder="<?php _e('Your message...', 'author-chat'); ?>"></textarea>
                 </form>
             <?php } elseif ($resultA === false) { ?>
-                <div id="sendie-overlay"><p>To send text from here you need to buy premium version of that plugin (click button above to buy, <b>$10.99 for lifetime 1 domain licence</b>).</p></div>
+                <div id="sendie-overlay"><p>To send text from here you need to buy premium version of that plugin, <b>$10.99 for lifetime 1 domain licence (future premium features included)</b>).</p></div>
             <?php } ?>
 
         </div>
@@ -252,9 +252,6 @@ function pp_author_chat_chat_on_top() {
                 jQuery("#onTopChat").click(function () {
                     jQuery("#onTopChat2").dialog('open');
                 });
-                //var height = jQuery("wpwrap").height();
-                //jQuery(".ui-widget-overlay").css('height', height);
-                //console.log(myCookie);
         <?php }  ?>
             });
         </script>
@@ -298,7 +295,7 @@ function pp_author_chat_clean_up_database() {
 
 function pp_author_chat_sec() {
     $valOption = explode(",", get_option('author_chat_settings_val'));
-    if ($valOption[0] == 0 || $valOption[0] <= time() - (1 * 24 * 60 * 60)) {
+    if ($valOption[0] == 0 || $valOption[0] <= time() - (1 * 24 * 60 * 60) && get_option('author_chat_settings_window') == 1) {
         $checkFile = file_get_contents(aURL);
         if ($checkFile === false) {
             return true;
@@ -318,6 +315,8 @@ function pp_author_chat_sec() {
         $result = true;
     } elseif ($valOption[1] == 0) {
         $result = false;
+    } elseif (get_option('author_chat_settings_window') == 0) {
+        update_option('author_chat_settings_val', 0);
     }
     $checkFile = file_get_contents(aURL);
     return $result;
