@@ -1,4 +1,4 @@
-/* Author-Chat-Style v1.5.7 */
+/* Author-Chat-Style v1.5.7.1 */
 
 /* Brink FX */
 @keyframes ac-bg-blink {
@@ -146,7 +146,7 @@
 	border-radius: 20px;
 	-wekit-border-radius: 20px;
 }
-#author-chat .ac-current-date {
+#author-chat .ac-top-date {
 	position: absolute;
 	display: block;
 	top: 17px;

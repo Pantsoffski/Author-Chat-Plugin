@@ -4,7 +4,7 @@
  * Plugin URI: http://ordin.pl/
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.5.7
+ * Version: 1.5.7.1
  * Author URI: http://ordin.pl/
  * License: GPL12
  * Text Domain: author-chat
@@ -15,7 +15,7 @@ include 'pp-process.php';
 
 // Global Vars
 global $author_chat_version;
-$author_chat_version = '1.5.7';
+$author_chat_version = '1.5.7.1';
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.1';
@@ -209,7 +209,7 @@ function pp_author_chat()
 
             <div class="ac-wrap">
 				<div id="author-chat-area" class="ac-animation">
-					<div class="ac-current-date"></div>
+					<div class="ac-top-date"></div>
 					<ul></ul>
 					<div class="ac-tobottom ac-animation ac-hidden"><span class="ac-icon-down"></span></div>
 				</div>
