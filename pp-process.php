@@ -78,7 +78,7 @@ if ( isset( $_POST['function'] ) )
 			array_walk_recursive( $date, function( &$element )
 			{
 				$element = strtotime( $element );
-				$element = date( 'j-m-Y,G:i:s', $element );
+				$element = date( 'Y-m-d,H:i:s', $element );
 			});
 			$result = array(
 				'id' => array_column( $text, 'id' ),
@@ -100,7 +100,7 @@ if ( isset( $_POST['function'] ) )
 			array_walk_recursive( $date, function( &$element )
 			{
 				$element = strtotime( $element );
-				$element = date( 'j-m-Y,G:i:s', $element );
+				$element = date( 'Y-m-d,H:i:s', $element );
 			});
 			$result = array(
 				'id' => array_column( $text, 'id' ),

@@ -1,4 +1,4 @@
-/* Author-Chat-Style v1.5.7.1 */
+/* Author-Chat-Style v1.5.7.2 */
 
 /* Brink FX */
 @keyframes ac-bg-blink {
@@ -74,7 +74,7 @@
 	overflow: auto;
 	overflow-x: hidden;
 }
-#author-chat-area li {
+#author-chat-area LI {
 	display: table;
 	width: 90%;
 	padding: 1px 3px 5px 6px;
@@ -115,7 +115,7 @@
 #author-chat .ac-msg {
 	display: block;
 }
-#author-chat .ac-msg a {
+#author-chat .ac-msg A {
 	word-break: break-all;
 	-ms-word-break: break-all;
 	hyphens: auto;
@@ -166,7 +166,7 @@
 	opacity:0.9;
 }
 
-#author-chat .ac-tobottom		{ 
+#author-chat .ac-tobottom { 
 	position: absolute;
 	display: flex;
 	display: -webkit-flex;
@@ -285,11 +285,11 @@ body.dashboard_page_author-chat #author-chat .ac-title {
 	display: inline-block;
 }
 
-body.toplevel_page_acset .form-table th {
+body.toplevel_page_acset .form-table TH {
 	width: auto;
 	min-width: 200px;
 }
-body.toplevel_page_acset .form-table td {
+body.toplevel_page_acset .form-table TD {
 	width: 80%;
 }
 
@@ -297,6 +297,7 @@ body.toplevel_page_acset .form-table td {
 	display: inline-block;
 	width: 18px;
     height: 18px;
+	margin-left: 5px;
 	margin-bottom: -4px;
 	background-image: url("emoticons.png");
 	background-repeat: no-repeat;

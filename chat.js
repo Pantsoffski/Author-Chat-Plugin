@@ -1,4 +1,4 @@
-/*  Author Chat  v1.5.7.1  */
+/*  Author Chat  v1.5.7.2  */
 /*************************/
 
 var authorChat = function()
@@ -12,6 +12,7 @@ var authorChat = function()
 	$this.interval_id = null;
 	$this.interval_secs = 2; /* interval time in seconds to check for some new message */
 	$this.last_date = '';
+	$this.today_date = new Date( Date.now() );
 	$this.last_id = 0;
 	$this.total_rows = 0;
 	$this.scroll_id = null;
@@ -359,6 +360,9 @@ _proto_.send = function()
 _proto_.update = function()
 {
 	var $this = this;
+	
+	$this.today_date = new Date( Date.now() );
+	
 	jQuery.ajax(
 	{
 		type: 'POST',
@@ -414,7 +418,7 @@ _proto_.update = function()
 				$this.last_id = parseInt( data.id[ rows - 1 ] );
 
 				/* set the last_day with today date */
-				$this.last_date = localize.today_date;
+				$this.last_date = (data.date[ rows - 1 ].split( ',' ))[0];
 			}
 
 			/* scroll the chat area to the bottom */
@@ -427,6 +431,9 @@ _proto_.update = function()
 _proto_.initiate = function( seconds )
 {
 	var $this = this;
+	
+	$this.today_date = new Date( Date.now() );
+	
 	jQuery.ajax(
 	{
 		type: 'POST',
@@ -447,8 +454,8 @@ _proto_.initiate = function( seconds )
 				}
 				/* save the last menssage id */
 				$this.last_id = parseInt( data.id[ rows - 1 ] );
-				/* set the last_day with today date */
-				$this.last_date = localize.today_date;
+				/* set the last_day */
+				$this.last_date = (data.date[ rows - 1 ].split( ',' ))[0];
 			}
 			/* scroll the chat area to the bottom */
 			$this.scrollToBottom();
@@ -492,14 +499,13 @@ _proto_.showMsg = function( uid, nick, msg, date, is_new )
 	if ( full_date[0] != $this.last_date )
 	{
 		$this.last_date = full_date[0];
-		var last_date = stringToDate( $this.last_date, localize.date_format, localize.date_delimiter );
-		var show_date = $this.last_date;
+		var msg_date = stringToDate( $this.last_date );
+		var show_date = msg_date.toLocaleDateString().replace(/\//g,'-').replace(/\-(\d)\-/g,'-0$1-');
 		
 		/* change the recent dates to weekday names */
 		if ( localize.set_weekdays == 1 )
 		{
-			var today_date = stringToDate( localize.today_date, localize.date_format, localize.date_delimiter );
-			var days = dayDiff ( today_date, last_date );
+			var days = dayDiff ( $this.today_date, msg_date );
 			if ( days == 0 )
 			{
 				show_date = localize.today;
@@ -510,7 +516,7 @@ _proto_.showMsg = function( uid, nick, msg, date, is_new )
 			}
 			else if ( days > 1 && days < 7 )
 			{
-				switch( last_date.getDay() )
+				switch( msg_date.getDay() )
 				{
 					case 0:
 						show_date = localize.sunday;
@@ -751,18 +757,18 @@ function truncateString( str, ini, end )
 /* Convert string date format to date */
 function stringToDate( _date, _format, _delimiter )
 {
-	var formatLowerCase = _format.toLowerCase(),
-		formatItems = formatLowerCase.split( _delimiter ),
-		dateItems = _date.split( _delimiter ),
+	var format = (_format||'yyyy-mm-dd').toLowerCase(),
+		delimiter = _delimiter||'-',
+		formatItems = format.split( delimiter ),
+		dateItems = _date.split( delimiter ),
 		monthIndex = formatItems.indexOf( 'mm' ),
 		dayIndex = formatItems.indexOf( 'dd' ),
 		yearIndex = formatItems.indexOf( 'yyyy' ),
 		month = parseInt( dateItems[ monthIndex ] );
 	month-=1;
-	var formatedDate = new Date( dateItems[ yearIndex ], month, dateItems[ dayIndex ] );
-	return formatedDate;
+	return new Date( dateItems[ yearIndex ], month, dateItems[ dayIndex ] );
 }
 
 function dayDiff( first_date, second_date ) {
-    return Math.round( ( first_date - second_date ) / (1000*60*60*24) );
+    return Math.floor( ( first_date - second_date ) / (1000*60*60*24) );
 }
