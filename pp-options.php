@@ -1,4 +1,5 @@
 <?php
+/* Author Chat Options v1.5.8 */
 
 function author_chat_settings() {
 	?>
@@ -80,6 +81,17 @@ function author_chat_settings() {
 				
 				<tr valign="top">
 					<th scope="row">
+						<label for="ac_show_my_name">
+							<?php _e('Show my name in the messages?', 'author-chat'); ?>
+						</label>
+					</th>
+					<td>
+						<input id="ac_show_my_name" type="checkbox" name="author_chat_settings_show_my_name" value="1" <?php checked( get_option( 'author_chat_settings_show_my_name' ), 1 ); ?>/>
+					</td>
+				</tr>
+				
+				<tr valign="top">
+					<th scope="row">
 						<label for="ac_show_url_preview">
 							<?php _e('Show thumb preview of the URLs?', 'author-chat'); ?>
 						</label>
@@ -97,6 +109,26 @@ function author_chat_settings() {
 					</th>
 					<td>
 						<input id="ac_show_weekdays" type="checkbox" name="author_chat_settings_weekdays" value="1" <?php checked( get_option( 'author_chat_settings_weekdays' ), 1 ); ?>/>
+					</td>
+				</tr>
+				
+				<tr valign="top">
+					<th scope="row">
+						<label for="ac_sets_interval">
+							<?php _e( 'Refresh interval to check new messages', 'author-chat' ); ?>
+						</label>
+					</th>
+					<td>
+						<select id="ac_sets_interval" name="author_chat_settings_interval">
+							<?php
+							for ($i = 1; $i < 11 ; $i++) {
+							?>
+								<option <?php echo selected( get_option( 'author_chat_settings_interval' ), $i ); ?> value="<?php echo $i; ?>"><?php echo $i; ?></option>
+							<?php
+							}
+							?>
+						</select>
+						&nbsp;<?php _e( 'second(s)', 'author-chat' ); ?>
 					</td>
 				</tr>
 

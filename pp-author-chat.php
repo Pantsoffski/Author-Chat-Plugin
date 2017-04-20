@@ -4,7 +4,7 @@
  * Plugin URI: http://ordin.pl/
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.5.7
+ * Version: 1.5.8
  * Author URI: http://ordin.pl/
  * License: GPL12
  * Text Domain: author-chat
@@ -15,7 +15,7 @@ include 'pp-process.php';
 
 // Global Vars
 global $author_chat_version;
-$author_chat_version = '1.5.7';
+$author_chat_version = '1.5.8';
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.1';
@@ -92,7 +92,9 @@ function pp_author_chat_activate()
 	add_option( 'author_chat_settings_access_contributor', 0 );
 	add_option( 'author_chat_settings_access_editor', 0 );
 	add_option( 'author_chat_settings_access_subscriber', 0 );
+	add_option( 'author_chat_settings_interval', 2 );
 	add_option( 'author_chat_settings_name', 0 );
+	add_option( 'author_chat_settings_show_my_name', 0 );
 	add_option( 'author_chat_settings_url_preview', 1 );
 	add_option( 'author_chat_settings_weekdays', 1 );
 	add_option( 'author_chat_settings_val', 0 );
@@ -112,7 +114,9 @@ function pp_author_chat_uninstall()
 	delete_option( 'author_chat_settings_access_editor' );
 	delete_option( 'author_chat_settings_access_subscriber' );
 	delete_option( 'author_chat_settings_delete');
+	delete_option( 'author_chat_settings_interval');
 	delete_option( 'author_chat_settings_name' );
+	delete_option( 'author_chat_settings_show_my_name' );
 	delete_option( 'author_chat_settings_url_preview' );
 	delete_option( 'author_chat_settings_weekdays' );
 	delete_option( 'author_chat_settings_val' );
@@ -145,6 +149,8 @@ function pp_scripts_admin_chat()
 		'thursday'			=> __( 'Thursday', 'default' ),
 		'friday'			=> __( 'Friday', 'default' ),
 		'saturday'			=> __( 'Saturday', 'default' ),
+		'set_interval'		=> get_option( 'author_chat_settings_interval' ),
+		'set_show_my_name'	=> get_option( 'author_chat_settings_show_my_name' ),
 		'set_url_preview'	=> get_option( 'author_chat_settings_url_preview' ),
 		'set_weekdays'		=> get_option( 'author_chat_settings_weekdays' )
 	);
@@ -177,7 +183,9 @@ function register_author_chat_settings()
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_access_editor' );
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_access_subscriber' );
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_delete' );
+	register_setting( 'author_chat_settings_group', 'author_chat_settings_interval' );
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_name' );
+	register_setting( 'author_chat_settings_group', 'author_chat_settings_show_my_name' );
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_url_preview' );
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_weekdays' );
 	register_setting( 'author_chat_settings_group', 'author_chat_settings_val' );
@@ -240,7 +248,7 @@ function pp_author_chat()
 
 function pp_author_chat_chat_on_top()
 {
-	$resultA = true;
+	$resultA = pp_author_chat_sec();
 	$current_screen = get_current_screen();
 
 	?>

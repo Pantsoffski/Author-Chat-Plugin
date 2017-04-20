@@ -1,5 +1,5 @@
-/*  Author Chat  v1.5.7  */
-/*************************/
+/*  Author Chat  v1.5.8  */
+/**************************/
 
 var authorChat = function()
 {
@@ -10,7 +10,7 @@ var authorChat = function()
 	$this.count = 0;
 	$this.title = document.title;
 	$this.interval_id = null;
-	$this.interval_secs = 2; /* interval time in seconds to check for some new message */
+	$this.interval_secs = parseInt( localize.set_interval ); /* interval time in seconds to check for some new message */
 	$this.last_date = '';
 	$this.today_date = new Date( Date.now() );
 	$this.last_id = 0;
@@ -18,6 +18,9 @@ var authorChat = function()
 	$this.scroll_id = null;
 	$this.win_is_focus = true;
 	$this.truncate = [ 35, 10 ]; /* to truncate the length of url text */
+	$this.uid_list = '';
+	$this.uid_colors = {};
+	$this.uid_last_color = 1;
 	
 	/* list of ASCII Emoticons to detect */
 	$this.emoticons = [
@@ -291,8 +294,8 @@ _proto_.getState = function()
 	{
 		/* console.log( 'getState: call Ajax from: '  + path ); */
 
-		/* save the master path in local storage with 6 segs of time-life */
-		$this.setLocalData( 'ac_master_path', path, 6 );
+		/* save the master path to localstorage with a lifetime relative to the current refresh time interval */
+		$this.setLocalData( 'ac_master_path', path, $this.interval_secs * 3 );
 
 		jQuery.ajax(
 		{
@@ -546,13 +549,30 @@ _proto_.showMsg = function( uid, nick, msg, date, is_new )
 		jQuery( '#author-chat-area ul' ).append( jQuery( '<li class="ac-date">' + show_date + '</li>' ) );
 	}
 	
+	/* Nick Classes */
+	var nick_class = 'ac-nick';
+	if ( uid == localize.user_id ) {
+		if  ( localize.set_show_my_name == 0 ) {
+			nick_class += ' ac-hide';
+		}
+	} else {
+		/* Nick Colors */
+		if ( $this.uid_list.indexOf( uid ) == -1 )
+		{
+			$this.uid_list += uid + ',';
+			$this.uid_colors[ uid ] = $this.uid_last_color++;
+			if ( $this.uid_last_color > 20 ){ $this.uid_last_color = 1; }
+		}
+		nick_class += ' color-' + $this.uid_colors[ uid ];
+	} 
+	
 	/* set the message bubble */
-	var $_bubble = jQuery( '<li>' + '<div class="ac-time">' + full_date[1] + '</div>' + '<div class="ac-nick">' + nick + '</div>' + '<div class="ac-msg"><span>' + $this.processMsg( msg ) + '</span></div>' + '<div class="ac-arrow"></div>' + '</li>');
+	var $_bubble = jQuery( '<li>' + '<div class="ac-time">' + full_date[1] + '</div>' + '<div class="' + nick_class + '">' + nick + '</div>' + '<div class="ac-msg"><span>' + $this.processMsg( msg ) + '</span></div>' + '<div class="ac-arrow"></div>' + '</li>');
 	
 	/* add the class "ac-me" to the bubble */
 	if ( uid == localize.user_id ) { 
 		$_bubble.addClass( 'ac-me' );
-	}
+	} 
 	
 	/* add thumb preview of last url if have one */
 	var $_url = $_bubble.find( 'a:not(:has(>img))' );

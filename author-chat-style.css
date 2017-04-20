@@ -1,4 +1,4 @@
-/* Author-Chat-Style v1.5.7 */
+/* Author-Chat-Style v1.5.8 */
 
 /* Brink FX */
 @keyframes ac-bg-blink {
@@ -60,7 +60,7 @@
 }
 #author-chat .ac-user {
 	float: right;
-	font: bold 12px "Lucida Grande", Sans-Serif;
+	font: 600 12px "Lucida Grande", Sans-Serif;
 	text-align: right;
 }
 #author-chat .ac-user span {
@@ -110,10 +110,16 @@
 #author-chat .ac-nick {
 	display: inline-block;
 	font-weight: 600;
-	color: black;
+	color: #888;
+}
+#author-chat .ac-nick.ac-hide {
+	display: none;
 }
 #author-chat .ac-msg {
 	display: block;
+}
+#author-chat .ac-me .ac-nick.ac-hide + .ac-msg {
+    margin-top: 3px;
 }
 #author-chat .ac-msg A {
 	word-break: break-all;
@@ -354,6 +360,48 @@ body.toplevel_page_acset .form-table TD {
 #author-chat .ac-emo.devil {
 	background-position: -26px -70px;
 }
+
+
+#author-chat .color-1{color:#35cd96 !important}
+#author-chat .color-2{color:#6bcbef !important}
+#author-chat .color-3{color:#e542a3 !important}
+#author-chat .color-4{color:#91ab01 !important}
+#author-chat .color-5{color:#ffa97a !important}
+#author-chat .color-6{color:#1f7aec !important}
+#author-chat .color-7{color:#dfb610 !important}
+#author-chat .color-8{color:#029d00 !important}
+#author-chat .color-9{color:#8b7add !important}
+#author-chat .color-10{color:#fe7c7f !important}
+#author-chat .color-11{color:#ba33dc !important}
+#author-chat .color-12{color:#59d368 !important}
+#author-chat .color-13{color:#b04632 !important}
+#author-chat .color-14{color:#fd85d4 !important}
+#author-chat .color-15{color:#8393ca !important}
+#author-chat .color-16{color:#ff8f2c !important}
+#author-chat .color-17{color:#a3e2cb !important}
+#author-chat .color-18{color:#b4876e !important}
+#author-chat .color-19{color:#c90379 !important}
+#author-chat .color-20{color:#ef4b4f !important}
+#author-chat .bg-color-1{background-color:#35cd96 !important}
+#author-chat .bg-color-2{background-color:#6bcbef !important}
+#author-chat .bg-color-3{background-color:#e542a3 !important}
+#author-chat .bg-color-4{background-color:#91ab01 !important}
+#author-chat .bg-color-5{background-color:#ffa97a !important}
+#author-chat .bg-color-6{background-color:#1f7aec !important}
+#author-chat .bg-color-7{background-color:#dfb610 !important}
+#author-chat .bg-color-8{background-color:#029d00 !important}
+#author-chat .bg-color-9{background-color:#8b7add !important}
+#author-chat .bg-color-10{background-color:#fe7c7f !important}
+#author-chat .bg-color-11{background-color:#ba33dc !important}
+#author-chat .bg-color-12{background-color:#59d368 !important}
+#author-chat .bg-color-13{background-color:#b04632 !important}
+#author-chat .bg-color-14{background-color:#fd85d4 !important}
+#author-chat .bg-color-15{background-color:#8393ca !important}
+#author-chat .bg-color-16{background-color:#ff8f2c !important}
+#author-chat .bg-color-17{background-color:#a3e2cb !important}
+#author-chat .bg-color-18{background-color:#b4876e !important}
+#author-chat .bg-color-19{background-color:#c90379 !important}
+#author-chat .bg-color-20{background-color:#ef4b4f !important}
 
 
 .ui-dialog[aria-describedby="author-chat-window"] {

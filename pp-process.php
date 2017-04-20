@@ -1,4 +1,5 @@
 <?php
+/* Author Chat Process v1.5.8 */
 
 define( 'aURL', 'https://ordin.pl/auth/author_chat/author_chat.csv' );
 
