@@ -1,5 +1,7 @@
 <?php
 
+/* Author Chat Process v1.5.9 */
+
 define('aURL', 'https://ordin.pl/auth/author_chat/author_chat.csv');
 
 if (!function_exists('array_column')) {
@@ -31,79 +33,72 @@ if (!function_exists('array_column')) {
 }
 
 if (isset($_POST['function'])) {
+    global $wpdb;
+    $author_chat_table = $wpdb->prefix . 'author_chat';
     $function = filter_var($_POST['function'], FILTER_SANITIZE_STRING);
-    $log = array();
+    $result = array();
 
     switch ($function) {
-
-        case('updateCount'):
-            global $wpdb;
-            $author_chat_table = $wpdb->prefix . 'author_chat';
-            $linesCount = $wpdb->get_var("SELECT COUNT(*) FROM $author_chat_table");
-            $log = $linesCount;
+        case( 'getState' ):
+            $result = $wpdb->get_var("SELECT COUNT(*) FROM $author_chat_table");
             break;
 
-        case('getState'):
-            global $wpdb;
-            $author_chat_table = $wpdb->prefix . 'author_chat';
-            $newLinesCount = $wpdb->get_var("SELECT COUNT(*) FROM $author_chat_table");
-            $log = $newLinesCount;
-            break;
-
-        case('send'):
+        case( 'send' ):
+            $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
             $nickname = strip_tags(filter_var($_POST['nickname'], FILTER_SANITIZE_STRING));
-            $reg_exUrl = "/(http|https|ftp|ftps)\:\/\/[a-zA-Z0-9\-\.]+\.[a-zA-Z]{2,3}(\/\S*)?/";
             $message = strip_tags(filter_var($_POST['message'], FILTER_SANITIZE_STRING));
-            if (($message) != "\n") {
-                if (preg_match($reg_exUrl, $message, $url)) {
-                    $message = preg_replace($reg_exUrl, '<a href="' . $url[0] . '" target="_blank">' . $url[0] . '</a>', $message);
-                }
-                global $wpdb;
-                $author_chat_table = $wpdb->prefix . 'author_chat';
-                $wpdb->query($wpdb->prepare(
-                                "INSERT INTO $author_chat_table (nickname, content, date) VALUES (%s, %s, NOW())", $nickname, $message
-                ));
+            if (( $message ) != '\n') {
+                $result = array(
+                    'user_id' => $user_id,
+                    'nickname' => $nickname,
+                    'content' => $message,
+                    'date' => date('Y-m-d H:i:s')
+                );
+
+                $wpdb->insert($author_chat_table, $result, array('%d', '%s', '%s', '%s'));
             }
             break;
 
-        case('update'):
-            global $wpdb;
-            $author_chat_table = $wpdb->prefix . 'author_chat';
-            $lines = $wpdb->get_results("SELECT nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
+        case( 'update' ):
+            $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
             $text = array();
             foreach ($lines as $line) {
                 $text[] = $line;
             }
-            $log = array_column($text, 'nickname');
-            $log2 = array_column($text, 'content');
-            $log3 = array_column($text, 'date');
-            array_walk_recursive($log3, function(&$element) {
+            $date = array_column($text, 'date');
+            array_walk_recursive($date, function( &$element ) {
                 $element = strtotime($element);
-                $element = date('j-m-Y </\s\p\a\n> <\s\p\a\n \i\d="\t\i\m\e">G:i:s', $element);
+                $element = date('Y-m-d,H:i:s', $element);
             });
+            $result = array(
+                'id' => array_column($text, 'id'),
+                'uid' => array_column($text, 'user_id'),
+                'nick' => array_column($text, 'nickname'),
+                'msg' => array_column($text, 'content'),
+                'date' => $date
+            );
             break;
 
-        case('initiate'):
-            global $wpdb;
-            $author_chat_table = $wpdb->prefix . 'author_chat';
-            $lines = $wpdb->get_results("SELECT nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
+        case( 'initiate' ):
+            $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
             $text = array();
             foreach ($lines as $line) {
                 $text[] = $line;
             }
-            $log = array_column($text, 'nickname');
-            $log2 = array_column($text, 'content');
-            $log3 = array_column($text, 'date');
-            array_walk_recursive($log3, function(&$element) {
+            $date = array_column($text, 'date');
+            array_walk_recursive($date, function( &$element ) {
                 $element = strtotime($element);
-                $element = date('j-m-Y </\s\p\a\n> <\s\p\a\n \i\d="\t\i\m\e">G:i:s', $element);
+                $element = date('Y-m-d,H:i:s', $element);
             });
+            $result = array(
+                'id' => array_column($text, 'id'),
+                'uid' => array_column($text, 'user_id'),
+                'nick' => array_column($text, 'nickname'),
+                'msg' => array_column($text, 'content'),
+                'date' => $date
+            );
             break;
     }
-    if (isset($log2)) {
-        echo wp_send_json(array('result1' => $log, 'result2' => $log2, 'result3' => $log3));
-    } else {
-        echo wp_send_json($log);
-    }
+    echo wp_send_json($result);
 }
 ?>

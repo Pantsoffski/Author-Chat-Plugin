@@ -2,11 +2,11 @@
 Contributors: Piotr Pesta
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EEDF5TV3M2WVG&lc=US
 Plugin Name: Author Chat
-Tags: plugin, chat, author, for authors, admin, messages, internal chat
+Tags: plugin, chat, author, for authors, admin, messages, internal chat, users chat, user, dashboard chat, dashboard, admin menu chat
 Author: Piotr Pesta
-Requires at least: 2.8.0
+Requires at least: 4.0
 Tested up to: 4.7
-Stable tag: 1.5.1
+Stable tag: 1.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,9 @@ Author Chat is an internal chat that let your authors (users with access to dash
 
 == Description ==
 
-Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use. All chat data is stored in database. You can also configure how many days chat history should be stored in database.
+[Author Chat](https://github.com/Pantsoffski/Author-Chat-Plugin) is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use. All chat data is stored in database. You can also configure how many days chat history should be stored in database, change the interval time for the verification of new messages, show or hide our name in the messages and many more.
+
+Big thanks to Pablo Custo for contributing.
 
 If you wish to translate plugin, just add your translation file to /lang/ folder.
 
@@ -35,6 +37,13 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 2. Screenshot 2 - Admin Chat in a dashboard.
 
 == Changelog ==
+= 1.5.9 =
+* Lot's of changes (!big thanks to [Pablo Custo](https://github.com/pablocusto) for his very hard work on this version!)
+* Now you change the interval time for the verification of new messages from the AC Settings (1 to 10 secs).
+* Incorporate the differentiation of nicknames by colors in their names as does WhatsApp.
+* Possibility to show or hide our name in the messages (AC Settings).
+* Big change of the chat window style.
+* Code optimization.
 = 1.5.1 =
 * Now chat can be visible everywhere (in small draggable window), so you can chat within any page inside the admin
 = 1.4.3 =
