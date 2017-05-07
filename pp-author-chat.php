@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.5.9
+ * Version: 1.6.0
  * Author URI: https://github.com/Pantsoffski
  * License: GPL12
  * Text Domain: author-chat
@@ -15,7 +15,7 @@ include 'pp-process.php';
 
 // Global Vars
 global $author_chat_version;
-$author_chat_version = '1.5.9';
+$author_chat_version = '1.6.0';
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.1';
@@ -24,6 +24,7 @@ add_action('admin_menu', 'pp_author_chat_setup_menu');
 add_action('wp_dashboard_setup', 'pp_wp_dashboard_author_chat');
 add_action('admin_enqueue_scripts', 'pp_scripts_admin_chat');
 register_activation_hook(__FILE__, 'pp_author_chat_activate');
+register_deactivation_hook( __FILE__, 'pp_author_chat_deactivate' );
 register_uninstall_hook(__FILE__, 'pp_author_chat_uninstall');
 add_action('plugins_loaded', 'pp_author_chat_update_db_check');
 add_action('plugins_loaded', 'pp_author_chat_load_textdomain');
@@ -92,6 +93,11 @@ function pp_author_chat_activate() {
     add_option('author_chat_settings_weekdays', 1);
     add_option('author_chat_settings_val', 0);
     add_option('author_chat_settings_window', 0);
+}
+
+// Deactivate Author Chat
+function pp_author_chat_deactivate() {
+    delete_option('author_chat_settings_val');
 }
 
 // Delete author_chat table

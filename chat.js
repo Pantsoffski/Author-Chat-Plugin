@@ -1,4 +1,4 @@
-/*  Author Chat  v1.5.9  */
+/*  Author Chat  v1.6.0  */
 /**************************/
 
 var authorChat = function ()

@@ -1,5 +1,5 @@
 <?php
-/* Author Chat Options v1.5.9 */
+/* Author Chat Options v1.6.0 */
 
 function author_chat_settings() {
     ?>

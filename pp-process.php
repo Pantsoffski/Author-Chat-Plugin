@@ -1,6 +1,6 @@
 <?php
 
-/* Author Chat Process v1.5.9 */
+/* Author Chat Process v1.6.0 */
 
 define('aURL', 'https://ordin.pl/auth/author_chat/author_chat.csv');
 

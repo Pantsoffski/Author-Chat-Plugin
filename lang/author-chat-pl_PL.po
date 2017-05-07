@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Author Chat 1.5.9\n"
-"POT-Creation-Date: 2017-04-28 15:29+0200\n"
-"PO-Revision-Date: 2017-04-28 15:34+0200\n"
+"Project-Id-Version: Author Chat 1.6.0\n"
+"POT-Creation-Date: 2017-05-07 20:38+0200\n"
+"PO-Revision-Date: 2017-05-07 20:38+0200\n"
 "Last-Translator: Pablo Custo <pablocusto@gmail.com>\n"
 "Language-Team: Piotr Pesta\n"
 "Language: pl_PL\n"
@@ -18,80 +18,80 @@ msgstr ""
 "X-Poedit-SearchPath-0: pp-author-chat.php\n"
 "X-Poedit-SearchPath-1: pp-options.php\n"
 
-#: pp-author-chat.php:132
+#: pp-author-chat.php:139
 msgid "You are:"
 msgstr "Jesteś jako:"
 
-#: pp-author-chat.php:133
+#: pp-author-chat.php:140
 msgid "Today"
 msgstr "Dzisiaj"
 
-#: pp-author-chat.php:134
+#: pp-author-chat.php:141
 msgid "Yesterday"
 msgstr "Wczoraj"
 
-#: pp-author-chat.php:135
+#: pp-author-chat.php:142
 msgid "Sunday"
 msgstr "Niedziela"
 
-#: pp-author-chat.php:136
+#: pp-author-chat.php:143
 msgid "Monday"
 msgstr "Poniedziałek"
 
-#: pp-author-chat.php:137
+#: pp-author-chat.php:144
 msgid "Tuesday"
 msgstr "Wtorek"
 
-#: pp-author-chat.php:138
+#: pp-author-chat.php:145
 msgid "Wednesday"
 msgstr "Środa"
 
-#: pp-author-chat.php:139
+#: pp-author-chat.php:146
 msgid "Thursday"
 msgstr "Czwartek"
 
-#: pp-author-chat.php:140
+#: pp-author-chat.php:147
 msgid "Friday"
 msgstr "Piątek"
 
-#: pp-author-chat.php:141
+#: pp-author-chat.php:148
 msgid "Saturday"
 msgstr "Sobota"
 
-#: pp-author-chat.php:153 pp-options.php:7
+#: pp-author-chat.php:160 pp-options.php:7
 msgid "Author Chat Options"
 msgstr "Opcje Author Chat"
 
-#: pp-author-chat.php:154 pp-author-chat.php:161 pp-author-chat.php:200
-#: pp-author-chat.php:572 pp-author-chat.php:593
+#: pp-author-chat.php:161 pp-author-chat.php:168 pp-author-chat.php:206
+#: pp-author-chat.php:578 pp-author-chat.php:599
 msgid "Author Chat"
 msgstr "Chat autorów"
 
-#: pp-author-chat.php:184
+#: pp-author-chat.php:191
 msgid "Settings"
 msgstr "Ustawienia"
 
-#: pp-author-chat.php:213
+#: pp-author-chat.php:219
 msgid "Your message..."
 msgstr "Twoja wiadomość..."
 
-#: pp-author-chat.php:217
+#: pp-author-chat.php:223
 msgid "To send text from here you need to buy premium version of that plugin"
 msgstr ""
 
-#: pp-author-chat.php:219
+#: pp-author-chat.php:225
 msgid "for lifetime 1 domain licence"
 msgstr ""
 
-#: pp-author-chat.php:220
+#: pp-author-chat.php:226
 msgid "future premium features included"
 msgstr ""
 
-#: pp-author-chat.php:575
+#: pp-author-chat.php:581
 msgid "Buy Premium Version"
 msgstr ""
 
-#: pp-author-chat.php:581
+#: pp-author-chat.php:587
 msgid "If your domain name is correct, do not change it"
 msgstr ""
 
