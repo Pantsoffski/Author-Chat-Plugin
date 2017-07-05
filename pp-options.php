@@ -1,5 +1,5 @@
 <?php
-/* Author Chat Options v1.6.0 */
+/* Author Chat Options v1.7.0 */
 
 function author_chat_settings() {
     ?>
@@ -10,6 +10,20 @@ function author_chat_settings() {
             <?php settings_fields('author_chat_settings_group'); ?>
             <?php do_settings_sections('author_chat_settings_group'); ?>
             <table class="form-table">
+                <tr valign="top">
+                    <th scope="row">
+                    </th>
+                    <td>
+                <center>
+                    <p><?php _e('Your PIN code for Android App:', 'author-chat'); ?><br />
+                        <b>
+                            <font size="6"><?php echo esc_attr(get_option('author_chat_settings_pin')); ?></font>
+                        </b><br /> 
+                        You can find Author Chat for Android here: <a href="https://play.google.com/store/apps/details?id=pl.ordin.authorchatforwordpress">Google Play</a>
+                    </p>
+                </center>
+                    </td>
+                </tr>
                 <tr valign="top">
                     <th scope="row">
                         <label for="ac_sets_lifetime">

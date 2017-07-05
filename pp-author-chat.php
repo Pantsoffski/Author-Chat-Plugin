@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.6.0
+ * Version: 1.7.0
  * Author URI: https://github.com/Pantsoffski
  * License: GPL12
  * Text Domain: author-chat
@@ -15,7 +15,7 @@ include 'pp-process.php';
 
 // Global Vars
 global $author_chat_version;
-$author_chat_version = '1.6.0';
+$author_chat_version = '1.7.0';
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.1';
@@ -30,6 +30,7 @@ add_action('plugins_loaded', 'pp_author_chat_update_db_check');
 add_action('plugins_loaded', 'pp_author_chat_load_textdomain');
 add_action('in_admin_footer', 'pp_author_chat_chat_on_top');
 add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'pp_plugin_action_links_ac');
+add_action('rest_api_init', 'pp_author_chat_rest_api');
 
 // Load Localization
 function pp_author_chat_load_textdomain() {
@@ -93,6 +94,7 @@ function pp_author_chat_activate() {
     add_option('author_chat_settings_weekdays', 1);
     add_option('author_chat_settings_val', 0);
     add_option('author_chat_settings_window', 0);
+    add_option('author_chat_settings_pin', mt_rand(1000, 9999));
 }
 
 // Deactivate Author Chat
@@ -119,6 +121,7 @@ function pp_author_chat_uninstall() {
     delete_option('author_chat_settings_weekdays');
     delete_option('author_chat_settings_val');
     delete_option('author_chat_settings_window');
+    delete_option('author_chat_settings_pin');
 }
 
 // Enqueue JavaScript & CSS files
@@ -184,11 +187,13 @@ function register_author_chat_settings() {
     register_setting('author_chat_settings_group', 'author_chat_settings_weekdays');
     register_setting('author_chat_settings_group', 'author_chat_settings_val');
     register_setting('author_chat_settings_group', 'author_chat_settings_window');
+    register_setting('author_chat_settings_group', 'author_chat_settings_pin');
 }
 
 function pp_plugin_action_links_ac($links) { //Add settings link to plugins page
     $action_links = array(
         'settings' => '<a href="' . admin_url('admin.php?page=acset') . '">' . esc_html__('Settings', 'author-chat') . '</a>',
+        'android' => '<a href="https://play.google.com/store/apps/details?id=pl.ordin.authorchatforwordpress">' . esc_html__('Author Chat for Android', 'author-chat') . '</a>',
     );
 
     return array_merge($action_links, $links);
@@ -652,4 +657,34 @@ function pp_author_chat_sec() {
     $checkFile = file_get_contents(aURL);
     return $result;
 }
-?>
+
+function pp_author_chat_rest_api() {
+    register_rest_route('author-chat/v2', '/chat/', array(
+        'methods' => 'GET',
+        'callback' => 'pp_get_chat_rest',
+    ));
+}
+
+function pp_get_chat_rest() {
+    global $wpdb;
+    $author_chat_table = $wpdb->prefix . 'author_chat';
+    $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
+            $text = array();
+            foreach ($lines as $line) {
+                $text[] = $line;
+            }
+            $date = array_column($text, 'date');
+            array_walk_recursive($date, function( &$element ) {
+                $element = strtotime($element);
+                $element = date('Y-m-d,H:i:s', $element);
+            });
+            $result = array(
+                'id' => array_column($text, 'id'),
+                'uid' => array_column($text, 'user_id'),
+                'nick' => array_column($text, 'nickname'),
+                'msg' => array_column($text, 'content'),
+                'date' => $date,
+                'pin' => get_option('author_chat_settings_pin')
+            );
+    return $result;
+}
