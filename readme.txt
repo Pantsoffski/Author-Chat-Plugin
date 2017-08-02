@@ -6,7 +6,7 @@ Tags: plugin, chat, author, for authors, admin, messages, internal chat, users c
 Author: Piotr Pesta
 Requires at least: 4.0
 Tested up to: 4.8
-Stable tag: 1.7.0
+Stable tag: 1.7.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,8 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 5. Author Chat - options and smaller chat window.
 
 == Changelog ==
+= 1.7.5 =
+* Author Chat for Android - code optimization so you can send messages from smartphone
 = 1.7.0 =
 * Now you can download Author Chat client for Android from Google Play
 * Wordpress 4.8 compatibility

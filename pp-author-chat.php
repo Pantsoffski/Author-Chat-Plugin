@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.7.0
+ * Version: 1.7.5
  * Author URI: https://github.com/Pantsoffski
  * License: GPL12
  * Text Domain: author-chat
@@ -15,7 +15,7 @@ include 'pp-process.php';
 
 // Global Vars
 global $author_chat_version;
-$author_chat_version = '1.7.0';
+$author_chat_version = '1.7.5';
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.1';
@@ -94,7 +94,6 @@ function pp_author_chat_activate() {
     add_option('author_chat_settings_weekdays', 1);
     add_option('author_chat_settings_val', 0);
     add_option('author_chat_settings_window', 0);
-    add_option('author_chat_settings_pin', mt_rand(1000, 9999));
 }
 
 // Deactivate Author Chat
@@ -121,7 +120,6 @@ function pp_author_chat_uninstall() {
     delete_option('author_chat_settings_weekdays');
     delete_option('author_chat_settings_val');
     delete_option('author_chat_settings_window');
-    delete_option('author_chat_settings_pin');
 }
 
 // Enqueue JavaScript & CSS files
@@ -187,7 +185,6 @@ function register_author_chat_settings() {
     register_setting('author_chat_settings_group', 'author_chat_settings_weekdays');
     register_setting('author_chat_settings_group', 'author_chat_settings_val');
     register_setting('author_chat_settings_group', 'author_chat_settings_window');
-    register_setting('author_chat_settings_group', 'author_chat_settings_pin');
 }
 
 function pp_plugin_action_links_ac($links) { //Add settings link to plugins page
@@ -589,7 +586,7 @@ function pp_author_chat_chat_on_top() {
                         <input type="hidden" name="cmd" value="_s-xclick">
                         <input type="hidden" name="hosted_button_id" value="5TGRZ4BSETP9G">
                         <table>
-                            <tr><td><input type="hidden" name="on0" value="Domain name"><?php _e('If your domain name is correct, do not change it', 'author-chat'); ?>.</td></tr><tr><td><input type="text" name="os0" maxlength="200" value="<?php echo $_SERVER['HTTP_HOST']; ?>"></td></tr>
+                            <tr><td><input type="hidden" name="on0" value="Domain name"><?php _e('If your domain name is correct, do not change it. Activation can take up to 24 hours! If you have any problems contact me at piotr.pesta@gmail.com', 'author-chat'); ?></td></tr><tr><td><input type="text" name="os0" maxlength="200" value="<?php echo $_SERVER['HTTP_HOST']; ?>"></td></tr>
                         </table>
                         <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
                         <img alt="" border="0" src="https://www.paypalobjects.com/pl_PL/i/scr/pixel.gif" width="1" height="1">
@@ -660,31 +657,57 @@ function pp_author_chat_sec() {
 
 function pp_author_chat_rest_api() {
     register_rest_route('author-chat/v2', '/chat/', array(
-        'methods' => 'GET',
-        'callback' => 'pp_get_chat_rest',
+        'methods' => 'POST',
+        'callback' => 'pp_chat_rest',
     ));
 }
 
-function pp_get_chat_rest() {
+function pp_chat_rest($data) {
+    global $author_chat_version;
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
-    $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
-            $text = array();
-            foreach ($lines as $line) {
-                $text[] = $line;
-            }
-            $date = array_column($text, 'date');
-            array_walk_recursive($date, function( &$element ) {
-                $element = strtotime($element);
-                $element = date('Y-m-d,H:i:s', $element);
-            });
-            $result = array(
-                'id' => array_column($text, 'id'),
-                'uid' => array_column($text, 'user_id'),
-                'nick' => array_column($text, 'nickname'),
-                'msg' => array_column($text, 'content'),
-                'date' => $date,
-                'pin' => get_option('author_chat_settings_pin')
-            );
+
+    $user = wp_signon(array(
+        'user_login' => $data['l'],
+        'user_password' => $data['p'],
+        "rememberme" => true), true);
+
+    if (is_wp_error($user)) {
+        return $user;
+    } else {
+        wp_set_current_user($user->ID); //set current user to get info
+    }
+
+    if (is_user_logged_in()) {
+        $current_user = wp_get_current_user();
+    }
+
+    if ($data['msg'] == "2358") {
+        $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
+        $text = array();
+        foreach ($lines as $line) {
+            $text[] = $line;
+        }
+        $date = array_column($text, 'date');
+        array_walk_recursive($date, function( &$element ) {
+            $element = strtotime($element);
+            $element = date('Y-m-d,H:i:s', $element);
+        });
+        $result = array(
+            'nick' => array_column($text, 'nickname'),
+            'msg' => array_column($text, 'content'),
+            'date' => $date,
+            'ver' => $author_chat_version
+        );
+    } else if (( $data['msg'] ) != '2358') {
+        $result = array(
+            'user_id' => $current_user->id,
+            'nickname' => $current_user->display_name,
+            'content' => $data['msg'],
+            'date' => date('Y-m-d H:i:s')
+        );
+
+        $wpdb->insert($author_chat_table, $result, array('%d', '%s', '%s', '%s'));
+    }
     return $result;
 }
