@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.7.5
+ * Version: 1.8.0
  * Author URI: https://github.com/Pantsoffski
  * License: GPL12
  * Text Domain: author-chat
@@ -15,7 +15,7 @@ include 'pp-process.php';
 
 // Global Vars
 global $author_chat_version;
-$author_chat_version = '1.7.5';
+$author_chat_version = '1.8.0';
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.1';
@@ -63,7 +63,8 @@ function pp_author_chat_activate() {
 			nickname tinytext NOT NULL,
 			content text NOT NULL,
 			date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-			PRIMARY KEY  (id)
+                        chat_room bigint(20) DEFAULT '0' NOT NULL,
+			PRIMARY KEY (id)
 			) $charset_collate;";
 
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
@@ -78,6 +79,10 @@ function pp_author_chat_activate() {
         if (!isset($updates->user_id)) {
             //Add user_id column if not present.
             $wpdb->query("ALTER TABLE $author_chat_table ADD user_id BIGINT(20) NOT NULL AFTER id");
+        }
+        if (!isset($updates->chatroom)) {
+            //Add chat_room column if not present.
+            $wpdb->query("ALTER TABLE $author_chat_table ADD chat_room BIGINT(20) DEFAULT '0' NOT NULL AFTER content");
         }
     }
 
@@ -208,6 +213,8 @@ function pp_author_chat() {
             <h2 class="ac-title"><?php _e('Author Chat', 'author-chat'); ?></h2>
 
             <div class="ac-user"></div>
+            
+            <div class="ac-private-conversation"></div>
 
             <div class="ac-wrap">
                 <div id="author-chat-area" class="ac-animation">

@@ -1,4 +1,4 @@
-/*  Author Chat  v1.6.0  */
+/*  Author Chat  v1.8.0  */
 /**************************/
 
 var authorChat = function ()
@@ -75,6 +75,20 @@ var authorChat = function ()
 
     /* display name on page */
     jQuery('#author-chat .ac-user').html(localize.you_are + ' <span>' + localize.nickname + '</span>');
+    
+    /* display private conversation button */
+    jQuery('#author-chat .ac-private-conversation').html('<button>Add private conversation</button>');
+    
+    /* Click event of the Button to private conversation */
+    var $_btnToPrivateConversation = jQuery('#author-chat .ac-private-conversation');
+    $_btnToPrivateConversation.click(function ()
+    {
+        if ($_chatArea.is(":visible")) {
+            $_chatArea.hide();
+        } else if (!$_chatArea.is(":visible")) {
+            $_chatArea.show();
+        }
+    });
 
     /* watch textarea for key presses */
     jQuery('#author-chat .ac-textarea').keydown(function (event)
@@ -271,7 +285,7 @@ _proto_.stop = function ()
 };
 
 /* Clear the Counter */
-_proto_.clearCount = function ( )
+_proto_.clearCount = function ()
 {
     this.count = 0;
 }
