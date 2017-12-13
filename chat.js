@@ -92,6 +92,21 @@ var authorChat = function ()
             $_chatArea.show();
         }
     });
+    
+    //todo: when click on room show room conversation
+    jQuery('#author-chat .ac-invisible').html('<span id="room1">Test</span>');
+    var $_room1 = jQuery('#room1');
+    $_room1.hide();
+    /* Click event of the Button to change room */
+    var $_btnToPrivateConversation = jQuery('#author-chat .ac-rooms');
+    $_btnToPrivateConversation.click(function ()
+    {
+        if ($_room1.is(":visible")) {
+            $_room1.hide();
+        } else if (!$_room1.is(":visible")) {
+            $_room1.show();
+        }
+    });
 
     /* watch textarea for key presses */
     jQuery('#author-chat .ac-textarea').keydown(function (event)
@@ -377,13 +392,14 @@ _proto_.update = function ()
     var $this = this;
 
     $this.today_date = new Date(Date.now());
-
+  
     jQuery.ajax(
             {
                 type: 'POST',
                 data:
                         {
-                            'function': 'update'
+                            'function': 'update',
+                            'room': $_room1.is(":visible") //todo: $_room1 not defined, try to send it to this function
                         },
                 dataType: 'json',
                 success: function (data)

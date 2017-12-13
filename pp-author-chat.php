@@ -240,6 +240,8 @@ function pp_author_chat() {
                     <div class="ac-tobottom ac-animation ac-hidden"><span class="ac-icon-down"></span></div>
                 </div>
                 
+                <div class="ac-invisible"></div>
+                
                 <div class="ac-rooms"></div>
                 
                 <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || $resultA === true) { ?>

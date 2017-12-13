@@ -36,6 +36,11 @@ if (isset($_POST['function'])) {
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
     $function = filter_var($_POST['function'], FILTER_SANITIZE_STRING);
+    if (isset($_POST['room'])) {
+        $room = $_POST['room'];
+    } else {
+        $room = null;
+    }
     $result = array();
 
     switch ($function) {
@@ -63,7 +68,9 @@ if (isset($_POST['function'])) {
             $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
             $text = array();
             foreach ($lines as $line) {
-                if ($line['chat_room_id'] == 0) { // Show only main chat room conversation
+                if ($line['chat_room_id'] == 55 && $room == true) { // Show only main chat room conversation
+                    $text[] = $line;
+                } else if ($line['chat_room_id'] == 0 && ($room == false || $room == null))  {
                     $text[] = $line;
                 }
             }
