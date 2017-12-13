@@ -5,8 +5,8 @@ Plugin Name: Author Chat
 Tags: plugin, chat, author, for authors, admin, messages, internal chat, users chat, user, dashboard chat, dashboard, admin menu chat
 Author: Piotr Pesta
 Requires at least: 4.0
-Tested up to: 4.8
-Stable tag: 1.7.5
+Tested up to: 4.9
+Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -40,6 +40,8 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 5. Author Chat - options and smaller chat window.
 
 == Changelog ==
+= 1.8.0 =
+* Now you can create chat rooms.
 = 1.7.5 =
 * Author Chat for Android - code optimization so you can send messages from smartphone
 = 1.7.0 =

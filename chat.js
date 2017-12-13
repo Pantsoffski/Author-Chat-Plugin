@@ -79,6 +79,9 @@ var authorChat = function ()
     /* display private conversation button */
     jQuery('#author-chat .ac-private-conversation').html('<button>Add private conversation</button>');
     
+    /* display private conversation rooms */
+    jQuery('#author-chat .ac-rooms').html('<button>Room 1</button>');
+    
     /* Click event of the Button to private conversation */
     var $_btnToPrivateConversation = jQuery('#author-chat .ac-private-conversation');
     $_btnToPrivateConversation.click(function ()
@@ -481,7 +484,7 @@ _proto_.initiate = function (seconds)
 };
 
 /* Scroll to the bottom the chat area */
-_proto_.scrollToBottom = function ( )
+_proto_.scrollToBottom = function ()
 {
     var $this = this,
             $_charArea = jQuery('#author-chat-area'),

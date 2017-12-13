@@ -1,6 +1,6 @@
 <?php
 
-/* Author Chat Process v1.7.5 */
+/* Author Chat Process v1.8.0 */
 
 define('aURL', 'https://ordin.pl/auth/author_chat/author_chat.csv');
 
@@ -60,10 +60,12 @@ if (isset($_POST['function'])) {
             break;
 
         case( 'update' ):
-            $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
+            $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
             $text = array();
             foreach ($lines as $line) {
-                $text[] = $line;
+                if ($line['chat_room_id'] == 0) { // Show only main chat room conversation
+                    $text[] = $line;
+                }
             }
             $date = array_column($text, 'date');
             array_walk_recursive($date, function( &$element ) {
@@ -80,10 +82,12 @@ if (isset($_POST['function'])) {
             break;
 
         case( 'initiate' ):
-            $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
+            $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
             $text = array();
             foreach ($lines as $line) {
-                $text[] = $line;
+                if ($line['chat_room_id'] == 0) { // Show only main chat room conversation
+                    $text[] = $line;
+                }
             }
             $date = array_column($text, 'date');
             array_walk_recursive($date, function( &$element ) {

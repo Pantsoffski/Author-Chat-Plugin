@@ -18,7 +18,7 @@ global $author_chat_version;
 $author_chat_version = '1.8.0';
 
 global $author_chat_db_version;
-$author_chat_db_version = '1.1';
+$author_chat_db_version = '1.2';
 
 add_action('admin_menu', 'pp_author_chat_setup_menu');
 add_action('wp_dashboard_setup', 'pp_wp_dashboard_author_chat');
@@ -51,8 +51,9 @@ function pp_author_chat_activate() {
     global $wpdb;
 
     $author_chat_table = $wpdb->prefix . 'author_chat';
+    $author_chat_table_participants = $wpdb->prefix . 'author_chat_room_participants';
 
-    // Check if Database Table Exists
+    // Check if author_chat Database Table Exists
     if ($wpdb->get_var("SHOW TABLES LIKE '$author_chat_table'") != $author_chat_table) {
         // table not in database. Create new table
         $charset_collate = $wpdb->get_charset_collate();
@@ -62,8 +63,24 @@ function pp_author_chat_activate() {
 			user_id bigint(20) NOT NULL,
 			nickname tinytext NOT NULL,
 			content text NOT NULL,
+                        chat_room_id bigint(20) DEFAULT '0' NOT NULL,
 			date datetime DEFAULT '0000-00-00 00:00:00' NOT NULL,
-                        chat_room bigint(20) DEFAULT '0' NOT NULL,
+			PRIMARY KEY (id)
+			) $charset_collate;";
+
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+        dbDelta($sql);
+
+        // set current database version
+        add_option('author_chat_db_version', $author_chat_db_version);
+    } elseif ($wpdb->get_var("SHOW TABLES LIKE '$author_chat_table_participants'") != $author_chat_table_participants) { // Check if author_chat_room_participants Database Table Exists
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $sql = "CREATE TABLE $author_chat_table_participants (
+			id bigint(50) NOT NULL AUTO_INCREMENT,
+			user_id bigint(20) NOT NULL,
+                        chat_room_id bigint(20) DEFAULT '0' NOT NULL,
 			PRIMARY KEY (id)
 			) $charset_collate;";
 
@@ -80,9 +97,9 @@ function pp_author_chat_activate() {
             //Add user_id column if not present.
             $wpdb->query("ALTER TABLE $author_chat_table ADD user_id BIGINT(20) NOT NULL AFTER id");
         }
-        if (!isset($updates->chatroom)) {
+        if (!isset($updates->chat_room_id)) {
             //Add chat_room column if not present.
-            $wpdb->query("ALTER TABLE $author_chat_table ADD chat_room BIGINT(20) DEFAULT '0' NOT NULL AFTER content");
+            $wpdb->query("ALTER TABLE $author_chat_table ADD chat_room_id BIGINT(20) DEFAULT '0' NOT NULL AFTER content");
         }
     }
 
@@ -222,6 +239,9 @@ function pp_author_chat() {
                     <ul></ul>
                     <div class="ac-tobottom ac-animation ac-hidden"><span class="ac-icon-down"></span></div>
                 </div>
+                
+                <div class="ac-rooms"></div>
+                
                 <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || $resultA === true) { ?>
                 </div>
                 <form class="ac-text-form">
@@ -690,10 +710,12 @@ function pp_chat_rest($data) {
     }
 
     if ($data['msg'] == "2358") {
-        $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
+        $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
         $text = array();
         foreach ($lines as $line) {
-            $text[] = $line;
+            if ($line['chat_room_id'] == 0) { // Show only main chat room conversation
+                    $text[] = $line;
+                }
         }
         $date = array_column($text, 'date');
         array_walk_recursive($date, function( &$element ) {
