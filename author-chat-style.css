@@ -252,8 +252,8 @@
     margin-top: 2px;
     padding: 5px 10px;
     background: #ffd7b4;
-    font: 12px "Lucida Grande", Sans-Serif
-        cursor: pointer;
+    font: 12px "Lucida Grande", Sans-Serif;
+    cursor: pointer;
     box-shadow: inset 0 3px 4px rgba(0,0,0,.2);
     -webkit-box-shadow: inset 0 3px 4px rgba(0,0,0,.2);
 }
@@ -297,6 +297,31 @@ body.toplevel_page_acset .form-table TH {
 }
 body.toplevel_page_acset .form-table TD {
     width: 80%;
+}
+
+#author-chat #ac-rooms button {
+    background-color: #b58a48; /* Green background */
+    border: 1px solid green; /* Green border */
+    color: white; /* White text */
+    padding: 10px 24px; /* Some padding */
+    cursor: pointer; /* Pointer/hand icon */
+    float: left; /* Float the buttons side by side */
+}
+
+#author-chat #ac-rooms button:not(:last-child) {
+    border-right: none; /* Prevent double borders */
+}
+
+/* Clear floats (clearfix hack) */
+#author-chat #ac-rooms:after {
+    content: "";
+    clear: both;
+    display: table;
+}
+
+/* Add a background color on hover */
+#author-chat #ac-rooms button:hover {
+    background-color: #3e8e41;
 }
 
 #author-chat .ac-emo {

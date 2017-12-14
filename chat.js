@@ -21,6 +21,8 @@ var authorChat = function ()
     $this.uid_list = '';
     $this.uid_colors = {};
     $this.uid_last_color = 1;
+    $this.room1;
+    $this.room_changed = false;
 
     /* list of ASCII Emoticons to detect */
     $this.emoticons = [
@@ -77,13 +79,13 @@ var authorChat = function ()
     jQuery('#author-chat .ac-user').html(localize.you_are + ' <span>' + localize.nickname + '</span>');
     
     /* display private conversation button */
-    jQuery('#author-chat .ac-private-conversation').html('<button>Add private conversation</button>');
+    jQuery('#author-chat #ac-private-conversation').html('<button>Add private conversation</button>');
     
-    /* display private conversation rooms */
-    jQuery('#author-chat .ac-rooms').html('<button>Room 1</button>');
+    /* display private conversation rooms buttons */
+    jQuery('#author-chat #ac-rooms').append('<button id="btn-room-1">Room 1</button>');
     
     /* Click event of the Button to private conversation */
-    var $_btnToPrivateConversation = jQuery('#author-chat .ac-private-conversation');
+    var $_btnToPrivateConversation = jQuery('#author-chat #ac-private-conversation');
     $_btnToPrivateConversation.click(function ()
     {
         if ($_chatArea.is(":visible")) {
@@ -94,17 +96,19 @@ var authorChat = function ()
     });
     
     //todo: when click on room show room conversation
-    jQuery('#author-chat .ac-invisible').html('<span id="room1">Test</span>');
-    var $_room1 = jQuery('#room1');
-    $_room1.hide();
+    jQuery('#author-chat #ac-invisible').html('<span id="room1">Test</span>');
+    $this.room1 = jQuery('#room1');
+    $this.room1.hide();
     /* Click event of the Button to change room */
-    var $_btnToPrivateConversation = jQuery('#author-chat .ac-rooms');
+    var $_btnToPrivateConversation = jQuery('#author-chat #ac-rooms');
     $_btnToPrivateConversation.click(function ()
     {
-        if ($_room1.is(":visible")) {
-            $_room1.hide();
-        } else if (!$_room1.is(":visible")) {
-            $_room1.show();
+        if ($this.room1.is(":visible")) {
+            $this.room1.hide();
+            $this.room_changed = true;
+        } else if (!$this.room1.is(":visible")) {
+            $this.room1.show();
+            $this.room_changed = true;
         }
     });
 
@@ -347,6 +351,25 @@ _proto_.getState = function ()
                         }
                     },
                 });
+        
+//        if ($this.room1.is(":visible")) {
+//            $this.clearCount();
+//            jQuery('#author-chat-area ul').empty();
+//            $this.initiate();
+//            console.log( 'First' );
+//        } else if (!$this.room1.is(":visible")) {
+//            $this.clearCount();
+//            jQuery('#author-chat-area ul').empty();
+//            $this.update();
+//            console.log( 'Second' );
+//        }
+//        
+        if ($this.room_changed === true) {
+            jQuery('#author-chat-area ul').empty();
+            $this.clearCount();
+            $this.initiate();
+            $this.room_changed = false;
+        }
     }
     /* we are not the master window so.. */
     else
@@ -360,7 +383,6 @@ _proto_.getState = function ()
             $this.update();
         }
     }
-
 };
 
 /* Send the message */
@@ -399,7 +421,7 @@ _proto_.update = function ()
                 data:
                         {
                             'function': 'update',
-                            'room': $_room1.is(":visible") //todo: $_room1 not defined, try to send it to this function
+                            'room': $this.room1.is(":visible")
                         },
                 dataType: 'json',
                 success: function (data)
@@ -471,7 +493,8 @@ _proto_.initiate = function (seconds)
                 type: 'POST',
                 data:
                         {
-                            'function': 'initiate'
+                            'function': 'initiate',
+                            'room': $this.room1.is(":visible")
                         },
                 dataType: 'json',
                 success: function (data)

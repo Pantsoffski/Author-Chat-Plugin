@@ -4,6 +4,14 @@
 
 define('aURL', 'https://ordin.pl/auth/author_chat/author_chat.csv');
 
+function debug_to_console( $data ) {
+    $output = $data;
+    if ( is_array( $output ) ) {
+        $output = implode( ',', $output);
+    }
+    echo "<script>console.log( 'Debug Objects: " . $output . "' );</script>";
+}
+
 if (!function_exists('array_column')) {
 
     function array_column(array $input, $columnKey, $indexKey = null) {
@@ -39,8 +47,9 @@ if (isset($_POST['function'])) {
     if (isset($_POST['room'])) {
         $room = $_POST['room'];
     } else {
-        $room = null;
+        $room = 'false';
     }
+    
     $result = array();
 
     switch ($function) {
@@ -68,12 +77,13 @@ if (isset($_POST['function'])) {
             $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
             $text = array();
             foreach ($lines as $line) {
-                if ($line['chat_room_id'] == 55 && $room == true) { // Show only main chat room conversation
+                if ($line['chat_room_id'] == 55 && $room == 'true') { // Show only main chat room conversation
                     $text[] = $line;
-                } else if ($line['chat_room_id'] == 0 && ($room == false || $room == null))  {
+                } else if ($line['chat_room_id'] == 0 && $room == 'false')  {
                     $text[] = $line;
                 }
             }
+            
             $date = array_column($text, 'date');
             array_walk_recursive($date, function( &$element ) {
                 $element = strtotime($element);
@@ -92,7 +102,9 @@ if (isset($_POST['function'])) {
             $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
             $text = array();
             foreach ($lines as $line) {
-                if ($line['chat_room_id'] == 0) { // Show only main chat room conversation
+                if ($line['chat_room_id'] == 55 && $room == 'true') { // Show only main chat room conversation
+                    $text[] = $line;
+                } else if ($line['chat_room_id'] == 0  && $room == 'false')  {
                     $text[] = $line;
                 }
             }
