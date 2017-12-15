@@ -1,6 +1,8 @@
 /*  Author Chat  v1.8.0  */
 /**************************/
 
+/* global localize */
+
 var authorChat = function ()
 {
     /* Creates a reference to this variable to be used within the functions */
@@ -42,7 +44,7 @@ var authorChat = function ()
         [/(^|\s)(:o|:\-o)/gi, 'suprice'],
         [/(^|\s)(:P|:\-P)/gi, 'tongle'],
         [/(^|\s)(XP|X\-P|=P)/gi, 'tongle-x'],
-        [/(^|\s)(;\)|;\-\))/gi, 'wink'],
+        [/(^|\s)(;\)|;\-\))/gi, 'wink']
     ];
 
     /* list of text url to parse */
@@ -65,7 +67,7 @@ var authorChat = function ()
             function (str, p1, p2) {
                 return ' <a href="http://' + p2 + '" title="' + p2 + '" target="_blank">' + truncateString(p2, $this.truncate[0], $this.truncate[1]) + '</a>';
             }
-        ],
+        ]
     ];
 
     var $_chatArea = jQuery('#author-chat-area');
@@ -137,7 +139,7 @@ var authorChat = function ()
         var $me = jQuery(this);
 
         /* only send in case of press Enter, not if we press Shift + Enter */
-        if (event.keyCode == 13 && !event.shiftKey)
+        if (event.keyCode === 13 && !event.shiftKey)
         {
             var text = $me.val();
             var maxLength = jQuery(this).attr("maxlength");
@@ -158,7 +160,7 @@ var authorChat = function ()
     /* Set focus on textarea with just click inside the Chat Area */
     $_chatArea.mouseup(function (event) {
         /* don't make focus on right click or if we select some text */
-        if (event.which == 1 && window.getSelection().toString() == '')
+        if (event.which === 1 && window.getSelection().toString() === '')
         {
             jQuery('#author-chat .ac-textarea').focus();
         }
@@ -181,7 +183,7 @@ var authorChat = function ()
             if ($_dialogContent.length)
             {
                 /* check if the floating window is minimized */
-                if ($_dialogContent.is(":hidden") == false)
+                if ($_dialogContent.is(":hidden") === false)
                 {
                     $this.clearCount();
                 }
@@ -233,7 +235,7 @@ var authorChat = function ()
                     }
                 }
             });
-            if ($_prevDate.text() != $_topDate.text())
+            if ($_prevDate.text() !== $_topDate.text())
             {
                 $_topDate.text($_prevDate.text());
             }
@@ -245,7 +247,7 @@ var authorChat = function ()
             ev.preventDefault();
             ev.returnValue = false;
             return false;
-        }
+        };
         if (!up && -delta >= scroll_height - height - scroll_top)
         {
             $_btnToBottom.addClass('ac-hidden');
@@ -277,8 +279,8 @@ var _proto_ = authorChat.prototype;
 _proto_.intervalSecs = function (seconds)
 {
     this.interval_secs = seconds || this.interval_secs;
-    return this.interval_secs
-}
+    return this.interval_secs;
+};
 
 /* Start the getState interval */
 _proto_.start = function (seconds)
@@ -310,7 +312,7 @@ _proto_.stop = function ()
 _proto_.clearCount = function ()
 {
     this.count = 0;
-}
+};
 
 /* Update chat if needed */
 _proto_.getState = function ()
@@ -321,7 +323,7 @@ _proto_.getState = function ()
     var master_path = $this.getLocalData('ac_master_path');
 
     /* check if this window is the master or will be the new master in case there is none */
-    if (master_path === null || master_path == path)
+    if (master_path === null || master_path === path)
     {
         /* console.log( 'getState: call Ajax from: '  + path ); */
 
@@ -338,9 +340,9 @@ _proto_.getState = function ()
                     dataType: 'json',
                     success: function (data)
                     {
-                        if (data != null)
+                        if (data !== null)
                         {
-                            if (data != $this.total_rows)
+                            if (data !== $this.total_rows)
                             {
                                 /* console.log( 'getState: update from ajax' ); */
 
@@ -349,24 +351,12 @@ _proto_.getState = function ()
                                 $this.update();
                             }
                         }
-                    },
+                    }
                 });
-        
-//        if ($this.room1.is(":visible")) {
-//            $this.clearCount();
-//            jQuery('#author-chat-area ul').empty();
-//            $this.initiate();
-//            console.log( 'First' );
-//        } else if (!$this.room1.is(":visible")) {
-//            $this.clearCount();
-//            jQuery('#author-chat-area ul').empty();
-//            $this.update();
-//            console.log( 'Second' );
-//        }
-//        
+
+        /* if room was changed empty chat msgs and initiate new chat with desired room */
         if ($this.room_changed === true) {
             jQuery('#author-chat-area ul').empty();
-            $this.clearCount();
             $this.initiate();
             $this.room_changed = false;
         }
@@ -375,7 +365,7 @@ _proto_.getState = function ()
     else
     {
         var total_rows = $this.getLocalData('ac_total_rows');
-        if (total_rows !== null && parseInt(total_rows) != $this.total_rows)
+        if (total_rows !== null && parseInt(total_rows) !== $this.total_rows)
         {
             /* console.log( 'getState: update from local data' ); */
 
@@ -404,7 +394,7 @@ _proto_.send = function ()
                 success: function (data)
                 {
                     $this.update();
-                },
+                }
             });
 };
 
@@ -426,7 +416,7 @@ _proto_.update = function ()
                 dataType: 'json',
                 success: function (data)
                 {
-                    if (data != null)
+                    if (data !== null)
                     {
                         /* get the total rows of the database */
                         var rows = data.id.length;
@@ -444,7 +434,7 @@ _proto_.update = function ()
                             var $_dialogContent = jQuery('#author-chat-window');
 
                             /* Increments the counter if the current window is not active or if the floating window is minimized */
-                            if ($this.win_is_focus == false || ($_dialogContent.length && $_dialogContent.is(":hidden")))
+                            if ($this.win_is_focus === false || ($_dialogContent.length && $_dialogContent.is(":hidden")))
                             {
                                 $this.count++;
 
@@ -453,7 +443,7 @@ _proto_.update = function ()
                                 {
                                     var DialogTitleBar = $_dialogContent.parent().find('.ui-dialog-titlebar');
                                     /* we make the titlebar brink if it's not */
-                                    if (DialogTitleBar.hasClass('ac-bg-blink') == false)
+                                    if (DialogTitleBar.hasClass('ac-bg-blink') === false)
                                     {
                                         DialogTitleBar.addClass('ac-bg-blink');
                                     }
@@ -499,7 +489,7 @@ _proto_.initiate = function (seconds)
                 dataType: 'json',
                 success: function (data)
                 {
-                    if (data != null && data.id.length)
+                    if (data !== null && data.id.length)
                     {
                         var rows = data.id.length;
 
@@ -533,7 +523,7 @@ _proto_.scrollToBottom = function ()
 
     $this.scroll_id = null;
 
-    if (scroll_top != scroll_height - height)
+    if (scroll_top !== scroll_height - height)
     {
         /* add a timeout to check again in case of some attached images have not been loaded */
         $this.scroll_id = setTimeout(function () {
@@ -543,7 +533,7 @@ _proto_.scrollToBottom = function ()
     /* scroll the chat area to the bottom */
     $_charArea.scrollTop(scroll_height);
     $_charArea.find('.ac-top-date').hide();
-}
+};
 
 /* Add the menssage to chat area */
 _proto_.showMsg = function (uid, nick, msg, date, is_new)
@@ -553,20 +543,20 @@ _proto_.showMsg = function (uid, nick, msg, date, is_new)
     var full_date = date.split(',');
 
     /* add the date label of current message if it's different from the last */
-    if (full_date[0] != $this.last_date)
+    if (full_date[0] !== $this.last_date)
     {
         $this.last_date = full_date[0];
         var msg_date = stringToDate($this.last_date);
         var show_date = msg_date.toLocaleDateString().replace(/\//g, '-').replace(/\-(\d)\-/g, '-0$1-');
 
         /* change the recent dates to weekday names */
-        if (localize.set_weekdays == 1)
+        if (localize.set_weekdays === 1)
         {
             var days = dayDiff($this.today_date, msg_date);
-            if (days == 0)
+            if (days === 0)
             {
                 show_date = localize.today;
-            } else if (days == 1)
+            } else if (days === 1)
             {
                 show_date = localize.yesterday;
             } else if (days > 1 && days < 7)
@@ -603,13 +593,13 @@ _proto_.showMsg = function (uid, nick, msg, date, is_new)
 
     /* Nick Classes */
     var nick_class = 'ac-nick';
-    if (uid == localize.user_id) {
-        if (localize.set_show_my_name == 0) {
+    if (uid === localize.user_id) {
+        if (localize.set_show_my_name === 0) {
             nick_class += ' ac-hide';
         }
     } else {
         /* Nick Colors */
-        if ($this.uid_list.indexOf(uid) == -1)
+        if ($this.uid_list.indexOf(uid) === -1)
         {
             $this.uid_list += uid + ',';
             $this.uid_colors[ uid ] = $this.uid_last_color++;
@@ -624,20 +614,20 @@ _proto_.showMsg = function (uid, nick, msg, date, is_new)
     var $_bubble = jQuery('<li>' + '<div class="ac-time">' + full_date[1] + '</div>' + '<div class="' + nick_class + '">' + nick + '</div>' + '<div class="ac-msg"><span>' + $this.processMsg(msg) + '</span></div>' + '<div class="ac-arrow"></div>' + '</li>');
 
     /* add the class "ac-me" to the bubble */
-    if (uid == localize.user_id) {
+    if (uid === localize.user_id) {
         $_bubble.addClass('ac-me');
     }
 
     /* add thumb preview of last url if have one */
     var $_url = $_bubble.find('a:not(:has(>img))');
-    if (localize.set_url_preview == 1 && $_url.length)
+    if (localize.set_url_preview === 1 && $_url.length)
     {
         jQuery('<img class="ac-preview" src="https://nyc.searchpreview.de/preview?s=' + $_url.attr('href') + '" />').prependTo($_bubble.find('.ac-msg'));
     }
 
     /* set init values for the Animation FX for new messages */
     if (is_new) {
-        var translateX = (uid == localize.user_id) ? '100%' : '-100%';
+        var translateX = (uid === localize.user_id) ? '100%' : '-100%';
         $_bubble.css({transform: 'scaleX(0) scaleY(0) translateX(' + translateX + ')', opacity: 0});
     }
 
@@ -661,7 +651,7 @@ _proto_.processMsg = function (message)
     /* Links */
     message = $this.setLinks(message);
     /* Shift+Enter */
-    message = message.replace(/[\r\n\t\f]/g, '<br>')
+    message = message.replace(/[\r\n\t\f]/g, '<br>');
     return message;
 };
 
@@ -712,7 +702,7 @@ if (window['localStorage'] !== null)
         try
         {
             localStorage.setItem(name, value);
-            if (expires != false)
+            if (expires !== false)
             {
                 localStorage.setItem(name + '.expires', schedule);
             }
@@ -737,7 +727,7 @@ if (window['localStorage'] !== null)
             expires = false;
         }
 
-        if (expires != false && expires < now)
+        if (expires !== false && expires < now)
         {
             /* Expired */
             $this.removeLocalData(name);
@@ -790,11 +780,11 @@ if (window['localStorage'] !== null)
         for (var i = 0; i < ca.length; i++)
         {
             var c = ca[i];
-            while (c.charAt(0) == ' ')
+            while (c.charAt(0) === ' ')
             {
                 c = c.substring(1);
             }
-            if (c.indexOf(name) == 0)
+            if (c.indexOf(name) === 0)
             {
                 return c.substring(name.length, c.length);
             }
