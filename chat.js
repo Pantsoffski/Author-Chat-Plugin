@@ -90,11 +90,7 @@ var authorChat = function ()
     var $_btnToPrivateConversation = jQuery('#author-chat #ac-private-conversation');
     $_btnToPrivateConversation.click(function ()
     {
-        if ($_chatArea.is(":visible")) {
-            $_chatArea.hide();
-        } else if (!$_chatArea.is(":visible")) {
-            $_chatArea.show();
-        }
+        $this.addRoom();
     });
     
     //todo: when click on room show room conversation
@@ -679,6 +675,30 @@ _proto_.setLinks = function (text)
     });
 
     return text;
+};
+
+/* Add empty chat room */
+_proto_.addRoom = function ()
+{
+    var $this = this;
+
+    var $randomRoomNumber = Math.floor((Math.random() * 100000) + 1);
+    
+    jQuery.ajax(
+            {
+                type: 'POST',
+                data:
+                        {
+                            'function': 'addRoom',
+                            'room_id': $randomRoomNumber,
+                            'user_id': localize.user_id
+                        },
+                dataType: 'json',
+                success: function (data)
+                {
+                    $this.update();
+                }
+            });
 };
 
 /* Use localStorage or Cookies to manage local data */

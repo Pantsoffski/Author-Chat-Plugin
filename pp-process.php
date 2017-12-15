@@ -43,6 +43,7 @@ if (!function_exists('array_column')) {
 if (isset($_POST['function'])) {
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
+    $author_chat_room_participants_table = $wpdb->prefix . 'author_chat_room_participants';
     $function = filter_var($_POST['function'], FILTER_SANITIZE_STRING);
     if (isset($_POST['room'])) {
         $room = $_POST['room'];
@@ -120,6 +121,32 @@ if (isset($_POST['function'])) {
                 'msg' => array_column($text, 'content'),
                 'date' => $date
             );
+            break;
+            
+        case( 'addRoom' ):
+            $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
+            $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
+
+            $result = array(
+                'user_id' => $user_id,
+                'chat_room_id' => $room_id
+            );
+
+            $wpdb->insert($author_chat_room_participants_table, $result, array('%d', '%d'));
+
+            break;
+        
+        case( 'getRoomsForUser' ):
+            $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
+            $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
+
+            $result = array(
+                'user_id' => $user_id,
+                'chat_room_id' => $room_id
+            );
+
+            $wpdb->insert($author_chat_room_participants_table, $result, array('%d', '%d'));
+
             break;
     }
     echo wp_send_json($result);
