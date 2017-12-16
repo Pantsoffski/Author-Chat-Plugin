@@ -44,11 +44,13 @@ if (isset($_POST['function'])) {
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
     $author_chat_room_participants_table = $wpdb->prefix . 'author_chat_room_participants';
+    $wp_usermeta = $wpdb->prefix . 'usermeta';
     $function = filter_var($_POST['function'], FILTER_SANITIZE_STRING);
-    if (isset($_POST['room'])) {
-        $room = $_POST['room'];
+    
+    if (isset($_POST['room_pressed_button_id'])) {
+        $room_pressed_button_id = strip_tags(filter_var($_POST['room_pressed_button_id'], FILTER_SANITIZE_STRING));
     } else {
-        $room = 'false';
+        $room_pressed_button_id = '0';
     }
     
     $result = array();
@@ -67,10 +69,11 @@ if (isset($_POST['function'])) {
                     'user_id' => $user_id,
                     'nickname' => $nickname,
                     'content' => $message,
+                    'chat_room_id' => $room_pressed_button_id,
                     'date' => date('Y-m-d H:i:s')
                 );
 
-                $wpdb->insert($author_chat_table, $result, array('%d', '%s', '%s', '%s'));
+                $wpdb->insert($author_chat_table, $result, array('%d', '%s', '%s', '%d', '%s'));
             }
             break;
 
@@ -78,9 +81,7 @@ if (isset($_POST['function'])) {
             $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
             $text = array();
             foreach ($lines as $line) {
-                if ($line['chat_room_id'] == 55 && $room == 'true') { // Show only main chat room conversation
-                    $text[] = $line;
-                } else if ($line['chat_room_id'] == 0 && $room == 'false')  {
+                if ($line['chat_room_id'] == $room_pressed_button_id) { // Show only main chat room conversation
                     $text[] = $line;
                 }
             }
@@ -103,9 +104,7 @@ if (isset($_POST['function'])) {
             $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
             $text = array();
             foreach ($lines as $line) {
-                if ($line['chat_room_id'] == 55 && $room == 'true') { // Show only main chat room conversation
-                    $text[] = $line;
-                } else if ($line['chat_room_id'] == 0  && $room == 'false')  {
+                if ($line['chat_room_id'] == $room_pressed_button_id) { // Show only main chat room conversation
                     $text[] = $line;
                 }
             }
@@ -133,20 +132,39 @@ if (isset($_POST['function'])) {
             );
 
             $wpdb->insert($author_chat_room_participants_table, $result, array('%d', '%d'));
-
             break;
         
         case( 'getRoomsForUser' ):
             $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
-            $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
+            
+            $lines = $wpdb->get_results("SELECT user_id, chat_room_id FROM $author_chat_room_participants_table WHERE user_id = $user_id", ARRAY_A);
+                        
+            $text = array();
+            foreach ($lines as $line) {
+                    $text[] = $line;
+            }
 
             $result = array(
-                'user_id' => $user_id,
-                'chat_room_id' => $room_id
+                'chat_room_id' => array_column($text, 'chat_room_id')
             );
+            break;
+            
+        case( 'searchUser' ):
+            if (isset($_POST['search_user'])) {
+                $user_name = strip_tags(filter_var($_POST['search_user'], FILTER_SANITIZE_STRING));
 
-            $wpdb->insert($author_chat_room_participants_table, $result, array('%d', '%d'));
+                $lines = $wpdb->get_results("SELECT user_id, meta_value FROM $wp_usermeta WHERE meta_value = '$user_name' AND meta_key = 'nickname'", ARRAY_A);
 
+                $text = array();
+                foreach ($lines as $line) {
+                    $text[] = $line;
+                }
+
+                $result = array(
+                    'user_id' => array_column($text, 'user_id'),
+                    'nickname' => array_column($text, 'meta_value')
+                );
+            }
             break;
     }
     echo wp_send_json($result);

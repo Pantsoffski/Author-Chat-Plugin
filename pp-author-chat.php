@@ -232,6 +232,7 @@ function pp_author_chat() {
             <div class="ac-user"></div>
             
             <div id="ac-private-conversation"></div>
+            <div id="ac-search-user"></div>
 
             <div class="ac-wrap">
                 <div id="author-chat-area" class="ac-animation">
@@ -240,14 +241,12 @@ function pp_author_chat() {
                     <div class="ac-tobottom ac-animation ac-hidden"><span class="ac-icon-down"></span></div>
                 </div>
                 
-                <div id="ac-invisible"></div>
-                
                 <div id="ac-rooms">
-                        <button>Main room</button>
+                        <button id="0">Main room</button>
                 </div>
                 
                 <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || $resultA === true) { ?>
-                </div>
+            </div>
                 <form class="ac-text-form">
                     <textarea class="ac-textarea" maxlength = "1000" placeholder="<?php _e('Your message...', 'author-chat'); ?>"></textarea>
                 </form>

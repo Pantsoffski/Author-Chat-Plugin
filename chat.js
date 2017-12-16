@@ -23,8 +23,8 @@ var authorChat = function ()
     $this.uid_list = '';
     $this.uid_colors = {};
     $this.uid_last_color = 1;
-    $this.room1;
     $this.room_changed = false;
+    $this.room_pressed_button_id = '0';
 
     /* list of ASCII Emoticons to detect */
     $this.emoticons = [
@@ -83,9 +83,6 @@ var authorChat = function ()
     /* display private conversation button */
     jQuery('#author-chat #ac-private-conversation').html('<button>Add private conversation</button>');
     
-    /* display private conversation rooms buttons */
-    jQuery('#author-chat #ac-rooms').append('<button id="btn-room-1">Room 1</button>');
-    
     /* Click event of the Button to private conversation */
     var $_btnToPrivateConversation = jQuery('#author-chat #ac-private-conversation');
     $_btnToPrivateConversation.click(function ()
@@ -93,20 +90,14 @@ var authorChat = function ()
         $this.addRoom();
     });
     
-    //todo: when click on room show room conversation
-    jQuery('#author-chat #ac-invisible').html('<span id="room1">Test</span>');
-    $this.room1 = jQuery('#room1');
-    $this.room1.hide();
     /* Click event of the Button to change room */
     var $_btnToPrivateConversation = jQuery('#author-chat #ac-rooms');
-    $_btnToPrivateConversation.click(function ()
+    $_btnToPrivateConversation.click(function (event)
     {
-        if ($this.room1.is(":visible")) {
-            $this.room1.hide();
+        if (!$this.room_changed) {
             $this.room_changed = true;
-        } else if (!$this.room1.is(":visible")) {
-            $this.room1.show();
-            $this.room_changed = true;
+            $this.room_pressed_button_id = event.target.id; //get id of clicked room button
+            $this.getRoomsForUser();
         }
     });
 
@@ -340,8 +331,6 @@ _proto_.getState = function ()
                         {
                             if (data !== $this.total_rows)
                             {
-                                /* console.log( 'getState: update from ajax' ); */
-
                                 $this.setLocalData('ac_total_rows', data);
                                 $this.total_rows = data;
                                 $this.update();
@@ -355,7 +344,15 @@ _proto_.getState = function ()
             jQuery('#author-chat-area ul').empty();
             $this.initiate();
             $this.room_changed = false;
+            if ($this.room_pressed_button_id !== '0') {
+                $this.showSearchUserBar(); //show search user bar if not visible
+            } else {
+                jQuery('#author-chat #ac-search-user').empty(); //remove search user bar
+            }
         }
+        
+        /* add room buttons (if user participating in some channels/rooms) */
+        $this.getRoomsForUser();
     }
     /* we are not the master window so.. */
     else
@@ -384,7 +381,8 @@ _proto_.send = function ()
                             'function': 'send',
                             'message': message.slice(0, -1),
                             'nickname': localize.nickname,
-                            'user_id': localize.user_id
+                            'user_id': localize.user_id,
+                            'room_pressed_button_id': $this.room_pressed_button_id
                         },
                 dataType: 'json',
                 success: function (data)
@@ -407,7 +405,7 @@ _proto_.update = function ()
                 data:
                         {
                             'function': 'update',
-                            'room': $this.room1.is(":visible")
+                            'room_pressed_button_id': $this.room_pressed_button_id
                         },
                 dataType: 'json',
                 success: function (data)
@@ -480,7 +478,7 @@ _proto_.initiate = function (seconds)
                 data:
                         {
                             'function': 'initiate',
-                            'room': $this.room1.is(":visible")
+                            'room_pressed_button_id': $this.room_pressed_button_id
                         },
                 dataType: 'json',
                 success: function (data)
@@ -699,6 +697,71 @@ _proto_.addRoom = function ()
                     $this.update();
                 }
             });
+};
+
+/* Get chat rooms ids for current uset */
+_proto_.getRoomsForUser = function ()
+{    
+    jQuery.ajax(
+            {
+                type: 'POST',
+                data:
+                        {
+                            'function': 'getRoomsForUser',
+                            'user_id': localize.user_id
+                        },
+                dataType: 'json',
+                success: function (data)
+                {
+                    if (data !== null && data.chat_room_id.length)
+                    {
+                        var rows = data.chat_room_id.length;
+                        for (var i = 0; i < rows; i++)
+                        {
+                            var $roomNumer = i + 1;
+                            /* display private conversation rooms buttons */
+                            if (!jQuery('#' + data.chat_room_id[i]).length) {
+                                jQuery('#author-chat #ac-rooms').append('<button id="' + data.chat_room_id[i] + '">Room ' + $roomNumer + '</button>');
+                            }
+                        }
+                }
+            }
+            });
+};
+
+/* Show user search bar */
+_proto_.showSearchUserBar = function ()
+{
+    var usersFound = [];
+    
+    jQuery.ajax(
+            {
+                type: 'POST',
+                data:
+                        {
+                            'function': 'searchUser',
+                            'search_user': 'Piotr'
+                        },
+                dataType: 'json',
+                success: function (data)
+                {
+                    if (data !== null && data.user_id.length)
+                    {
+                        var rows = data.user_id.length;
+                        for (var i = 0; i < rows; i++)
+                        {
+                            /* ... */
+                            console.log("ID: " + data.user_id[i] + "Nickname: " + data.nickname[i]);
+                            usersFound.push(data.nickname[i]);
+                        }
+                    }
+                }
+            });
+
+    jQuery('#author-chat #ac-search-user').html('<label for="search-user-bar">Search user: </label><input id="search-user-bar">');
+    jQuery('#search-user-bar').autocomplete({
+      source: usersFound
+    });
 };
 
 /* Use localStorage or Cookies to manage local data */

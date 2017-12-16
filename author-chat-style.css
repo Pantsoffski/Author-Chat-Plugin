@@ -274,7 +274,7 @@
     padding: 0 !important; /* because some plugins maybe change this */
 }
 
-#author-chat-window	#author-chat {
+#author-chat-window #author-chat {
     margin: 5px;
 }
 
@@ -299,7 +299,7 @@ body.toplevel_page_acset .form-table TD {
     width: 80%;
 }
 
-#author-chat #ac-rooms button {
+#author-chat #ac-rooms button, #author-chat #ac-private-conversation button {
     background-color: #b58a48; /* Green background */
     border: 1px solid green; /* Green border */
     color: white; /* White text */
@@ -308,19 +308,19 @@ body.toplevel_page_acset .form-table TD {
     float: left; /* Float the buttons side by side */
 }
 
-#author-chat #ac-rooms button:not(:last-child) {
+#author-chat #ac-rooms button:not(:last-child), #author-chat #ac-private-conversation button:not(:last-child) {
     border-right: none; /* Prevent double borders */
 }
 
 /* Clear floats (clearfix hack) */
-#author-chat #ac-rooms:after {
+#author-chat #ac-rooms:after, #author-chat #ac-private-conversation:after {
     content: "";
     clear: both;
     display: table;
 }
 
 /* Add a background color on hover */
-#author-chat #ac-rooms button:hover {
+#author-chat #ac-rooms button:hover, #author-chat #ac-private-conversation button:hover {
     background-color: #3e8e41;
 }
 
