@@ -123,6 +123,17 @@ if (isset($_POST['function'])) {
             break;
             
         case( 'addRoom' ):
+            //Remove rooms without conversations before adding another one
+            $wpdb->query(
+                    $wpdb->prepare("
+                SELECT acrpt.* FROM $author_chat_room_participants_table acrpt
+		INNER JOIN $author_chat_table act ON acrpt.chat_room_id = act.chat_room_id
+		")
+            );
+            //$messagesRoomsIds = $wpdb->get_results("SELECT DISTINCT chat_room_id FROM $author_chat_table WHERE NOT chat_room_id = 0", ARRAY_A);
+                    
+            //$wpdb->delete($author_chat_room_participants_table, $messagesRoomsIds);
+
             $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
             $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
 
@@ -153,7 +164,7 @@ if (isset($_POST['function'])) {
             if (isset($_POST['search_user'])) {
                 $user_name = strip_tags(filter_var($_POST['search_user'], FILTER_SANITIZE_STRING));
 
-                $lines = $wpdb->get_results("SELECT user_id, meta_value FROM $wp_usermeta WHERE meta_value = '$user_name' AND meta_key = 'nickname'", ARRAY_A);
+                $lines = $wpdb->get_results("SELECT user_id, meta_value FROM $wp_usermeta WHERE meta_value LIKE '%$user_name%' AND meta_key = 'nickname'", ARRAY_A);
 
                 $text = array();
                 foreach ($lines as $line) {

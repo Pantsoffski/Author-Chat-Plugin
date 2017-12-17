@@ -715,6 +715,8 @@ _proto_.getRoomsForUser = function ()
                 {
                     if (data !== null && data.chat_room_id.length)
                     {
+                        jQuery('#author-chat #ac-rooms #0').nextAll().remove(); //remove all buttons afrer main room button
+                        
                         var rows = data.chat_room_id.length;
                         for (var i = 0; i < rows; i++)
                         {
@@ -729,39 +731,77 @@ _proto_.getRoomsForUser = function ()
             });
 };
 
-/* Show user search bar */
+/* Show user search bar and start searching while user start typing (powered by jQuery autocomplete) */
 _proto_.showSearchUserBar = function ()
 {
-    var usersFound = [];
+    var usersIdFound = [];
+    var usersNamesFound = [];
+
+    function log(message) {
+        console.log(message);
+    }
+    ;
+
+    jQuery('#author-chat #ac-search-user').html('<label for="search-user-bar">Search user: </label><input id="search-user-bar" placeholder="start typing...">');
+    jQuery('#search-user-bar').autocomplete({
+
+        source: function (request, response) {
+            jQuery.ajax(
+                    {
+                        type: 'POST',
+                        data:
+                                {
+                                    'function': 'searchUser',
+                                    'search_user': request.term
+                                },
+                        dataType: 'json',
+                        success: function (data)
+                        {
+                            if (data !== null && data.user_id.length)
+                            {
+
+
+                                var rows = data.user_id.length;
+                                for (var i = 0; i < rows; i++)
+                                {
+                                    /* Put results to array */
+                                    usersNamesFound.push(data.nickname[i]);
+                                    usersIdFound.push(data.user_id[i]);
+                                }
+                                response(usersNamesFound);
+                            }
+                        }
+                    });
+        },
+        minLength: 3,
+        select: function (event, ui) {
+            log(ui.item ?
+                    "Selected: " + ui.item.label + " " + usersIdFound[0] :
+                    "Nothing selected, input was " + this.value);
+        }
+    });
+};
+
+/* Add user to conversation */
+_proto_.addUserToConversation = function ()
+{
+    var $this = this;
     
     jQuery.ajax(
             {
                 type: 'POST',
                 data:
                         {
-                            'function': 'searchUser',
-                            'search_user': 'Piotr'
+                            'function': 'addRoom',
+                            'room_id': $randomRoomNumber,
+                            'user_id': localize.user_id
                         },
                 dataType: 'json',
                 success: function (data)
                 {
-                    if (data !== null && data.user_id.length)
-                    {
-                        var rows = data.user_id.length;
-                        for (var i = 0; i < rows; i++)
-                        {
-                            /* ... */
-                            console.log("ID: " + data.user_id[i] + "Nickname: " + data.nickname[i]);
-                            usersFound.push(data.nickname[i]);
-                        }
-                    }
+                    $this.update();
                 }
             });
-
-    jQuery('#author-chat #ac-search-user').html('<label for="search-user-bar">Search user: </label><input id="search-user-bar">');
-    jQuery('#search-user-bar').autocomplete({
-      source: usersFound
-    });
 };
 
 /* Use localStorage or Cookies to manage local data */
