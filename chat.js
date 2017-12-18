@@ -734,6 +734,7 @@ _proto_.getRoomsForUser = function ()
 /* Show user search bar and start searching while user start typing (powered by jQuery autocomplete) */
 _proto_.showSearchUserBar = function ()
 {
+    var $this = this;
     var usersIdFound = [];
     var usersNamesFound = [];
 
@@ -742,7 +743,7 @@ _proto_.showSearchUserBar = function ()
     }
     ;
 
-    jQuery('#author-chat #ac-search-user').html('<label for="search-user-bar">Search user: </label><input id="search-user-bar" placeholder="start typing...">');
+    jQuery('#author-chat #ac-search-user').html('<label for="search-user-bar">Search user: </label><input type="text" name="searchuserbar" id="search-user-bar" placeholder="start typing...">');
     jQuery('#search-user-bar').autocomplete({
 
         source: function (request, response) {
@@ -759,8 +760,6 @@ _proto_.showSearchUserBar = function ()
                         {
                             if (data !== null && data.user_id.length)
                             {
-
-
                                 var rows = data.user_id.length;
                                 for (var i = 0; i < rows; i++)
                                 {
@@ -773,17 +772,19 @@ _proto_.showSearchUserBar = function ()
                         }
                     });
         },
-        minLength: 3,
+        minLength: 2,
         select: function (event, ui) {
-            log(ui.item ?
-                    "Selected: " + ui.item.label + " " + usersIdFound[0] :
-                    "Nothing selected, input was " + this.value);
+            $this.addUserToConversation(usersIdFound[0]);
+            //afret success clear text box and change placeholder
+            this.value = "";
+            this.placeholder= "Success!";
+            return false;
         }
     });
 };
 
 /* Add user to conversation */
-_proto_.addUserToConversation = function ()
+_proto_.addUserToConversation = function (user_id)
 {
     var $this = this;
     
@@ -792,9 +793,9 @@ _proto_.addUserToConversation = function ()
                 type: 'POST',
                 data:
                         {
-                            'function': 'addRoom',
-                            'room_id': $randomRoomNumber,
-                            'user_id': localize.user_id
+                            'function': 'addUser',
+                            'room_id': $this.room_pressed_button_id,
+                            'user_id': user_id
                         },
                 dataType: 'json',
                 success: function (data)

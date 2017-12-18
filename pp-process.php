@@ -124,15 +124,12 @@ if (isset($_POST['function'])) {
             
         case( 'addRoom' ):
             //Remove rooms without conversations before adding another one
-            $wpdb->query(
-                    $wpdb->prepare("
-                SELECT acrpt.* FROM $author_chat_room_participants_table acrpt
-		INNER JOIN $author_chat_table act ON acrpt.chat_room_id = act.chat_room_id
-		")
-            );
-            //$messagesRoomsIds = $wpdb->get_results("SELECT DISTINCT chat_room_id FROM $author_chat_table WHERE NOT chat_room_id = 0", ARRAY_A);
-                    
-            //$wpdb->delete($author_chat_room_participants_table, $messagesRoomsIds);
+            $wpdb->query("
+                DELETE acrp
+                FROM $author_chat_room_participants_table acrp
+                LEFT JOIN $author_chat_table ac ON ac.chat_room_id = acrp.chat_room_id
+                WHERE ac.chat_room_id IS NULL
+		");
 
             $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
             $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
@@ -144,7 +141,7 @@ if (isset($_POST['function'])) {
 
             $wpdb->insert($author_chat_room_participants_table, $result, array('%d', '%d'));
             break;
-        
+
         case( 'getRoomsForUser' ):
             $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
             
@@ -176,6 +173,19 @@ if (isset($_POST['function'])) {
                     'nickname' => array_column($text, 'meta_value')
                 );
             }
+            break;
+            
+        case( 'addUser' ):
+            $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
+            $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
+
+            $result = array(
+                'user_id' => $user_id,
+                'chat_room_id' => $room_id
+            );
+
+            $wpdb->insert($author_chat_room_participants_table, $result, array('%d', '%d'));
+
             break;
     }
     echo wp_send_json($result);
