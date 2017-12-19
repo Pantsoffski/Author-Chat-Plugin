@@ -353,6 +353,9 @@ _proto_.getState = function ()
         
         /* add room buttons (if user participating in some channels/rooms) */
         $this.getRoomsForUser();
+        
+        /* add users list for current room */
+        $this.getUsersForRoom();
     }
     /* we are not the master window so.. */
     else
@@ -801,6 +804,39 @@ _proto_.addUserToConversation = function (user_id)
                 success: function (data)
                 {
                     $this.update();
+                }
+            });
+};
+
+/* Get participating users list for currently viewed room/channel */
+_proto_.getUsersForRoom = function ()
+{
+    var $this = this;
+    
+    jQuery.ajax(
+            {
+                type: 'POST',
+                data:
+                        {
+                            'function': 'getUsersForRoom',
+                            'room_id': $this.room_pressed_button_id
+                        },
+                dataType: 'json',
+                success: function (data)
+                {
+                    if (data !== null && data.user_id.length && $this.room_pressed_button_id !== 0)
+                    {
+                        //jQuery('#author-chat #ac-rooms #0').nextAll().remove(); //remove all buttons afrer main room button
+                        
+                        var rows = data.user_id.length;
+                        for (var i = 0; i < rows; i++)
+                        {
+                            /* display channel/room users list */
+                            if (!jQuery('.room-user-name#' + data.user_id[i]).length) {
+                                jQuery('#author-chat #ac-room-users-list').append('<span class="room-user-name" id="' + data.user_id[i] + '">' + data.nickname[i] + '</span>');
+                            }
+                        }
+                    }
                 }
             });
 };

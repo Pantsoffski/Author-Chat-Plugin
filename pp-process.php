@@ -187,6 +187,32 @@ if (isset($_POST['function'])) {
             $wpdb->insert($author_chat_room_participants_table, $result, array('%d', '%d'));
 
             break;
+        
+        case( 'getUsersForRoom' ):
+            $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
+
+            //$lines = $wpdb->get_results("SELECT DISTINCT user_id FROM $author_chat_room_participants_table WHERE chat_room_id = $room_id", ARRAY_A);
+            
+            $lines = $wpdb->get_results("
+                SELECT acrp.user_id, um.meta_value 
+                FROM $author_chat_room_participants_table acrp 
+                INNER JOIN $wp_usermeta um 
+                ON acrp.user_id = um.user_id 
+                WHERE acrp.chat_room_id = $room_id 
+                AND um.meta_key = 'nickname'
+                ", ARRAY_A);
+
+                $text = array();
+                foreach ($lines as $line) {
+                    $text[] = $line;
+                }
+
+                $result = array(
+                    'user_id' => array_column($text, 'user_id'),
+                    'nickname' => array_column($text, 'meta_value')
+                );
+
+            break;
     }
     echo wp_send_json($result);
 }

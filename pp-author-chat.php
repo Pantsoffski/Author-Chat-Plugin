@@ -233,6 +233,7 @@ function pp_author_chat() {
             
             <div id="ac-private-conversation"></div>
             <div id="ac-search-user"></div>
+            <div id="ac-room-users-list"></div>
 
             <div class="ac-wrap">
                 <div id="author-chat-area" class="ac-animation">
