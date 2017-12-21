@@ -15,7 +15,10 @@ include 'pp-process.php';
 
 // Global Vars
 global $author_chat_version;
+global $resultA;
+
 $author_chat_version = '1.8.0';
+$resultA = pp_author_chat_sec();
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.2';
@@ -147,6 +150,7 @@ function pp_author_chat_uninstall() {
 // Enqueue JavaScript & CSS files
 function pp_scripts_admin_chat() {
     global $author_chat_version;
+    global $resultA;
     wp_enqueue_script('author-chat-script', plugins_url('chat.js', __FILE__), array('jquery'), $author_chat_version, true);
     wp_enqueue_style('author-chat-style', plugins_url('author-chat-style.css', __FILE__), array(), $author_chat_version);
     wp_enqueue_style('wp-jquery-ui-dialog');
@@ -159,6 +163,7 @@ function pp_scripts_admin_chat() {
         (
         'user_id' => $current_user->ID,
         'nickname' => $username,
+        'result_a' => $resultA,
         'you_are' => __('You are:', 'author-chat'),
         'today' => __('Today', 'default'),
         'yesterday' => __('Yesterday', 'author-chat'),
@@ -219,7 +224,7 @@ function pp_plugin_action_links_ac($links) { //Add settings link to plugins page
 }
 
 function pp_author_chat() {
-    $resultA = pp_author_chat_sec();
+    global $resultA;
     $current_user = wp_get_current_user();
     $current_screen = get_current_screen();
 
@@ -242,9 +247,7 @@ function pp_author_chat() {
                     <div class="ac-tobottom ac-animation ac-hidden"><span class="ac-icon-down"></span></div>
                 </div>
                 
-                <div id="ac-rooms">
-                        <button id="0">Main room</button>
-                </div>
+                <div id="ac-rooms"></div>
                 
                 <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || $resultA === true) { ?>
             </div>
@@ -275,7 +278,7 @@ function pp_author_chat() {
 }
 
 function pp_author_chat_chat_on_top() {
-    $resultA = pp_author_chat_sec();
+    global $resultA;
     $current_screen = get_current_screen();
     ?>
     <script type="text/javascript">

@@ -178,13 +178,17 @@ if (isset($_POST['function'])) {
         case( 'addUser' ):
             $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
             $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
+            
+            $duplicate_check = $wpdb->get_results("SELECT user_id FROM $author_chat_room_participants_table WHERE user_id = $user_id AND chat_room_id = $room_id", ARRAY_A);
+            
+            if (count($duplicate_check) === 0) {
+                $result = array(
+                    'user_id' => $user_id,
+                    'chat_room_id' => $room_id
+                );
 
-            $result = array(
-                'user_id' => $user_id,
-                'chat_room_id' => $room_id
-            );
-
-            $wpdb->insert($author_chat_room_participants_table, $result, array('%d', '%d'));
+                $wpdb->insert($author_chat_room_participants_table, $result, array('%d', '%d'));
+            }
 
             break;
         
@@ -211,6 +215,19 @@ if (isset($_POST['function'])) {
                     'user_id' => array_column($text, 'user_id'),
                     'nickname' => array_column($text, 'meta_value')
                 );
+
+            break;
+            
+            case( 'removeUser' ):
+            $user_id = strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_STRING));
+            $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
+
+            $result = array(
+                'user_id' => $user_id,
+                'chat_room_id' => $room_id
+            );
+
+            $wpdb->delete($author_chat_room_participants_table, $result, array('%d', '%d'));
 
             break;
     }
