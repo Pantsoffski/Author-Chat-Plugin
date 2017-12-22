@@ -187,7 +187,7 @@ function pp_author_chat_setup_menu() {
 
     $optionsTitle = __('Author Chat Options', 'author-chat');
     $pluginName = __('Author Chat', 'author-chat');
-    add_dashboard_page($pluginName, $pluginName, 'read', 'author-chat', 'pp_author_chat');
+    //add_dashboard_page($pluginName, $pluginName, 'read', 'author-chat', 'pp_author_chat'); //dashboard page temporary removed
     add_menu_page($optionsTitle, $pluginName, 'administrator', 'acset', 'author_chat_settings', 'dashicons-carrot');
     add_action('admin_init', 'register_author_chat_settings');
 }

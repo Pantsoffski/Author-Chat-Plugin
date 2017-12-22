@@ -25,6 +25,7 @@ var authorChat = function ()
     $this.uid_last_color = 1;
     $this.room_changed = false;
     $this.room_pressed_button_id = '0';
+    $this.curent_user_room_owner = false;
 
     /* list of ASCII Emoticons to detect */
     $this.emoticons = [
@@ -79,7 +80,7 @@ var authorChat = function ()
     
     /* display name on page */
     jQuery('#author-chat .ac-user').html(localize.you_are + ' <span>' + localize.nickname + '</span>');
-
+    
     /* display add private chat room button */
     jQuery('#author-chat #ac-private-conversation').html('<button>Add private chat room</button>');
     /* Click event of the Button to private conversation */
@@ -343,6 +344,7 @@ _proto_.getState = function ()
             $this.room_changed = false;
             if ($this.room_pressed_button_id !== '0') {
                 $this.showSearchUserBar(); //show search user bar if not visible
+                $this.whoIsChannelOwner(); //check who is channel owner
             } else {
                 jQuery('#author-chat #ac-search-user').empty(); //remove search user bar
             }
@@ -350,7 +352,7 @@ _proto_.getState = function ()
         
         /* add room buttons (if user participating in some channels/rooms) */
         $this.getRoomsForUser();
-
+        
         /* add users list for current room (not main) */
         if ($this.room_pressed_button_id !== '0') {
             $this.getUsersForRoom();
@@ -683,7 +685,7 @@ _proto_.addRoom = function ()
 {
     var $this = this;
 
-    if (jQuery('#ac-rooms :button').length < 2 || localize.result_a === 1) {
+    if (jQuery('#ac-rooms :button').length < 2 && jQuery('#ac-rooms :button').length > 0 || localize.result_a === '1') {
 
         var $randomRoomNumber = Math.floor((Math.random() * 100000) + 1);
 
@@ -712,6 +714,8 @@ _proto_.addRoom = function ()
 /* Get chat rooms ids for current uset */
 _proto_.getRoomsForUser = function ()
 {    
+    var $this = this;
+    
     jQuery.ajax(
             {
                 type: 'POST',
@@ -733,10 +737,11 @@ _proto_.getRoomsForUser = function ()
                             var $roomNumer = i + 1;
                             /* display private conversation rooms buttons */
                             if (!jQuery('#' + data.chat_room_id[i]).length) {
-                                jQuery('#author-chat #ac-rooms').append('<button id="' + data.chat_room_id[i] + '">Room ' + $roomNumer + '</button>');
-                                console.log("dodaje");
-                            }
+                                jQuery('#author-chat #ac-rooms').append('<button id="' + data.chat_room_id[i] + '">Room ' + $roomNumer + '</button>');                            }
                         }
+                    } else if (data.chat_room_id.length === 0 && $this.room_pressed_button_id !== '0') { //if there is no users for current room, go to main room
+                        jQuery('#author-chat #ac-rooms').html('<button id="0">Main room</button>');
+                        jQuery('#author-chat #ac-rooms #0').trigger('click');
                     }
                 }
             });
@@ -833,23 +838,32 @@ _proto_.getUsersForRoom = function ()
                 success: function (data)
                 {
                     jQuery('#author-chat #ac-room-users-list').empty(); //remove all users from list before start loop
-                    
+
                     if (data !== null && data.user_id.length && $currentRoom !== '0')
                     {
                         var rows = data.user_id.length;
                         for (var i = 0; i < rows; i++)
                         {
                             /* display channel/room users list */
-                                var $user_id = data.user_id[i];
-                                jQuery('#author-chat #ac-room-users-list').append('<span class="room-user-name" id="' + $user_id + '">' + data.nickname[i] + '</span><input type="button" id="rem-user-' + data.user_id[i] + '" value="x"/>');
+                            var $user_id = data.user_id[i];
+                            jQuery('#author-chat #ac-room-users-list').append('<span class="room-user-name" id="' + $user_id + '">' + data.nickname[i] + '</span><input type="button" id="rem-user-' + data.user_id[i] + '" value="x"/>');
 
-                                /* Click event of the Button to remove user */
-                                jQuery('#author-chat #ac-room-users-list #rem-user-' + $user_id).click(function ()
-                                {
+                            /* Click event of the Button to remove user */
+                            jQuery('#author-chat #ac-room-users-list #rem-user-' + $user_id).click(function ()
+                            {
+                                if ($this.curent_user_room_owner === true) { //channel ownership checking
                                     $this.removeUserFromRoom($user_id, $currentRoom);
-                                });
+                                } else {
+                                    alert("Only chat room owner can delete users!");
+                                }
+                            });
                         }
-                    }
+                    } 
+//                    else if ($currentRoom !== '0' && data !== null && data.user_id.length === 0) {
+//                        console.log("Puste");
+//                        $this.initiate();
+//                        $this.getRoomsForUser();
+//                    }
                 }
             });
 };
@@ -872,6 +886,43 @@ _proto_.removeUserFromRoom = function (user_id, room_id)
                 success: function (data)
                 {
                     $this.update();                }
+            });
+};
+
+/* Who is room moderator(owner)? */
+_proto_.whoIsChannelOwner = function ()
+{
+    var $this = this;
+
+    jQuery.ajax(
+            {
+                type: 'POST',
+                data:
+                        {
+                            'function': 'whoIsChannelOwner',
+                            'room_id': $this.room_pressed_button_id
+                        },
+                dataType: 'json',
+                success: function (data)
+                {
+                    console.log(data.user_id.length);
+                    if (data !== null && data.user_id.length && $this.room_pressed_button_id !== '0')
+                    {
+                        var rows = data.user_id.length;
+                        for (var i = 0; i < rows; i++)
+                        {
+                            var $owner_user_id = data.user_id[i];
+                            console.log(data.user_id[i]);
+                        }
+                        
+                        /* set curent_user_room_owner to reckognize if current user is room owner or not */
+                        if ($owner_user_id === localize.user_id){
+                            $this.curent_user_room_owner = true;
+                        } else {
+                            $this.curent_user_room_owner = false;
+                        }
+                    }
+                }
             });
 };
 

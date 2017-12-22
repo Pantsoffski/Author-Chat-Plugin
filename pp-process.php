@@ -230,6 +230,22 @@ if (isset($_POST['function'])) {
             $wpdb->delete($author_chat_room_participants_table, $result, array('%d', '%d'));
 
             break;
+        
+        case( 'whoIsChannelOwner' ):
+            $room_id = strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_STRING));
+
+            $lines = $wpdb->get_results("SELECT DISTINCT user_id FROM $author_chat_room_participants_table WHERE id IN(SELECT MIN(id) from $author_chat_room_participants_table WHERE chat_room_id = $room_id) AND chat_room_id = $room_id", ARRAY_A);
+
+            $text = array();
+            foreach ($lines as $line) {
+                $text[] = $line;
+            }
+
+            $result = array(
+                'user_id' => array_column($text, 'user_id'),
+            );
+
+            break;
     }
     echo wp_send_json($result);
 }
