@@ -324,6 +324,7 @@ body.toplevel_page_acset .form-table TD {
     background-color: #896835;
 }
 
+/* Users names styling */
 .room-users-names {
     color: #555;
     line-height: 22px;
@@ -331,6 +332,7 @@ body.toplevel_page_acset .form-table TD {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
+/* Users names labels styling */
 .room-users-name .room-user-name {
     margin-right: 5px;
     color: #699472;
@@ -346,9 +348,16 @@ body.toplevel_page_acset .form-table TD {
     border-radius: .2em;   
 }
 
+/* Users names remove button styling */
 .room-users-name .rem-user-button {
     margin-left: 8px;
     cursor: pointer;
+}
+
+/* Users names remove button styling */
+.room-users-name .rem-user-button::after {
+    content: "x";
+    padding: 0px 2px;
 }
 
 #author-chat .ac-emo {

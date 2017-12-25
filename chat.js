@@ -846,7 +846,7 @@ _proto_.getUsersForRoom = function ()
                         {
                             /* display channel/room users list */
                             var $user_id = data.user_id[i];
-                            jQuery('#author-chat #ac-room-users-list').append('<span class="room-users-name"><span class="room-user-name" id="' + $user_id + '">' + data.nickname[i] + '<span class="rem-user-button" id="rem-user-' + data.user_id[i] + '"> x</span></span></span>');
+                            jQuery('#author-chat #ac-room-users-list').append('<span class="room-users-name"><span class="room-user-name" id="' + $user_id + '">' + data.nickname[i] + '<span class="rem-user-button" id="rem-user-' + data.user_id[i] + '"></span></span></span>');
 
                             /* Click event of the Button to remove user */
                             jQuery('#author-chat #ac-room-users-list #rem-user-' + $user_id).click(function ()
