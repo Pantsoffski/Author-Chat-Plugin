@@ -300,10 +300,10 @@ body.toplevel_page_acset .form-table TD {
 }
 
 #author-chat #ac-rooms button, #author-chat #ac-private-conversation button {
-    background-color: #b58a48; /* Green background */
-    border: 1px solid green; /* Green border */
+    background-color: #b58a48; /* background */
+    border: 1px solid #896835; /* border */
     color: white; /* White text */
-    padding: 10px 24px; /* Some padding */
+    padding: 5px 8px; /* Some padding */
     cursor: pointer; /* Pointer/hand icon */
     float: left; /* Float the buttons side by side */
 }
@@ -321,7 +321,34 @@ body.toplevel_page_acset .form-table TD {
 
 /* Add a background color on hover */
 #author-chat #ac-rooms button:hover, #author-chat #ac-private-conversation button:hover {
-    background-color: #3e8e41;
+    background-color: #896835;
+}
+
+.room-users-names {
+    color: #555;
+    line-height: 22px;
+    cursor: text;
+    font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.room-users-name .room-user-name {
+    margin-right: 5px;
+    color: #699472;
+    border: 1px solid #bbdd78;
+    background-color: #cce59b;
+    display: inline;
+    padding: .2em .5em;
+    font-weight: 400;
+    font-size: 14px;
+    text-align: center;
+    white-space: normal;
+    vertical-align: baseline;
+    border-radius: .2em;   
+}
+
+.room-users-name .rem-user-button {
+    margin-left: 8px;
+    cursor: pointer;
 }
 
 #author-chat .ac-emo {
