@@ -305,7 +305,6 @@ body.toplevel_page_acset .form-table TD {
     color: white; /* White text */
     padding: 5px 8px; /* Some padding */
     cursor: pointer; /* Pointer/hand icon */
-    float: left; /* Float the buttons side by side */
 }
 
 #author-chat #ac-rooms button:not(:last-child), #author-chat #ac-private-conversation button:not(:last-child) {
@@ -313,7 +312,7 @@ body.toplevel_page_acset .form-table TD {
 }
 
 /* Clear floats (clearfix hack) */
-#author-chat #ac-rooms:after, #author-chat #ac-private-conversation:after {
+#author-chat #ac-private-conversation:after {
     content: "";
     clear: both;
     display: table;
@@ -339,9 +338,9 @@ body.toplevel_page_acset .form-table TD {
     border: 1px solid #bbdd78;
     background-color: #cce59b;
     display: inline;
-    padding: .2em .5em;
+    padding: 2px 2px;
     font-weight: 400;
-    font-size: 14px;
+    font-size: 11px;
     text-align: center;
     white-space: normal;
     vertical-align: baseline;
@@ -358,6 +357,13 @@ body.toplevel_page_acset .form-table TD {
 .room-users-name .rem-user-button::after {
     content: "x";
     padding: 0px 2px;
+}
+
+/* Add room button */
+#ac-private-conversation button {
+    border-radius: 15px;
+    margin-left: 5px;
+    padding-top: 0px !important;
 }
 
 #author-chat .ac-emo {

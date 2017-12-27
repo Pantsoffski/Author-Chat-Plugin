@@ -236,7 +236,7 @@ function pp_author_chat() {
 
             <div class="ac-user"></div>
             
-            <div id="ac-private-conversation"></div>
+            <div id="ac-rooms-add-btn-wrapper"><span id="ac-rooms"></span><span id="ac-private-conversation"></span></div>
             <div id="ac-search-user"></div>
             <div id="ac-room-users-list"></div>
 
@@ -246,8 +246,6 @@ function pp_author_chat() {
                     <ul></ul>
                     <div class="ac-tobottom ac-animation ac-hidden"><span class="ac-icon-down"></span></div>
                 </div>
-                
-                <div id="ac-rooms"></div>
                 
                 <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || $resultA === true) { ?>
             </div>

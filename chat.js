@@ -81,15 +81,6 @@ var authorChat = function ()
     /* display name on page */
     jQuery('#author-chat .ac-user').html(localize.you_are + ' <span>' + localize.nickname + '</span>');
     
-    /* display add private chat room button */
-    jQuery('#author-chat #ac-private-conversation').html('<button>Add private chat room</button>');
-    /* Click event of the Button to private conversation */
-    var $_btnToPrivateConversation = jQuery('#author-chat #ac-private-conversation');
-    $_btnToPrivateConversation.click(function ()
-    {
-        $this.addRoom();
-    });
-    
     /* Click event of the Button to change room */
     var $_btnToPrivateConversation = jQuery('#author-chat #ac-rooms');
     $_btnToPrivateConversation.click(function (event)
@@ -730,6 +721,15 @@ _proto_.getRoomsForUser = function ()
                     if (data !== null && data.chat_room_id.length)
                     {
                         jQuery('#author-chat #ac-rooms').html('<button id="0">Main room</button>');
+                        
+                        /* display add private chat room button */
+                        jQuery('#author-chat #ac-private-conversation').html('<button title="Add private chat room...">+</button>');
+                        /* Click event of the Button to private conversation */
+                        var $_btnToPrivateConversation = jQuery('#author-chat #ac-private-conversation');
+                        $_btnToPrivateConversation.click(function ()
+                        {
+                            $this.addRoom();
+                        });
 
                         var rows = data.chat_room_id.length;
                         for (var i = 0; i < rows; i++)
@@ -739,9 +739,6 @@ _proto_.getRoomsForUser = function ()
                             if (!jQuery('#' + data.chat_room_id[i]).length) {
                                 jQuery('#author-chat #ac-rooms').append('<button id="' + data.chat_room_id[i] + '">Room ' + $roomNumer + '</button>');                            }
                         }
-                    } else if (data.chat_room_id.length === 0 && $this.room_pressed_button_id !== '0') { //if there is no users for current room, go to main room
-                        jQuery('#author-chat #ac-rooms').html('<button id="0">Main room</button>');
-                        jQuery('#author-chat #ac-rooms #0').trigger('click');
                     }
                 }
             });
@@ -752,7 +749,7 @@ _proto_.showSearchUserBar = function ()
 {
     var $this = this;
 
-    jQuery('#author-chat #ac-search-user').html('<label for="search-user-bar">Add user: </label><input type="text" name="searchuserbar" id="search-user-bar" placeholder="start typing...">');
+    jQuery('#author-chat #ac-search-user').html('<input type="text" name="searchuserbar" id="search-user-bar" placeholder="Add user: type nickname...">');
     jQuery('#search-user-bar').autocomplete({
 
         source: function (request, response) {
@@ -774,9 +771,6 @@ _proto_.showSearchUserBar = function ()
                                 var rows = data.user_id.length;
                                 for (var i = 0; i < rows; i++)
                                 {
-                                    /* Put results to array */
-                                    //$usersNamesFound.push(data.nickname[i]);
-                                    //$usersIdFound.push(data.user_id[i]);
                                    suggestions.push({
                                        label: data.nickname[i],
                                        id: data.user_id[i]
@@ -846,7 +840,7 @@ _proto_.getUsersForRoom = function ()
                         {
                             /* display channel/room users list */
                             var $user_id = data.user_id[i];
-                            jQuery('#author-chat #ac-room-users-list').append('<span class="room-users-name"><span class="room-user-name" id="' + $user_id + '">' + data.nickname[i] + '<span class="rem-user-button" id="rem-user-' + data.user_id[i] + '"></span></span></span>');
+                            jQuery('#author-chat #ac-room-users-list').append('<span class="room-users-name"><span class="room-user-name" id="' + $user_id + '">' + data.nickname[i] + '<span class="rem-user-button" id="rem-user-' + data.user_id[i] + '" title="Click to remove user (remove all users to delete room)"></span></span></span>');
 
                             /* Click event of the Button to remove user */
                             jQuery('#author-chat #ac-room-users-list #rem-user-' + $user_id).click(function ()
@@ -858,12 +852,10 @@ _proto_.getUsersForRoom = function ()
                                 }
                             });
                         }
-                    } 
-//                    else if ($currentRoom !== '0' && data !== null && data.user_id.length === 0) {
-//                        console.log("Puste");
-//                        $this.initiate();
-//                        $this.getRoomsForUser();
-//                    }
+                    } else if (data.user_id.length === 0 && $this.room_pressed_button_id !== '0') { //if there is no users for current room, go to main room
+                        jQuery('#author-chat #ac-rooms').html('<button id="0">Main room</button>');
+                        jQuery('#author-chat #ac-rooms #0').trigger('click');
+                    }
                 }
             });
 };
@@ -905,14 +897,12 @@ _proto_.whoIsChannelOwner = function ()
                 dataType: 'json',
                 success: function (data)
                 {
-                    console.log(data.user_id.length);
                     if (data !== null && data.user_id.length && $this.room_pressed_button_id !== '0')
                     {
                         var rows = data.user_id.length;
                         for (var i = 0; i < rows; i++)
                         {
                             var $owner_user_id = data.user_id[i];
-                            console.log(data.user_id[i]);
                         }
                         
                         /* set curent_user_room_owner to reckognize if current user is room owner or not */
