@@ -73,13 +73,13 @@ var authorChat = function ()
 
     var $_chatArea = jQuery('#author-chat-area');
     var $_dialogContent = jQuery('#author-chat-window');
-    var $_topDate = $_chatArea.find('.ac-top-date');
+    //var $_topDate = $_chatArea.find('.ac-top-date');
 
     /* hide the current date label of the top */
-    $_topDate.hide();
+    //$_topDate.hide();
     
     /* display name on page */
-    jQuery('#author-chat .ac-user').html(localize.you_are + ' <span>' + localize.nickname + '</span>');
+    //jQuery('#author-chat .ac-user').html(localize.you_are + ' <span>' + localize.nickname + '</span>');
     
     /* Click event of the Button to change room */
     var $_btnToPrivateConversation = jQuery('#author-chat #ac-rooms');
@@ -179,7 +179,7 @@ var authorChat = function ()
     {
         $_chatArea.scrollTop($_chatArea.prop('scrollHeight'));
         $_btnToBottom.addClass('ac-hidden');
-        $_topDate.hide();
+        //$_topDate.hide();
     });
 
     /* MouseWheel event */
@@ -201,23 +201,23 @@ var authorChat = function ()
 
         /* displays the current date of visible messages at the top as does Whatsapp */
         /* Note: we set a timeout to check the position of the elements after the scroll is finished  */
-        $this.scroll_id = setTimeout(function () {
-            var $_prevDate = $me.find('.ac-date').first();
-            $me.find('.ac-date').each(function () {
-                var top = jQuery(this).position().top;
-                if (top < 0)
-                {
-                    if (top > $_prevDate.position().top)
-                    {
-                        $_prevDate = jQuery(this);
-                    }
-                }
-            });
-            if ($_prevDate.text() !== $_topDate.text())
-            {
-                $_topDate.text($_prevDate.text());
-            }
-        }, 250);
+//        $this.scroll_id = setTimeout(function () {
+//            var $_prevDate = $me.find('.ac-date').first();
+//            $me.find('.ac-date').each(function () {
+//                var top = jQuery(this).position().top;
+//                if (top < 0)
+//                {
+//                    if (top > $_prevDate.position().top)
+//                    {
+//                        $_prevDate = jQuery(this);
+//                    }
+//                }
+//            });
+//            if ($_prevDate.text() !== $_topDate.text())
+//            {
+//                $_topDate.text($_prevDate.text());
+//            }
+//        }, 250);
 
         /* prevent MouseWheel Scrolling of parent elements if we are on the chat-area */
         var prevent = function () {
@@ -231,21 +231,22 @@ var authorChat = function ()
             $_btnToBottom.addClass('ac-hidden');
             // Scrolling down, but this will take us past the bottom.
             $me.scrollTop(scroll_height);
-            $_topDate.hide();
+            //$_topDate.hide();
             return prevent();
         } else if (up && delta > scroll_top)
         {
             // Scrolling up, but this will take us past the top.
             $me.scrollTop(0);
-            $_topDate.hide();
+            //$_topDate.hide();
             return prevent();
-        } else
-        {
-            if ($_topDate.is(':hidden'))
-            {
-                $_topDate.show();
-            }
-        }
+        } 
+//        else
+//        {
+//            if ($_topDate.is(':hidden'))
+//            {
+//                $_topDate.show();
+//            }
+//        }
     });
 
 };
@@ -522,7 +523,7 @@ _proto_.scrollToBottom = function ()
     }
     /* scroll the chat area to the bottom */
     $_charArea.scrollTop(scroll_height);
-    $_charArea.find('.ac-top-date').hide();
+    //$_charArea.find('.ac-top-date').hide();
 };
 
 /* Add the menssage to chat area */

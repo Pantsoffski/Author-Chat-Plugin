@@ -152,7 +152,7 @@
     border-radius: 20px;
     -wekit-border-radius: 20px;
 }
-#author-chat .ac-top-date {
+/*#author-chat .ac-top-date {
     position: absolute;
     display: block;
     top: 17px;
@@ -170,7 +170,7 @@
     border-radius: 0px 8px 0px 8px;
     -wekit-border-radius: 0px 8px 0px 8px;
     opacity:0.9;
-}
+}*/
 
 #author-chat .ac-tobottom { 
     position: absolute;
@@ -364,6 +364,10 @@ body.toplevel_page_acset .form-table TD {
     border-radius: 15px;
     margin-left: 5px;
     padding-top: 0px !important;
+}
+
+#ac-search-user {
+    margin: 3px 0 3px 0;
 }
 
 #author-chat .ac-emo {

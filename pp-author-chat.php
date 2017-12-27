@@ -234,7 +234,7 @@ function pp_author_chat() {
 
             <h2 class="ac-title"><?php _e('Author Chat', 'author-chat'); ?></h2>
 
-            <div class="ac-user"></div>
+<!--            <div class="ac-user"></div>-->
             
             <div id="ac-rooms-add-btn-wrapper"><span id="ac-rooms"></span><span id="ac-private-conversation"></span></div>
             <div id="ac-search-user"></div>
