@@ -130,7 +130,9 @@ function pp_author_chat_deactivate() {
 function pp_author_chat_uninstall() {
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
+    $author_chat_table_participants = $wpdb->prefix . 'author_chat_room_participants';
     $wpdb->query("DROP TABLE IF EXISTS $author_chat_table");
+    $wpdb->query("DROP TABLE IF EXISTS $author_chat_table_participants");
     delete_option('author_chat_settings');
     delete_option('author_chat_settings_access_all_users');
     delete_option('author_chat_settings_access_author');
@@ -239,12 +241,28 @@ function pp_author_chat() {
             <div id="ac-rooms-add-btn-wrapper"><span id="ac-rooms"></span><span id="ac-private-conversation"></span></div>
             <div id="ac-search-user"></div>
             <div id="ac-room-users-list"></div>
+<!--            Hidden dialog messages-->
+            <div id="ac-only-owner" title="NO! Bad user!">
+                <p>Only chat room owner (User that created chat room) can delete users!</p>
+            </div>
+            <div id="ac-wait-sec" title="NO! Bad user!">
+                <p>Wait a sec!</p>
+            </div>
+            <div class="ac-overlay">
+                <div id="ac-p-warn" title="NO! Bad user!">
+                    <p>Buy premium version to add more chat rooms!</p>
+                    <p><b style="color:#b11b1b;">$10.99 <?php _e('for lifetime 1 domain licence', 'author-chat'); ?>.</b>
+                        (<i><?php _e('future premium features included', 'author-chat'); ?></i>)</p>
+                    <img class="ac-buy" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" alt="PayPal - The safer, easier way to pay online!" />
+                </div>
+            </div>
+
 
             <div class="ac-wrap">
                 <div id="author-chat-area" class="ac-animation">
                     <div class="ac-top-date"></div>
                     <ul></ul>
-                    <div class="ac-tobottom ac-animation ac-hidden"><span class="ac-icon-down"></span></div>
+<!--                    <div class="ac-tobottom ac-animation ac-hidden"><span class="ac-arrow"></span></div>-->
                 </div>
                 
                 <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || $resultA === true) { ?>
@@ -277,6 +295,7 @@ function pp_author_chat() {
 
 function pp_author_chat_chat_on_top() {
     global $resultA;
+    $resultA = false;
     $current_screen = get_current_screen();
     ?>
     <script type="text/javascript">
@@ -377,6 +396,9 @@ function pp_author_chat_chat_on_top() {
                 var $_chatArea = $_dialogWindow.find('#author-chat-area');
                 var dialog_offset = $_dialogWindow.offset();
                 var $_wpAdminBar = jQuery('#wpadminbar');
+                var $_roomBtnWrapper = jQuery('#ac-rooms-add-btn-wrapper');
+                var $_searchUserBar = jQuery('#ac-search-user');
+                var $_roomUsers = jQuery('#ac-room-users-list');
 
                 /* Set Floating Window as Sidebar */
                 /*--------------------------------*/
@@ -405,7 +427,7 @@ function pp_author_chat_chat_on_top() {
                     $_dialogWindow.css('top', $_wpAdminBar.outerHeight() + 'px');
 
                     var outside = $_dialogWindow.outerHeight() - $_chatArea.outerHeight();
-                    $_chatArea.css('height', (jQuery(window).height() - $_wpAdminBar.outerHeight() - outside - 10) + 'px');
+                    $_chatArea.css('height', (jQuery(window).height() - $_wpAdminBar.outerHeight() - outside - 130) + 'px'); // -10 was a default value
 
                     chat.setLocalData('ac_dialog_is_sidebar', true);
                 }
@@ -612,7 +634,7 @@ function pp_author_chat_chat_on_top() {
             <div id="author-chat-window" class="ac-animation" title="<?php _e('Author Chat', 'author-chat'); ?>">
                 <?php pp_author_chat(); ?>
             </div>
-            <div id="author-chat-buy" title="<?php _e('Buy Premium Version', 'author-chat'); ?>">
+            <div id="author-chat-buy" title="<?php _e('Buy Premium Version ($10.99)', 'author-chat'); ?>">
                 <div class="ac-pp">
                     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                         <input type="hidden" name="cmd" value="_s-xclick">

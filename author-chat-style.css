@@ -172,7 +172,7 @@
     opacity:0.9;
 }*/
 
-#author-chat .ac-tobottom { 
+/*#author-chat .ac-tobottom { 
     position: absolute;
     display: flex;
     display: -webkit-flex;
@@ -238,7 +238,7 @@
     margin-top: -11px;
     border-color: #edd8c3;
     transform: rotate(246deg) scaleX(-1);
-}
+}*/
 
 #author-chat .ac-textarea {
     width: 100%;
@@ -250,7 +250,7 @@
 #author-chat .ac-overlay {
     height: 100%;
     margin-top: 2px;
-    padding: 5px 10px;
+    /*padding: 5px 10px;*/
     background: #ffd7b4;
     font: 12px "Lucida Grande", Sans-Serif;
     cursor: pointer;
@@ -265,7 +265,7 @@
 #author-chat-buy .ac-pp {
     margin:0 auto;
     font-size: 15px;
-    text-align:center;
+    text-align: center;
 }
 
 
@@ -366,8 +366,14 @@ body.toplevel_page_acset .form-table TD {
     padding-top: 0px !important;
 }
 
+/* User search bar margins */
 #ac-search-user {
     margin: 3px 0 3px 0;
+}
+
+/* Hidden dialogs */
+#ac-only-owner, #ac-wait-sec, #ac-p-warn {
+    display: none;
 }
 
 #author-chat .ac-emo {

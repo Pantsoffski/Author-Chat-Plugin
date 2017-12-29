@@ -174,13 +174,13 @@ var authorChat = function ()
     });
 
     /* Click event of the Button to Scroll to Bottom */
-    var $_btnToBottom = $_chatArea.find('.ac-tobottom');
-    $_btnToBottom.click(function ()
-    {
-        $_chatArea.scrollTop($_chatArea.prop('scrollHeight'));
-        $_btnToBottom.addClass('ac-hidden');
-        //$_topDate.hide();
-    });
+//    var $_btnToBottom = $_chatArea.find('.ac-tobottom');
+//    $_btnToBottom.click(function ()
+//    {
+//        $_chatArea.scrollTop($_chatArea.prop('scrollHeight'));
+//        $_btnToBottom.addClass('ac-hidden');
+//        //$_topDate.hide();
+//    });
 
     /* MouseWheel event */
     $_chatArea.on('DOMMouseScroll mousewheel', function (ev) {
@@ -194,10 +194,10 @@ var authorChat = function ()
         clearTimeout($this.scroll_id);
 
         /* show the button to go to bottom */
-        if ($_btnToBottom.hasClass('ac-hidden'))
-        {
-            $_btnToBottom.removeClass('ac-hidden');
-        }
+//        if ($_btnToBottom.hasClass('ac-hidden'))
+//        {
+//            $_btnToBottom.removeClass('ac-hidden');
+//        }
 
         /* displays the current date of visible messages at the top as does Whatsapp */
         /* Note: we set a timeout to check the position of the elements after the scroll is finished  */
@@ -228,7 +228,7 @@ var authorChat = function ()
         };
         if (!up && -delta >= scroll_height - height - scroll_top)
         {
-            $_btnToBottom.addClass('ac-hidden');
+            //$_btnToBottom.addClass('ac-hidden');
             // Scrolling down, but this will take us past the bottom.
             $me.scrollTop(scroll_height);
             //$_topDate.hide();
@@ -676,8 +676,8 @@ _proto_.setLinks = function (text)
 _proto_.addRoom = function ()
 {
     var $this = this;
-
-    if (jQuery('#ac-rooms :button').length < 2 && jQuery('#ac-rooms :button').length > 0 || localize.result_a === '1') {
+    console.log(localize.result_a + ' Rooms: ' + jQuery('#author-chat #ac-rooms :button').length);
+    if (jQuery('#author-chat #ac-rooms :button').length < 2 && jQuery('#author-chat #ac-rooms :button').length > 0 || localize.result_a === '') {
 
         var $randomRoomNumber = Math.floor((Math.random() * 100000) + 1);
 
@@ -696,10 +696,11 @@ _proto_.addRoom = function ()
                         $this.update();
                     }
                 });
-    } else if (localize.result_a === '') {
-        alert("Buy premium version to add more chat rooms!");
+    } else if (localize.result_a === '1') {
+        //jQuery('#ac-p-warn').dialog();
+        jQuery('#author-chat-buy').dialog('open');
     } else {
-        alert("Wait a sec!");
+        jQuery('#ac-wait-sec').dialog();
     }
 };
 
@@ -740,6 +741,17 @@ _proto_.getRoomsForUser = function ()
                             if (!jQuery('#' + data.chat_room_id[i]).length) {
                                 jQuery('#author-chat #ac-rooms').append('<button id="' + data.chat_room_id[i] + '">Room ' + $roomNumer + '</button>');                            }
                         }
+                    } else {
+                        jQuery('#author-chat #ac-rooms').html('<button id="0">Main room</button>');
+                        
+                        /* display add private chat room button */
+                        jQuery('#author-chat #ac-private-conversation').html('<button title="Add private chat room...">+</button>');
+                        /* Click event of the Button to private conversation */
+                        var $_btnToPrivateConversation = jQuery('#author-chat #ac-private-conversation');
+                        $_btnToPrivateConversation.click(function ()
+                        {
+                            $this.addRoom();
+                        });
                     }
                 }
             });
@@ -837,6 +849,13 @@ _proto_.getUsersForRoom = function ()
                     if (data !== null && data.user_id.length && $currentRoom !== '0')
                     {
                         var rows = data.user_id.length;
+                        
+                        /* Check if current user participating to currently vieved channel, if not - redirect to Main Room */
+                        if (jQuery.inArray(localize.user_id, data.user_id) === -1) {
+                            jQuery('#author-chat #ac-rooms').html('<button id="0">Main room</button>');
+                            jQuery('#author-chat #ac-rooms #0').trigger('click');
+                        }
+                        
                         for (var i = 0; i < rows; i++)
                         {
                             /* display channel/room users list */
@@ -849,7 +868,7 @@ _proto_.getUsersForRoom = function ()
                                 if ($this.curent_user_room_owner === true) { //channel ownership checking
                                     $this.removeUserFromRoom($user_id, $currentRoom);
                                 } else {
-                                    alert("Only chat room owner can delete users!");
+                                    jQuery("#ac-only-owner").dialog();
                                 }
                             });
                         }
