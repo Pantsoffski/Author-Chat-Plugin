@@ -87,6 +87,7 @@ var authorChat = function ()
     {
         if (!$this.room_changed) {
             $this.room_changed = true;
+            jQuery('#author-chat #ac-rooms #' + $this.room_pressed_button_id).removeClass('active'); // remove acive class button when another room button was pressed
             $this.room_pressed_button_id = event.target.id; //get id of clicked room button
             $this.getRoomsForUser();
         }
@@ -676,8 +677,8 @@ _proto_.setLinks = function (text)
 _proto_.addRoom = function ()
 {
     var $this = this;
-    console.log(localize.result_a + ' Rooms: ' + jQuery('#author-chat #ac-rooms :button').length);
-    if (jQuery('#author-chat #ac-rooms :button').length < 2 && jQuery('#author-chat #ac-rooms :button').length > 0 || localize.result_a === '') {
+    
+    if (jQuery('#author-chat #ac-rooms :button').length < 2 && jQuery('#author-chat #ac-rooms :button').length > 0 || localize.result_a === '1') {
 
         var $randomRoomNumber = Math.floor((Math.random() * 100000) + 1);
 
@@ -696,9 +697,14 @@ _proto_.addRoom = function ()
                         $this.update();
                     }
                 });
-    } else if (localize.result_a === '1') {
-        //jQuery('#ac-p-warn').dialog();
-        jQuery('#author-chat-buy').dialog('open');
+    } else if (localize.result_a === '') {
+        jQuery('#ac-p-warn').dialog(
+                {
+                    autoOpen: true,
+                    modal: true,
+                    draggable: false,
+                    resizable: false
+                });
     } else {
         jQuery('#ac-wait-sec').dialog();
     }
@@ -752,7 +758,8 @@ _proto_.getRoomsForUser = function ()
                         {
                             $this.addRoom();
                         });
-                    }
+                    }      
+                    jQuery('#author-chat #ac-rooms #' + $this.room_pressed_button_id).addClass('active'); // add active class so user will know which room is active
                 }
             });
 };

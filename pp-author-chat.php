@@ -156,6 +156,7 @@ function pp_scripts_admin_chat() {
     wp_enqueue_style('author-chat-style', plugins_url('author-chat-style.css', __FILE__), array(), $author_chat_version);
     wp_enqueue_style('wp-jquery-ui-dialog');
     wp_enqueue_script('jquery-ui-dialog');
+    wp_enqueue_script('jquery-ui-autocomplete');
 
     // set localize variables for send to the JS
     $current_user = wp_get_current_user();
@@ -247,12 +248,20 @@ function pp_author_chat() {
             <div id="ac-wait-sec" title="NO! Bad user!">
                 <p>Wait a sec!</p>
             </div>
-            <div class="ac-overlay">
-                <div id="ac-p-warn" title="NO! Bad user!">
-                    <p>Buy premium version to add more chat rooms!</p>
-                    <p><b style="color:#b11b1b;">$10.99 <?php _e('for lifetime 1 domain licence', 'author-chat'); ?>.</b>
-                        (<i><?php _e('future premium features included', 'author-chat'); ?></i>)</p>
-                    <img class="ac-buy" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" alt="PayPal - The safer, easier way to pay online!" />
+            <div id="ac-p-warn" title="<?php _e('Buy Premium Version ($10.99)', 'author-chat'); ?>">
+                <p>Buy premium version to add more chat rooms!</p>
+                <p><b style="color:#b11b1b;">$10.99 <?php _e('for lifetime 1 domain licence', 'author-chat'); ?>.</b>
+                    (<i><?php _e('future premium features included', 'author-chat'); ?></i>)</p>
+                <div class="ac-pp">
+                    <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+                        <input type="hidden" name="cmd" value="_s-xclick">
+                        <input type="hidden" name="hosted_button_id" value="5TGRZ4BSETP9G">
+                        <table>
+                            <tr><td><input type="hidden" name="on0" value="Domain name"><?php _e('If your domain name is correct, do not change it. Activation can take up to 24 hours! If you have any problems contact me at piotr.pesta@gmail.com', 'author-chat'); ?></td></tr><tr><td><input type="text" name="os0" maxlength="200" value="<?php echo $_SERVER['HTTP_HOST']; ?>"></td></tr>
+                        </table>
+                        <input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_buynowCC_LG.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+                        <img alt="" border="0" src="https://www.paypalobjects.com/pl_PL/i/scr/pixel.gif" width="1" height="1">
+                    </form>
                 </div>
             </div>
 
@@ -294,7 +303,6 @@ function pp_author_chat() {
 
 function pp_author_chat_chat_on_top() {
     global $resultA;
-    $resultA = false;
     $current_screen = get_current_screen();
     ?>
     <script type="text/javascript">

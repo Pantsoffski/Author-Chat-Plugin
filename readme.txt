@@ -37,9 +37,8 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 
 1. Author Chat - stretched window on the right side.
 2. Author Chat - stretched window on the right side of WYSWIG editor.
-3. Author Chat - dedicated view.
-4. Author Chat - dashboard view.
-5. Author Chat - options and smaller chat window.
+3. Author Chat - dashboard view.
+4. Author Chat - options and smaller chat window.
 
 == Changelog ==
 = 1.8.0 =

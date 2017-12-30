@@ -262,12 +262,11 @@
     margin: 0 auto;
     margin-top: 6px;
 }
-#author-chat-buy .ac-pp {
+.ac-pp {
     margin:0 auto;
     font-size: 15px;
     text-align: center;
 }
-
 
 #author-chat-window {
     width: 100% !important; /* because some plugins maybe change this */
@@ -323,6 +322,11 @@ body.toplevel_page_acset .form-table TD {
     background-color: #896835;
 }
 
+/* Active/inactive buttons class */
+#author-chat #ac-rooms .active {
+    background-color: #896835;
+}
+
 /* Users names styling */
 .room-users-names {
     color: #555;
@@ -375,6 +379,7 @@ body.toplevel_page_acset .form-table TD {
 #ac-only-owner, #ac-wait-sec, #ac-p-warn {
     display: none;
 }
+
 
 #author-chat .ac-emo {
     display: inline-block;
