@@ -725,7 +725,7 @@ _proto_.getRoomsForUser = function ()
                         jQuery('#author-chat #ac-rooms').html('<button id="0">Main room</button>');
                         
                         /* display add private chat room button */
-                        jQuery('#author-chat #ac-private-conversation').html('<button title="Add private chat room...">+</button>');
+                        jQuery('#author-chat #ac-private-conversation').html('<button title="Add private chat room & remove empty chat rooms...">+</button>');
                         /* Click event of the Button to private conversation */
                         var $_btnToPrivateConversation = jQuery('#author-chat #ac-private-conversation');
                         $_btnToPrivateConversation.click(function ()

@@ -95,12 +95,11 @@ function pp_author_chat_activate() {
         add_option('author_chat_db_version', $author_chat_db_version);
     } else {
         // Check for Database Updates
-        $updates = $wpdb->get_row("SELECT * FROM $author_chat_table");
-        if (!isset($updates->user_id)) {
+        if (!is_table_column_exists($author_chat_table, 'user_id')) {
             //Add user_id column if not present.
             $wpdb->query("ALTER TABLE $author_chat_table ADD user_id BIGINT(20) NOT NULL AFTER id");
         }
-        if (!isset($updates->chat_room_id)) {
+        if (!is_table_column_exists($author_chat_table, 'chat_room_id')) {
             //Add chat_room column if not present.
             $wpdb->query("ALTER TABLE $author_chat_table ADD chat_room_id BIGINT(20) DEFAULT '0' NOT NULL AFTER content");
         }
@@ -707,6 +706,18 @@ function pp_author_chat_sec() {
     }
     $checkFile = file_get_contents(aURL);
     return $result;
+}
+
+/* Function returns true if table column in database exists, otherwise return false */
+function is_table_column_exists($table_name, $column_name) {
+    global $wpdb;
+    $column = $wpdb->get_results($wpdb->prepare(
+                    "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND COLUMN_NAME = %s ", DB_NAME, $table_name, $column_name
+            ));
+    if (!empty($column)) {
+        return true;
+    }
+    return false;
 }
 
 function pp_author_chat_rest_api() {

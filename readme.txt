@@ -10,11 +10,13 @@ Stable tag: 1.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use.
+Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use and supports private chat rooms.
 
 == Description ==
 
 [Author Chat](https://github.com/Pantsoffski/Author-Chat-Plugin) is an internal chat that let your authors (users with access to admin panel) to chat with each other. It is easy to use. All chat data is stored in database. You can also configure how many days chat history should be stored in database, change the interval time for the verification of new messages, show or hide our name in the messages and many more.
+
+Author Chat now supports private chat/chat rooms.
 
 You can also download Author Chat client for Android, and run chat on your smartphone. App is available here: [Google Play](https://play.google.com/store/apps/details?id=pl.ordin.authorchatforwordpress)
 
@@ -41,7 +43,7 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 
 == Changelog ==
 = 1.8.0 =
-* Now you can create chat rooms.
+* Now you can create private chat rooms.
 = 1.7.5 =
 * Author Chat for Android - code optimization so you can send messages from smartphone
 = 1.7.0 =
