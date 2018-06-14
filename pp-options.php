@@ -1,5 +1,5 @@
 <?php
-/* Author Chat Options v1.7.5 */
+/* Author Chat Options v1.8.2 */
 
 function author_chat_settings() {
     ?>
@@ -10,7 +10,7 @@ function author_chat_settings() {
             <?php settings_fields('author_chat_settings_group'); ?>
             <?php do_settings_sections('author_chat_settings_group'); ?>
             <table class="form-table">
-                <tr valign="top">
+<!--                <tr valign="top">
                     <th scope="row">
                     </th>
                     <td>
@@ -20,7 +20,7 @@ function author_chat_settings() {
                     </p>
                 </center>
                     </td>
-                </tr>
+                </tr>-->
                 <tr valign="top">
                     <th scope="row">
                         <label for="ac_sets_lifetime">

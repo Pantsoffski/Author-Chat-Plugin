@@ -1,8 +1,8 @@
 <?php
 
-/* Author Chat Process v1.8.0 */
+/* Author Chat Process v1.8.1 */
 
-define('aURL', 'https://ordin.pl/auth/author_chat/author_chat.csv');
+define('aURL', 'https://docs.google.com/spreadsheets/d/1IkGM2We8WFjdb_EuPEbfHfzHhK1magaDCrBA1rG2ElM/gviz/tq?tqx=out:csv');
 
 function debug_to_console( $data ) {
     $output = $data;

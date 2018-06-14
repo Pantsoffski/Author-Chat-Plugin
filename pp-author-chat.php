@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.8.0
+ * Version: 1.8.2
  * Author URI: https://github.com/Pantsoffski
  * License: GPL12
  * Text Domain: author-chat
@@ -17,7 +17,7 @@ include 'pp-process.php';
 global $author_chat_version;
 global $resultA;
 
-$author_chat_version = '1.8.0';
+$author_chat_version = '1.8.2';
 $resultA = pp_author_chat_sec();
 
 global $author_chat_db_version;
@@ -313,7 +313,7 @@ function pp_author_chat_chat_on_top() {
             var chat = new authorChat();
             chat.initiate();
     <?php
-    if (get_option('author_chat_settings_window') == 1 && $current_screen->base != 'dashboard' && $current_screen->base != 'dashboard_page_author-chat') {
+    if (get_option('author_chat_settings_window') == 1 && $current_screen->base != 'dashboard' && $current_screen->base != 'dashboard_page_author-chat' && !wp_is_mobile()) {
         ?>
                 var $_dialogWindow = jQuery('#author-chat-window').dialog(
                         {
