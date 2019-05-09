@@ -1,4 +1,4 @@
-/*  Author Chat  v1.8.0  */
+/*  Author Chat  v1.9.0  */
 /**************************/
 
 /* global localize */
@@ -403,7 +403,8 @@ _proto_.update = function ()
                 data:
                         {
                             'function': 'update',
-                            'room_pressed_button_id': $this.room_pressed_button_id
+                            'room_pressed_button_id': $this.room_pressed_button_id,
+                            'user_time_zone': -(new Date().getTimezoneOffset() / 60)
                         },
                 dataType: 'json',
                 success: function (data)
@@ -476,7 +477,8 @@ _proto_.initiate = function (seconds)
                 data:
                         {
                             'function': 'initiate',
-                            'room_pressed_button_id': $this.room_pressed_button_id
+                            'room_pressed_button_id': $this.room_pressed_button_id,
+                            'user_time_zone': -(new Date().getTimezoneOffset() / 60)
                         },
                 dataType: 'json',
                 success: function (data)

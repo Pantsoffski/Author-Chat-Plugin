@@ -22,7 +22,10 @@ If you wish to translate plugin, just add your translation file to /lang/ folder
 Or just add .zip file as a new plugin in your Wordpress administration panel.
 
 # Changelog
-
+### 1.9.0
+* From now chat time stamps are in user local time (not server time like before).
+* New translation: persian (thanks to Javidnikoo).
+* New translation: italian (thanks to Fabio).
 ### 1.8.2
 * Bug fix for Wordpress mobile view (chat window is now invisible in mobile view).
 * Temporary remove support for Android app.

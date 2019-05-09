@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.8.2
+ * Version: 1.9.0
  * Author URI: https://github.com/Pantsoffski
  * License: GPL12
  * Text Domain: author-chat
@@ -15,10 +15,8 @@ include 'pp-process.php';
 
 // Global Vars
 global $author_chat_version;
-global $resultA;
 
-$author_chat_version = '1.8.2';
-$resultA = pp_author_chat_sec();
+$author_chat_version = '1.9.0';
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.2';
@@ -151,7 +149,6 @@ function pp_author_chat_uninstall() {
 // Enqueue JavaScript & CSS files
 function pp_scripts_admin_chat() {
     global $author_chat_version;
-    global $resultA;
     wp_enqueue_script('author-chat-script', plugins_url('chat.js', __FILE__), array('jquery'), $author_chat_version, true);
     wp_enqueue_style('author-chat-style', plugins_url('author-chat-style.css', __FILE__), array(), $author_chat_version);
     wp_enqueue_style('wp-jquery-ui-dialog');
@@ -165,7 +162,7 @@ function pp_scripts_admin_chat() {
         (
         'user_id' => $current_user->ID,
         'nickname' => $username,
-        'result_a' => $resultA,
+        'result_a' => pp_author_chat_sec(),
         'you_are' => __('You are:', 'author-chat'),
         'today' => __('Today', 'default'),
         'yesterday' => __('Yesterday', 'author-chat'),
@@ -226,7 +223,6 @@ function pp_plugin_action_links_ac($links) { //Add settings link to plugins page
 }
 
 function pp_author_chat() {
-    global $resultA;
     $current_user = wp_get_current_user();
     $current_screen = get_current_screen();
 
@@ -273,7 +269,7 @@ function pp_author_chat() {
 <!--                    <div class="ac-tobottom ac-animation ac-hidden"><span class="ac-arrow"></span></div>-->
                 </div>
                 
-                <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || $resultA === true) { ?>
+                <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || pp_author_chat_sec() !== false) { ?>
             </div>
                 <form class="ac-text-form">
                     <textarea class="ac-textarea" maxlength = "1000" placeholder="<?php _e('Your message...', 'author-chat'); ?>"></textarea>
@@ -302,7 +298,6 @@ function pp_author_chat() {
 }
 
 function pp_author_chat_chat_on_top() {
-    global $resultA;
     $current_screen = get_current_screen();
     ?>
     <script type="text/javascript">
@@ -623,7 +618,7 @@ function pp_author_chat_chat_on_top() {
                 });
 
         <?php
-        if ($resultA === false) {
+        if (pp_author_chat_sec() !== true) {
             ?>
                     jQuery('#author-chat-buy').dialog(
                             {
