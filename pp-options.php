@@ -1,5 +1,5 @@
 <?php
-/* Author Chat Options v1.8.2 */
+/* Author Chat Options v2.0.0 */
 
 function author_chat_settings() {
     ?>
@@ -10,17 +10,14 @@ function author_chat_settings() {
             <?php settings_fields('author_chat_settings_group'); ?>
             <?php do_settings_sections('author_chat_settings_group'); ?>
             <table class="form-table">
-<!--                <tr valign="top">
-                    <th scope="row">
-                    </th>
+                <tr valign="top">
+                    <th scope="row"><?php _e('Author Chat for Android:', 'author-chat'); ?></th>
                     <td>
-                <center>
                     <p>
-                        You can find Author Chat for Android here: <a href="https://play.google.com/store/apps/details?id=pl.ordin.authorchatforwordpress">Google Play</a>
+                        <a href='https://play.google.com/store/apps/details?id=pl.ordin.authorchat'><img alt='Author Chat for Android' src='https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png' height="62" width="161"/></a>
                     </p>
-                </center>
                     </td>
-                </tr>-->
+                </tr>
                 <tr valign="top">
                     <th scope="row">
                         <label for="ac_sets_lifetime">

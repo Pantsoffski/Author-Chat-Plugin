@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 1.9.0
+ * Version: 2.0.0
  * Author URI: https://github.com/Pantsoffski
  * License: GPL12
  * Text Domain: author-chat
@@ -16,7 +16,7 @@ include 'pp-process.php';
 // Global Vars
 global $author_chat_version;
 
-$author_chat_version = '1.9.0';
+$author_chat_version = '2.0.0';
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.2';
@@ -216,7 +216,7 @@ function register_author_chat_settings() {
 function pp_plugin_action_links_ac($links) { //Add settings link to plugins page
     $action_links = array(
         'settings' => '<a href="' . admin_url('admin.php?page=acset') . '">' . esc_html__('Settings', 'author-chat') . '</a>',
-        'android' => '<a href="https://play.google.com/store/apps/details?id=pl.ordin.authorchatforwordpress">' . esc_html__('Author Chat for Android', 'author-chat') . '</a>',
+        'android' => '<a href="https://play.google.com/store/apps/details?id=pl.ordin.authorchat">' . esc_html__('Author Chat for Android', 'author-chat') . '</a>',
     );
 
     return array_merge($action_links, $links);
@@ -724,7 +724,7 @@ function is_table_column_exists($table_name, $column_name) {
 }
 
 function pp_author_chat_rest_api() {
-    register_rest_route('author-chat/v2', '/chat/', array(
+    register_rest_route('author-chat/v2', '/chat', array(
         'methods' => 'POST',
         'callback' => 'pp_chat_rest',
     ));
@@ -734,6 +734,7 @@ function pp_chat_rest($data) {
     global $author_chat_version;
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
+    $author_chat_room_participants_table = $wpdb->prefix . 'author_chat_room_participants';
 
     $user = wp_signon(array(
         'user_login' => $data['l'],
@@ -750,34 +751,67 @@ function pp_chat_rest($data) {
         $current_user = wp_get_current_user();
     }
 
-    if ($data['msg'] == "2358") {
-        $lines = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
-        $text = array();
-        foreach ($lines as $line) {
-            if ($line['chat_room_id'] == 0) { // Show only main chat room conversation
-                    $text[] = $line;
-                }
-        }
+    if ($data['function'] == 'read') {
+        $text = $wpdb->get_results("SELECT id, user_id, nickname, content, chat_room_id, date FROM $author_chat_table ORDER BY id ASC", ARRAY_A);
+//        $text = array();
+//        foreach ($lines as $line) {
+//            if ($line['chat_room_id'] == $data['room']) { // Show selected chat room conversation
+//                $text[] = $line;
+//            }
+//        }
         $date = array_column($text, 'date');
         array_walk_recursive($date, function( &$element ) {
             $element = strtotime($element);
             $element = date('Y-m-d,H:i:s', $element);
         });
         $result = array(
+            'id' => array_column($text, 'id'),
             'nick' => array_column($text, 'nickname'),
             'msg' => array_column($text, 'content'),
             'date' => $date,
-            'ver' => $author_chat_version
+            'room' => array_column($text, 'chat_room_id'),
+            'ver' => $author_chat_version,
+            'sec' => pp_author_chat_sec()
         );
-    } else if (( $data['msg'] ) != '2358') {
+    } else if ($data['function'] == 'send') {
         $result = array(
+            'id' => array_column($text, 'id'),
+            'nick' => array($current_user->display_name),
+            'msg' => array($data['msg']),
+            'date' => array(date('Y-m-d H:i:s')),
+            'room' => array($data['room']),
+            'ver' => $author_chat_version,
+            'sec' => pp_author_chat_sec()
+        );
+        
+        $forWpdb = array(
             'user_id' => $current_user->id,
             'nickname' => $current_user->display_name,
             'content' => $data['msg'],
+            'chat_room_id' => $data['room'],
             'date' => date('Y-m-d H:i:s')
         );
 
-        $wpdb->insert($author_chat_table, $result, array('%d', '%s', '%s', '%s'));
+        $wpdb->insert($author_chat_table, $forWpdb, array('%d', '%s', '%s', '%d', '%s'));
+    } else if ($data['function'] == 'rooms') {
+        $user_id = $current_user->id;
+        
+        $lines = $wpdb->get_results("SELECT user_id, chat_room_id FROM $author_chat_room_participants_table WHERE user_id = $user_id", ARRAY_A);
+                        
+        $text = array();
+        foreach ($lines as $line) {
+                $text[] = $line;
+        }
+
+        $result = array(
+            'id' => array_column($text, 'id'),
+            'nick' => array($current_user->display_name),
+            'msg' => array($data['msg']),
+            'date' => array(date('Y-m-d H:i:s')),
+            'room' => array_column($text, 'chat_room_id'),
+            'ver' => $author_chat_version,
+            'sec' => pp_author_chat_sec()
+        );
     }
     return $result;
 }

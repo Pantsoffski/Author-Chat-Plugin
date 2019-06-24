@@ -8,7 +8,7 @@ Author Chat is an internal chat that let your authors (users with access to dash
 
 Author Chat now supports private chat/chat rooms.
 
-Big thanks to Pablo Custo for contributing.
+You can also download Author Chat client for Android, and run chat on your smartphone. App is available here: [Google Play](https://play.google.com/store/apps/details?id=pl.ordin.authorchat)
 
 If you wish to translate plugin, just add your translation file to /lang/ folder.
 
@@ -22,6 +22,9 @@ If you wish to translate plugin, just add your translation file to /lang/ folder
 Or just add .zip file as a new plugin in your Wordpress administration panel.
 
 # Changelog
+### 2.0.0
+* Added support for Android App (https://play.google.com/store/apps/details?id=pl.ordin.authorchat)
+* Security fix
 ### 1.9.0
 * From now chat time stamps are in user local time (not server time like before).
 * New translation: persian (thanks to Javidnikoo).
