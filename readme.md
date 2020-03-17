@@ -22,6 +22,9 @@ If you wish to translate plugin, just add your translation file to /lang/ folder
 Or just add .zip file as a new plugin in your Wordpress administration panel.
 
 # Changelog
+### 2.0.1
+* Fixed bug: not working add new chat room button.
+* Wordpress 5.3 compatibility
 ### 2.0.0
 * Added support for Android App (https://play.google.com/store/apps/details?id=pl.ordin.authorchat)
 * Security fix
