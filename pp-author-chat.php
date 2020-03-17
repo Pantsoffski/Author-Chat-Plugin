@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 2.0.0
+ * Version: 2.0.1
  * Author URI: https://github.com/Pantsoffski
  * License: GPL12
  * Text Domain: author-chat
@@ -16,7 +16,7 @@ include 'pp-process.php';
 // Global Vars
 global $author_chat_version;
 
-$author_chat_version = '2.0.0';
+$author_chat_version = '2.0.1';
 
 global $author_chat_db_version;
 $author_chat_db_version = '1.2';
