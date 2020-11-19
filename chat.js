@@ -1,4 +1,4 @@
-/*  Author Chat  v2.0.1  */
+/*  Author Chat  v2.0.2  */
 /**************************/
 
 /* global localize */

@@ -22,6 +22,10 @@ If you wish to translate plugin, just add your translation file to /lang/ folder
 Or just add .zip file as a new plugin in your Wordpress administration panel.
 
 # Changelog
+### 2.0.2
+* Fixed bug: "jQuery.fn.load() is deprecated"
+* Wordpress 5.5 compatibility
+* New translation: Dutch (thanks to Dave Krul)
 ### 2.0.1
 * Fixed bug: not working add new chat room button.
 * Wordpress 5.3 compatibility
