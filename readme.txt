@@ -6,7 +6,7 @@ Tags: plugin, chat, author, for authors, admin, messages, internal chat, users c
 Author: Piotr Pesta
 Requires at least: 4.0
 Tested up to: 5.7
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -39,6 +39,8 @@ Or just add .zip file as a new plugin in your Wordpress administration panel.
 4. Author Chat - options and smaller chat window.
 
 == Changelog ==
+= 2.0.3 =
+* Minor bug fix.
 = 2.0.2 =
 * Fixed bug: "jQuery.fn.load() is deprecated"
 * Wordpress 5.5 compatibility
