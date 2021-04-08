@@ -5,7 +5,7 @@ Plugin Name: Author Chat
 Tags: plugin, chat, author, for authors, admin, messages, internal chat, users chat, user, dashboard chat, dashboard, admin menu chat
 Author: Piotr Pesta
 Requires at least: 4.0
-Tested up to: 5.6
+Tested up to: 5.7
 Stable tag: 2.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
