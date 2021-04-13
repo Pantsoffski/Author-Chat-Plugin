@@ -11,7 +11,7 @@
  * Domain Path: /lang
  */
 
-include 'pp-process.php';
+include 'acppauthorchat-process.php';
 
 // Global Vars
 global $author_chat_version;
@@ -21,33 +21,33 @@ $author_chat_version = '2.0.3';
 global $author_chat_db_version;
 $author_chat_db_version = '1.2';
 
-add_action('admin_menu', 'pp_author_chat_setup_menu');
-add_action('wp_dashboard_setup', 'pp_wp_dashboard_author_chat');
-add_action('admin_enqueue_scripts', 'pp_scripts_admin_chat');
-register_activation_hook(__FILE__, 'pp_author_chat_activate');
-register_deactivation_hook( __FILE__, 'pp_author_chat_deactivate' );
-register_uninstall_hook(__FILE__, 'pp_author_chat_uninstall');
-add_action('plugins_loaded', 'pp_author_chat_update_db_check');
-add_action('plugins_loaded', 'pp_author_chat_load_textdomain');
-add_action('in_admin_footer', 'pp_author_chat_chat_on_top');
-add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'pp_plugin_action_links_ac');
-add_action('rest_api_init', 'pp_author_chat_rest_api');
+add_action('admin_menu', 'acppauthorchat_setup_menu');
+add_action('wp_dashboard_setup', 'acppauthorchat_wp_dashboard');
+add_action('admin_enqueue_scripts', 'acppauthorchat_scripts_admin_chat');
+register_activation_hook(__FILE__, 'acppauthorchat_activate');
+register_deactivation_hook( __FILE__, 'acppauthorchat_deactivate' );
+register_uninstall_hook(__FILE__, 'acppauthorchat_uninstall');
+add_action('plugins_loaded', 'acppauthorchat_update_db_check');
+add_action('plugins_loaded', 'acppauthorchat_load_textdomain');
+add_action('in_admin_footer', 'acppauthorchat_chat_on_top');
+add_filter('plugin_action_links_' . plugin_basename(__FILE__), 'acppauthorchat_plugin_action_links');
+add_action('rest_api_init', 'acppauthorchat_rest_api');
 
 // Load Localization
-function pp_author_chat_load_textdomain() {
+function acppauthorchat_load_textdomain() {
     load_plugin_textdomain('author-chat', false, dirname(plugin_basename(__FILE__)) . '/lang/');
 }
 
 // Check if Database Update
-function pp_author_chat_update_db_check() {
+function acppauthorchat_update_db_check() {
     global $author_chat_db_version;
     if (get_site_option('author_chat_db_version') != $author_chat_db_version) {
-        pp_author_chat_activate();
+        acppauthorchat_activate();
     }
 }
 
 // Create author_chat table
-function pp_author_chat_activate() {
+function acppauthorchat_activate() {
     global $author_chat_db_version;
     global $wpdb;
 
@@ -119,12 +119,12 @@ function pp_author_chat_activate() {
 }
 
 // Deactivate Author Chat
-function pp_author_chat_deactivate() {
+function acppauthorchat_deactivate() {
     delete_option('author_chat_settings_val');
 }
 
 // Delete author_chat table
-function pp_author_chat_uninstall() {
+function acppauthorchat_uninstall() {
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
     $author_chat_table_participants = $wpdb->prefix . 'author_chat_room_participants';
@@ -147,10 +147,10 @@ function pp_author_chat_uninstall() {
 }
 
 // Enqueue JavaScript & CSS files
-function pp_scripts_admin_chat() {
+function acppauthorchat_scripts_admin_chat() {
     global $author_chat_version;
-    wp_enqueue_script('author-chat-script', plugins_url('chat.js', __FILE__), array('jquery'), $author_chat_version, true);
-    wp_enqueue_style('author-chat-style', plugins_url('author-chat-style.css', __FILE__), array(), $author_chat_version);
+    wp_enqueue_script('acppauthorchat-author-chat-script', plugins_url('acppauthorchat_chat.js', __FILE__), array('jquery'), $author_chat_version, true);
+    wp_enqueue_style('acppauthorchat-author-chat-style', plugins_url('acppauthorchat_author_chat_style.css', __FILE__), array(), $author_chat_version);
     wp_enqueue_style('wp-jquery-ui-dialog');
     wp_enqueue_script('jquery-ui-dialog');
     wp_enqueue_script('jquery-ui-autocomplete');
@@ -162,7 +162,7 @@ function pp_scripts_admin_chat() {
         (
         'user_id' => $current_user->ID,
         'nickname' => $username,
-        'result_a' => pp_author_chat_sec(),
+        'result_a' => acppauthorchat_author_chat_sec(),
         'you_are' => __('You are:', 'author-chat'),
         'today' => __('Today', 'default'),
         'yesterday' => __('Yesterday', 'author-chat'),
@@ -178,22 +178,22 @@ function pp_scripts_admin_chat() {
         'set_url_preview' => get_option('author_chat_settings_url_preview'),
         'set_weekdays' => get_option('author_chat_settings_weekdays')
     );
-    wp_localize_script('author-chat-script', 'localize', $values);
+    wp_localize_script('acppauthorchat-author-chat-script', 'localize', $values);
 }
 
-function pp_author_chat_setup_menu() {
-    include 'pp-options.php';
+function acppauthorchat_setup_menu() {
+    include 'acppauthorchat-options.php';
 
     $optionsTitle = __('Author Chat Options', 'author-chat');
     $pluginName = __('Author Chat', 'author-chat');
-    //add_dashboard_page($pluginName, $pluginName, 'read', 'author-chat', 'pp_author_chat'); //dashboard page temporary removed
+    //add_dashboard_page($pluginName, $pluginName, 'read', 'author-chat', 'acppauthorchat_author_chat'); //dashboard page temporary removed
     add_menu_page($optionsTitle, $pluginName, 'administrator', 'acset', 'author_chat_settings', 'dashicons-carrot');
     add_action('admin_init', 'register_author_chat_settings');
 }
 
-function pp_wp_dashboard_author_chat() {
+function acppauthorchat_wp_dashboard() {
     $pluginName = __('Author Chat', 'author-chat');
-    wp_add_dashboard_widget('author-chat-widget', $pluginName, 'pp_author_chat');
+    wp_add_dashboard_widget('author-chat-widget', $pluginName, 'acppauthorchat_author_chat');
 }
 
 function register_author_chat_settings() {
@@ -213,7 +213,7 @@ function register_author_chat_settings() {
     register_setting('author_chat_settings_group', 'author_chat_settings_window');
 }
 
-function pp_plugin_action_links_ac($links) { //Add settings link to plugins page
+function acppauthorchat_plugin_action_links($links) { //Add settings link to plugins page
     $action_links = array(
         'settings' => '<a href="' . admin_url('admin.php?page=acset') . '">' . esc_html__('Settings', 'author-chat') . '</a>',
         'android' => '<a href="https://play.google.com/store/apps/details?id=pl.ordin.authorchat">' . esc_html__('Author Chat for Android', 'author-chat') . '</a>',
@@ -222,7 +222,7 @@ function pp_plugin_action_links_ac($links) { //Add settings link to plugins page
     return array_merge($action_links, $links);
 }
 
-function pp_author_chat() {
+function acppauthorchat_author_chat() {
     $current_user = wp_get_current_user();
     $current_screen = get_current_screen();
 
@@ -269,7 +269,7 @@ function pp_author_chat() {
 <!--                    <div class="ac-tobottom ac-animation ac-hidden"><span class="ac-arrow"></span></div>-->
                 </div>
                 
-                <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || pp_author_chat_sec() !== false) { ?>
+                <?php if ($current_screen->base == 'dashboard_page_author-chat' || $current_screen->base == 'dashboard' || acppauthorchat_author_chat_sec() !== false) { ?>
             </div>
                 <form class="ac-text-form">
                     <textarea class="ac-textarea" maxlength = "1000" placeholder="<?php _e('Your message...', 'author-chat'); ?>"></textarea>
@@ -290,14 +290,14 @@ function pp_author_chat() {
         <?php
     }
 
-    pp_author_chat_clean_up_chat_history();
+    acppauthorchat_clean_up_chat_history();
 
     if (get_option('author_chat_settings_delete') == 1) {
-        pp_author_chat_clean_up_database();
+        acppauthorchat_clean_up_database();
     }
 }
 
-function pp_author_chat_chat_on_top() {
+function acppauthorchat_chat_on_top() {
     $current_screen = get_current_screen();
     ?>
     <script type="text/javascript">
@@ -618,7 +618,7 @@ function pp_author_chat_chat_on_top() {
                 });
 
         <?php
-        if (pp_author_chat_sec() !== true) {
+        if (acppauthorchat_author_chat_sec() !== true) {
             ?>
                     jQuery('#author-chat-buy').dialog(
                             {
@@ -634,7 +634,7 @@ function pp_author_chat_chat_on_top() {
                 });
             </script>
             <div id="author-chat-window" class="ac-animation" title="<?php _e('Author Chat', 'author-chat'); ?>">
-                <?php pp_author_chat(); ?>
+                <?php acppauthorchat_author_chat(); ?>
             </div>
             <div id="author-chat-buy" title="<?php _e('Buy Premium Version ($10.99)', 'author-chat'); ?>">
                 <div class="ac-pp">
@@ -655,7 +655,7 @@ function pp_author_chat_chat_on_top() {
             });
             </script>
             <div id="author-chat-window" class="ac-animation" title="<?php _e('Author Chat', 'author-chat'); ?>">
-                <?php pp_author_chat(); ?>
+                <?php acppauthorchat_author_chat(); ?>
             </div>
             <?php
         }
@@ -667,14 +667,14 @@ function pp_author_chat_chat_on_top() {
     }
 }
 
-function pp_author_chat_clean_up_chat_history() {
+function acppauthorchat_clean_up_chat_history() {
     global $wpdb;
     $daystoclear = get_option('author_chat_settings');
     $author_chat_table = $wpdb->prefix . 'author_chat';
     $wpdb->query("DELETE FROM $author_chat_table WHERE date <= NOW() - INTERVAL $daystoclear DAY");
 }
 
-function pp_author_chat_clean_up_database() {
+function acppauthorchat_clean_up_database() {
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
     $wpdb->query("TRUNCATE TABLE $author_chat_table");
@@ -683,11 +683,11 @@ function pp_author_chat_clean_up_database() {
     update_option('author_chat_settings_delete', $update_options);
 }
 
-function pp_author_chat_sec() {
+function acppauthorchat_author_chat_sec() {
     $valOption = explode(",", get_option('author_chat_settings_val'));
     if ($valOption[0] == 0 || $valOption[0] <= time() - (1 * 24 * 60 * 60 ) && get_option('author_chat_settings_window') == 1) {
-        $checkFile = file_get_contents(aURL);
-        if ($checkFile === false) {
+        $checkFile = wp_remote_retrieve_body(wp_remote_get(aURL));
+        if (empty($checkFile)) {
             return true;
         }
         $dmCompare = stripos($checkFile, $_SERVER['HTTP_HOST']);
@@ -707,7 +707,7 @@ function pp_author_chat_sec() {
     } elseif (get_option('author_chat_settings_window') == 0) {
         update_option('author_chat_settings_val', 0);
     }
-    $checkFile = file_get_contents(aURL);
+
     return $result;
 }
 
@@ -723,14 +723,14 @@ function is_table_column_exists($table_name, $column_name) {
     return false;
 }
 
-function pp_author_chat_rest_api() {
+function acppauthorchat_rest_api() {
     register_rest_route('author-chat/v2', '/chat', array(
         'methods' => 'POST',
-        'callback' => 'pp_chat_rest',
+        'callback' => 'acppauthorchat_rest',
     ));
 }
 
-function pp_chat_rest($data) {
+function acppauthorchat_rest($data) {
     global $author_chat_version;
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
@@ -771,7 +771,7 @@ function pp_chat_rest($data) {
             'date' => $date,
             'room' => array_column($text, 'chat_room_id'),
             'ver' => $author_chat_version,
-            'sec' => pp_author_chat_sec()
+            'sec' => acppauthorchat_author_chat_sec()
         );
     } else if ($data['function'] == 'send') {
         $result = array(
@@ -781,7 +781,7 @@ function pp_chat_rest($data) {
             'date' => array(date('Y-m-d H:i:s')),
             'room' => array($data['room']),
             'ver' => $author_chat_version,
-            'sec' => pp_author_chat_sec()
+            'sec' => acppauthorchat_author_chat_sec()
         );
         
         $forWpdb = array(
@@ -810,7 +810,7 @@ function pp_chat_rest($data) {
             'date' => array(date('Y-m-d H:i:s')),
             'room' => array_column($text, 'chat_room_id'),
             'ver' => $author_chat_version,
-            'sec' => pp_author_chat_sec()
+            'sec' => acppauthorchat_author_chat_sec()
         );
     }
     return $result;
