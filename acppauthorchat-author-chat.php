@@ -684,31 +684,32 @@ function acppauthorchat_clean_up_database() {
 }
 
 function acppauthorchat_author_chat_sec() {
-    $valOption = explode(",", get_option('author_chat_settings_val'));
-    if ($valOption[0] == 0 || $valOption[0] <= time() - (1 * 24 * 60 * 60 ) && get_option('author_chat_settings_window') == 1) {
-        $checkFile = wp_remote_retrieve_body(wp_remote_get(aURL));
-        if (empty($checkFile)) {
-            return true;
-        }
-        $dmCompare = stripos($checkFile, $_SERVER['HTTP_HOST']);
-        if ($dmCompare !== false) {
-            $toUpdate = time() . ',1';
-            update_option('author_chat_settings_val', $toUpdate);
-            $result = true;
-        } else {
-            $toUpdate = time() . ',0';
-            update_option('author_chat_settings_val', $toUpdate);
-            $result = false;
-        }
-    } elseif ($valOption[1] == 1) {
-        $result = true;
-    } elseif ($valOption[1] == 0) {
-        $result = false;
-    } elseif (get_option('author_chat_settings_window') == 0) {
-        update_option('author_chat_settings_val', 0);
-    }
+    // $valOption = explode(",", get_option('author_chat_settings_val'));
+    // if ($valOption[0] == 0 || $valOption[0] <= time() - (1 * 24 * 60 * 60 ) && get_option('author_chat_settings_window') == 1) {
+        // $checkFile = wp_remote_retrieve_body(wp_remote_get(aURL));
+        // if (empty($checkFile)) {
+            // return true;
+        // }
+        // $dmCompare = stripos($checkFile, $_SERVER['HTTP_HOST']);
+        // if ($dmCompare !== false) {
+            // $toUpdate = time() . ',1';
+            // update_option('author_chat_settings_val', $toUpdate);
+            // $result = true;
+        // } else {
+            // $toUpdate = time() . ',0';
+            // update_option('author_chat_settings_val', $toUpdate);
+            // $result = false;
+        // }
+    // } elseif ($valOption[1] == 1) {
+        // $result = true;
+    // } elseif ($valOption[1] == 0) {
+        // $result = false;
+    // } elseif (get_option('author_chat_settings_window') == 0) {
+        // update_option('author_chat_settings_val', 0);
+    // }
 
-    return $result;
+    //return $result;
+	return true;
 }
 
 /* Function returns true if table column in database exists, otherwise return false */

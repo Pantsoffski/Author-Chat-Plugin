@@ -281,6 +281,6 @@ function sendFCMNotification($title = "", $body = "", $customData = [], $serverK
 }
 
 // This is not any data collecting part of code, it's just link to csv file with necessary urls.
-define('aURL', 'https://docs.google.com/spreadsheets/d/1IkGM2We8WFjdb_EuPEbfHfzHhK1magaDCrBA1rG2ElM/gviz/tq?tqx=out:csv');
+//define('aURL', 'https://docs.google.com/spreadsheets/d/1IkGM2We8WFjdb_EuPEbfHfzHhK1magaDCrBA1rG2ElM/gviz/tq?tqx=out:csv');
 
 ?>
