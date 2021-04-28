@@ -2,9 +2,10 @@
 /**************************/
 
 /* global localize */
+/* global ajax_var */
 
 var authorChat = function ()
-{
+{	
     /* Creates a reference to this variable to be used within the functions */
     var $this = this;
 
@@ -310,10 +311,12 @@ _proto_.getState = function ()
 
         jQuery.ajax(
                 {
+					url: ajax_var.url,
                     type: 'POST',
                     data:
                             {
-                                'function': 'getState'
+                                'function': 'getState',
+								'nonce': ajax_var.nonce
                             },
                     dataType: 'json',
                     success: function (data)
@@ -373,6 +376,7 @@ _proto_.send = function ()
     var message = jQuery('#author-chat .ac-textarea').val();
     jQuery.ajax(
             {
+				url: ajax_var.url,
                 type: 'POST',
                 data:
                         {
@@ -380,7 +384,8 @@ _proto_.send = function ()
                             'message': message.slice(0, -1),
                             'nickname': localize.nickname,
                             'user_id': localize.user_id,
-                            'room_pressed_button_id': $this.room_pressed_button_id
+                            'room_pressed_button_id': $this.room_pressed_button_id,
+							'nonce': ajax_var.nonce
                         },
                 dataType: 'json',
                 success: function (data)
@@ -399,12 +404,14 @@ _proto_.update = function ()
   
     jQuery.ajax(
             {
+				url: ajax_var.url,
                 type: 'POST',
                 data:
                         {
                             'function': 'update',
                             'room_pressed_button_id': $this.room_pressed_button_id,
-                            'user_time_zone': -(new Date().getTimezoneOffset() / 60)
+                            'user_time_zone': -(new Date().getTimezoneOffset() / 60),
+							'nonce': ajax_var.nonce
                         },
                 dataType: 'json',
                 success: function (data)
@@ -473,12 +480,14 @@ _proto_.initiate = function (seconds)
 
     jQuery.ajax(
             {
+				url: ajax_var.url,
                 type: 'POST',
                 data:
                         {
                             'function': 'initiate',
                             'room_pressed_button_id': $this.room_pressed_button_id,
-                            'user_time_zone': -(new Date().getTimezoneOffset() / 60)
+                            'user_time_zone': -(new Date().getTimezoneOffset() / 60),
+							'nonce': ajax_var.nonce
                         },
                 dataType: 'json',
                 success: function (data)
@@ -686,12 +695,14 @@ _proto_.addRoom = function ()
 
         jQuery.ajax(
                 {
+					url: ajax_var.url,
                     type: 'POST',
                     data:
                             {
                                 'function': 'addRoom',
                                 'room_id': $randomRoomNumber,
-                                'user_id': localize.user_id
+                                'user_id': localize.user_id,
+								'nonce': ajax_var.nonce
                             },
                     dataType: 'json',
                     success: function (data)
@@ -719,11 +730,13 @@ _proto_.getRoomsForUser = function ()
     
     jQuery.ajax(
             {
+				url: ajax_var.url,
                 type: 'POST',
                 data:
                         {
                             'function': 'getRoomsForUser',
-                            'user_id': localize.user_id
+                            'user_id': localize.user_id,
+							'nonce': ajax_var.nonce
                         },
                 dataType: 'json',
                 success: function (data)
@@ -777,11 +790,13 @@ _proto_.showSearchUserBar = function ()
         source: function (request, response) {
             jQuery.ajax(
                     {
+						url: ajax_var.url,
                         type: 'POST',
                         data:
                                 {
                                     'function': 'searchUser',
-                                    'search_user': request.term
+                                    'search_user': request.term,
+									'nonce': ajax_var.nonce
                                 },
                         dataType: 'json',
                         success: function (data)
@@ -821,12 +836,14 @@ _proto_.addUserToRoom = function (user_id)
     
     jQuery.ajax(
             {
+				url: ajax_var.url,
                 type: 'POST',
                 data:
                         {
                             'function': 'addUser',
                             'room_id': $this.room_pressed_button_id,
-                            'user_id': user_id
+                            'user_id': user_id,
+							'nonce': ajax_var.nonce
                         },
                 dataType: 'json',
                 success: function (data)
@@ -844,11 +861,13 @@ _proto_.getUsersForRoom = function ()
 
     jQuery.ajax(
             {
+				url: ajax_var.url,
                 type: 'POST',
                 data:
                         {
                             'function': 'getUsersForRoom',
-                            'room_id': $currentRoom
+                            'room_id': $currentRoom,
+							'nonce': ajax_var.nonce
                         },
                 dataType: 'json',
                 success: function (data)
@@ -896,12 +915,14 @@ _proto_.removeUserFromRoom = function (user_id, room_id)
     
     jQuery.ajax(
             {
+				url: ajax_var.url,
                 type: 'POST',
                 data:
                         {
                             'function': 'removeUser',
                             'room_id': room_id,
-                            'user_id': user_id
+                            'user_id': user_id,
+							'nonce': ajax_var.nonce
                         },
                 dataType: 'json',
                 success: function (data)
@@ -917,11 +938,13 @@ _proto_.whoIsChannelOwner = function ()
 
     jQuery.ajax(
             {
+				url: ajax_var.url,
                 type: 'POST',
                 data:
                         {
                             'function': 'whoIsChannelOwner',
-                            'room_id': $this.room_pressed_button_id
+                            'room_id': $this.room_pressed_button_id,
+							'nonce': ajax_var.nonce
                         },
                 dataType: 'json',
                 success: function (data)

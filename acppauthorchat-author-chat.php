@@ -93,11 +93,11 @@ function acppauthorchat_activate() {
         add_option('author_chat_db_version', $author_chat_db_version);
     } else {
         // Check for Database Updates
-        if (!is_table_column_exists($author_chat_table, 'user_id')) {
+        if (!acppauthorchat_is_table_column_exists($author_chat_table, 'user_id')) {
             //Add user_id column if not present.
             $wpdb->query("ALTER TABLE $author_chat_table ADD user_id BIGINT(20) NOT NULL AFTER id");
         }
-        if (!is_table_column_exists($author_chat_table, 'chat_room_id')) {
+        if (!acppauthorchat_is_table_column_exists($author_chat_table, 'chat_room_id')) {
             //Add chat_room column if not present.
             $wpdb->query("ALTER TABLE $author_chat_table ADD chat_room_id BIGINT(20) DEFAULT '0' NOT NULL AFTER content");
         }
@@ -150,6 +150,10 @@ function acppauthorchat_uninstall() {
 function acppauthorchat_scripts_admin_chat() {
     global $author_chat_version;
     wp_enqueue_script('acppauthorchat-author-chat-script', plugins_url('acppauthorchat_chat.js', __FILE__), array('jquery'), $author_chat_version, true);
+	wp_localize_script('acppauthorchat-author-chat-script', 'ajax_var', array(
+         'url' => admin_url('admin-ajax.php'),
+         'nonce' => wp_create_nonce('ajax-nonce')
+     ));
     wp_enqueue_style('acppauthorchat-author-chat-style', plugins_url('acppauthorchat_author_chat_style.css', __FILE__), array(), $author_chat_version);
     wp_enqueue_style('wp-jquery-ui-dialog');
     wp_enqueue_script('jquery-ui-dialog');
@@ -713,7 +717,7 @@ function acppauthorchat_author_chat_sec() {
 }
 
 /* Function returns true if table column in database exists, otherwise return false */
-function is_table_column_exists($table_name, $column_name) {
+function acppauthorchat_is_table_column_exists($table_name, $column_name) {
     global $wpdb;
     $column = $wpdb->get_results($wpdb->prepare(
                     "SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_SCHEMA = %s AND TABLE_NAME = %s AND COLUMN_NAME = %s ", DB_NAME, $table_name, $column_name

@@ -30,21 +30,21 @@ if (!function_exists('array_column')) {
 
 }
 
-if (isset($_POST['function'])) {
+if (isset($_POST['function']) && (isset($_POST['nonce']) && wp_verify_nonce($_POST['nonce'], 'ajax-nonce'))) {
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
     $author_chat_room_participants_table = $wpdb->prefix . 'author_chat_room_participants';
     $wp_usermeta = $wpdb->prefix . 'usermeta';
-    $function = esc_textarea( $_POST['function'] );
+    $function = sanitize_text_field( $_POST['function'] );
     
     if (isset($_POST['room_pressed_button_id'])) {
-        $room_pressed_button_id = strip_tags(esc_textarea($_POST['room_pressed_button_id']));
+        $room_pressed_button_id = strip_tags(sanitize_text_field($_POST['room_pressed_button_id']));
     } else {
         $room_pressed_button_id = '0';
     }
     
     if (isset($_POST['user_time_zone'])) {
-        $user_time_zone = strip_tags(esc_textarea($_POST['user_time_zone']));
+        $user_time_zone = strip_tags(sanitize_text_field($_POST['user_time_zone']));
     } else {
         $user_time_zone = '0';
     }
@@ -57,9 +57,9 @@ if (isset($_POST['function'])) {
             break;
 
         case( 'send' ):
-            $user_id = strip_tags(esc_textarea($_POST['user_id']));
-            $nickname = strip_tags(esc_textarea($_POST['nickname']));
-            $message = strip_tags(esc_textarea($_POST['message']));
+            $user_id = strip_tags(sanitize_text_field($_POST['user_id']));
+            $nickname = strip_tags(sanitize_text_field($_POST['nickname']));
+            $message = strip_tags(sanitize_text_field($_POST['message']));
             $date = date('Y-m-d H:i:s');
             if (( $message ) != '\n') {                
                 //$newDate = strtotime("$date +{$user_time_zone} hours");
@@ -75,7 +75,7 @@ if (isset($_POST['function'])) {
                 
                 $wpdb->insert($author_chat_table, $result, array('%d', '%s', '%s', '%d', '%s'));
                 
-                sendFCMNotification($nickname, $message, ["room_id" => $room_pressed_button_id], "AAAAl54tLgs:APA91bFZaptLBvPyNRvReX8WYwKNMRqgt4Mx109sbteaL13t6gx6OOASiA_REWO5g9zjy1jZxqRD_X7BglRMFG3imdr4uUhJ9i94HWK3dciFbEbKi7ErD7nuKaxlFo6dVGAKrcdPjiAd");
+                acppauthorchat_sendFCMNotification($nickname, $message, ["room_id" => $room_pressed_button_id], "AAAAl54tLgs:APA91bFZaptLBvPyNRvReX8WYwKNMRqgt4Mx109sbteaL13t6gx6OOASiA_REWO5g9zjy1jZxqRD_X7BglRMFG3imdr4uUhJ9i94HWK3dciFbEbKi7ErD7nuKaxlFo6dVGAKrcdPjiAd");
             }
             break;
 
@@ -133,8 +133,8 @@ if (isset($_POST['function'])) {
                 WHERE ac.chat_room_id IS NULL
 		");
 
-            $user_id = esc_textarea(strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT)));
-            $room_id = esc_textarea(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
+            $user_id = sanitize_text_field(strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT)));
+            $room_id = sanitize_text_field(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
 
             $result = array(
                 'user_id' => $user_id,
@@ -145,7 +145,7 @@ if (isset($_POST['function'])) {
             break;
 
         case( 'getRoomsForUser' ):
-            $user_id = esc_textarea(strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT)));
+            $user_id = sanitize_text_field(strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT)));
             
             $lines = $wpdb->get_results("SELECT user_id, chat_room_id FROM $author_chat_room_participants_table WHERE user_id = $user_id", ARRAY_A);
                         
@@ -161,7 +161,7 @@ if (isset($_POST['function'])) {
             
         case( 'searchUser' ):
             if (isset($_POST['search_user'])) {
-                $user_name = esc_textarea(strip_tags(filter_var($_POST['search_user'], FILTER_SANITIZE_STRING, array('flags' => FILTER_FLAG_STRIP_LOW | FILTER_FLAG_ENCODE_HIGH))));
+                $user_name = sanitize_text_field(strip_tags(filter_var($_POST['search_user'], FILTER_SANITIZE_STRING, array('flags' => FILTER_FLAG_STRIP_LOW | FILTER_FLAG_ENCODE_HIGH))));
 
                 $lines = $wpdb->get_results("SELECT user_id, meta_value FROM $wp_usermeta WHERE meta_value LIKE '%$user_name%' AND meta_key = 'nickname'", ARRAY_A);
 
@@ -178,8 +178,8 @@ if (isset($_POST['function'])) {
             break;
             
         case( 'addUser' ):
-            $user_id = esc_textarea(strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT)));
-            $room_id = esc_textarea(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
+            $user_id = sanitize_text_field(strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT)));
+            $room_id = sanitize_text_field(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
             
             $duplicate_check = $wpdb->get_results("SELECT user_id FROM $author_chat_room_participants_table WHERE user_id = $user_id AND chat_room_id = $room_id", ARRAY_A);
             
@@ -195,7 +195,7 @@ if (isset($_POST['function'])) {
             break;
         
         case( 'getUsersForRoom' ):
-            $room_id = esc_textarea(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
+            $room_id = sanitize_text_field(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
 
             //$lines = $wpdb->get_results("SELECT DISTINCT user_id FROM $author_chat_room_participants_table WHERE chat_room_id = $room_id", ARRAY_A);
             
@@ -221,8 +221,8 @@ if (isset($_POST['function'])) {
             break;
             
 		case( 'removeUser' ):
-            $user_id = esc_textarea(strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT)));
-            $room_id = esc_textarea(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
+            $user_id = sanitize_text_field(strip_tags(filter_var($_POST['user_id'], FILTER_SANITIZE_NUMBER_INT)));
+            $room_id = sanitize_text_field(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
 
             $result = array(
                 'user_id' => $user_id,
@@ -234,7 +234,7 @@ if (isset($_POST['function'])) {
             break;
         
         case( 'whoIsChannelOwner' ):
-            $room_id = esc_textarea(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
+            $room_id = sanitize_text_field(strip_tags(filter_var($_POST['room_id'], FILTER_SANITIZE_NUMBER_INT)));
 
             $lines = $wpdb->get_results("SELECT DISTINCT user_id FROM $author_chat_room_participants_table WHERE id IN(SELECT MIN(id) from $author_chat_room_participants_table WHERE chat_room_id = $room_id) AND chat_room_id = $room_id", ARRAY_A);
 
@@ -252,7 +252,7 @@ if (isset($_POST['function'])) {
     echo wp_send_json($result);
 }
 
-function sendFCMNotification($title = "", $body = "", $customData = [], $serverKey = ""){    
+function acppauthorchat_sendFCMNotification($title = "", $body = "", $customData = [], $serverKey = ""){    
     $topic = $_SERVER['SERVER_NAME'];
     
     if($serverKey != ""){
@@ -260,7 +260,7 @@ function sendFCMNotification($title = "", $body = "", $customData = [], $serverK
         $data = array (
             "to" => "/topics/$topic",
             "notification" => array(
-                "body" => esc_html ( $body ),
+                "body" => sanitize_text_field($body),
                 "title" => $title,
             ),
             "data" => $customData
@@ -279,8 +279,5 @@ function sendFCMNotification($title = "", $body = "", $customData = [], $serverK
     }
     return false;
 }
-
-// This is not any data collecting part of code, it's just link to csv file with necessary urls.
-//define('aURL', 'https://docs.google.com/spreadsheets/d/1IkGM2We8WFjdb_EuPEbfHfzHhK1magaDCrBA1rG2ElM/gviz/tq?tqx=out:csv');
 
 ?>

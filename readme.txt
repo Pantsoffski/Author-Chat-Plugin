@@ -22,6 +22,10 @@ You can also download Author Chat client for Android, and run chat on your smart
 
 If you wish to translate plugin, just add your translation file to /lang/ folder.
 
+== Using 3rd party service ==
+
+Please note that this plugin is relying on a 3rd party service, which is the Google Firebase Cloud Messaging service (FCM) and your data is being sent through their servers via HTTP API (https://fcm.googleapis.com/fcm/send). This is very legal to use the Google Firebase Cloud Messaging service (FCM), based on their terms and conditions https://firebase.google.com/terms/.
+
 == Installation ==
 
 1. Upload the zip to 'plugins' directory
