@@ -30,7 +30,11 @@ if (!function_exists('array_column')) {
 
 }
 
-if (isset($_POST['function']) && (isset($_POST['nonce']) && wp_verify_nonce($_POST['nonce'], 'ajax-nonce'))) {
+if (!function_exists('wp_verify_nonce') ) {
+    require_once( ABSPATH . 'wp-includes/pluggable.php' );
+}
+
+if (isset($_POST['function']) && (isset($_POST['nonce']) && wp_verify_nonce($_POST['nonce'], 'ajax-nonce') != false)) {
     global $wpdb;
     $author_chat_table = $wpdb->prefix . 'author_chat';
     $author_chat_room_participants_table = $wpdb->prefix . 'author_chat_room_participants';
