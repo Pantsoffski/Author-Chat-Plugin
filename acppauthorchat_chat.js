@@ -175,15 +175,6 @@ var authorChat = function ()
         }
     });
 
-    /* Click event of the Button to Scroll to Bottom */
-//    var $_btnToBottom = $_chatArea.find('.ac-tobottom');
-//    $_btnToBottom.click(function ()
-//    {
-//        $_chatArea.scrollTop($_chatArea.prop('scrollHeight'));
-//        $_btnToBottom.addClass('ac-hidden');
-//        //$_topDate.hide();
-//    });
-
     /* MouseWheel event */
     $_chatArea.on('DOMMouseScroll mousewheel', function (ev) {
         var $me = jQuery(this),
@@ -194,32 +185,6 @@ var authorChat = function ()
                 up = delta > 0;
 
         clearTimeout($this.scroll_id);
-
-        /* show the button to go to bottom */
-//        if ($_btnToBottom.hasClass('ac-hidden'))
-//        {
-//            $_btnToBottom.removeClass('ac-hidden');
-//        }
-
-        /* displays the current date of visible messages at the top as does Whatsapp */
-        /* Note: we set a timeout to check the position of the elements after the scroll is finished  */
-//        $this.scroll_id = setTimeout(function () {
-//            var $_prevDate = $me.find('.ac-date').first();
-//            $me.find('.ac-date').each(function () {
-//                var top = jQuery(this).position().top;
-//                if (top < 0)
-//                {
-//                    if (top > $_prevDate.position().top)
-//                    {
-//                        $_prevDate = jQuery(this);
-//                    }
-//                }
-//            });
-//            if ($_prevDate.text() !== $_topDate.text())
-//            {
-//                $_topDate.text($_prevDate.text());
-//            }
-//        }, 250);
 
         /* prevent MouseWheel Scrolling of parent elements if we are on the chat-area */
         var prevent = function () {
