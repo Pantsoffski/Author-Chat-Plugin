@@ -1,0 +1,27 @@
+{
+  "core": null,
+  "phpVersion": "8.3",
+  "plugins": [],
+  "mappings": {
+    "wp-content/plugins/author-chat": ".",
+    "wp-content/mu-plugins/author-chat-test-network.php": "./tests/block-network.php"
+  },
+  "config": {
+    "AUTHOR_CHAT_SYNTHETIC_TESTS": true,
+    "WP_HTTP_BLOCK_EXTERNAL": true,
+    "WP_DEBUG": true,
+    "WP_DEBUG_DISPLAY": false,
+    "DISABLE_WP_CRON": true,
+    "AUTHOR_CHAT_INTEGRATION_ALLOWED": false
+  },
+  "env": {
+    "tests": {
+      "config": {
+        "AUTHOR_CHAT_INTEGRATION_ALLOWED": true,
+        "WP_DEBUG": true,
+        "WP_DEBUG_LOG": true,
+        "WP_DEBUG_DISPLAY": false
+      }
+    }
+  }
+}

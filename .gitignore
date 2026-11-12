@@ -1,4 +1,7 @@
 # Windows image file caches
+node_modules/
+.wp-env.override.json
+
 Thumbs.db
 ehthumbs.db
 
@@ -41,3 +44,6 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
+
+# Local release artifacts
+dist/

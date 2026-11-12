@@ -1,86 +1,72 @@
-# Author Chat For Wordpress
+=== Author Chat ===
+Contributors: piotr-pesta
+Tags: chat, dashboard, collaboration, messages
+Requires at least: 7.1.4
+Tested up to: 7.1.4
+Requires PHP: 8.3
+Stable tag: 2.1.0
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Author Chat is an internal chat that let your authors (users with access to dashboard) to chat with each other. It is easy to use and supports private chat rooms.
+Internal dashboard chat with private rooms, membership controls and local message storage.
 
-# Description
+== Description ==
 
-[Author Chat](https://pl.wordpress.org/plugins/author-chat/) is an internal chat that let your authors (users with access to admin panel) to chat with each other. It is easy to use. All chat data is stored in database. You can also configure how many days chat history should be stored in database, change the interval time for the verification of new messages, show or hide our name in the messages and many more.
+Author Chat provides a main room and private rooms for members of a WordPress site. All included features are free. Private rooms are visible only to their participants; administrators do not automatically gain access to other users' private conversations.
 
-Author Chat now supports private chat/chat rooms.
+The owner is the user with the oldest surviving participation record. Room creation uses a durable database reservation so retrying a request does not create a second room. Upgrades retain existing room IDs, messages, duplicate memberships and settings.
 
-You can also download Author Chat client for Android, and run chat on your smartphone. App is available here: [Google Play](https://play.google.com/store/apps/details?id=pl.ordin.authorchat)
+Chat is available on the dashboard. An optional floating panel is available on other admin pages. Settings control access, display names, refresh interval and weekday labels.
 
-If you wish to translate plugin, just add your translation file to /lang/ folder.
+== Privacy and external connections ==
 
-# Using 3rd party service
+Messages, sender IDs, nicknames, dates, room membership and room reservation identifiers are stored in the site's own database. They are available to authorized users through authenticated WordPress AJAX.
 
-Please note that this plugin is relying on a 3rd party service, which is the Google Firebase Cloud Messaging service (FCM) and your data is being sent through their servers via HTTP API (https://fcm.googleapis.com/fcm/send). This is very legal to use the Google Firebase Cloud Messaging service (FCM), based on their terms and conditions https://firebase.google.com/terms/.
+The plugin makes no automatic outgoing HTTP requests. There are no payment forms, remote images, URL previews, analytics or push delivery. Notification audio is bundled locally; emoticons use Unicode characters rendered by the device's own font.
 
-# Installation
+Clicking a message link opens the destination chosen by the user. No preview request is made. WordPress core, browsers and other plugins may have their own network behavior.
 
-1. Upload the zip to 'plugins' directory
-2. Unzip (steps 1 and 2 can also be performed automatically)
-3. Activate the plugin
-4. Plugin is visible in a dashboard
+== Data retention ==
 
-Or just add .zip file as a new plugin in your Wordpress administration panel.
+There is no automatic cleanup. Upgrading, rendering the dashboard or deactivating the plugin does not erase chat records or historical options. Deleting the plugin through WordPress permanently removes its three tables, settings and namespaced maintenance data on every site in a multisite installation. Back up the database before deleting the plugin.
 
-# Changelog
-### 2.0.3
-* Minor bug fix.
-### 2.0.2
-* Fixed bug: "jQuery.fn.load() is deprecated"
-* Wordpress 5.5 compatibility
-* New translation: Dutch (thanks to Dave Krul)
-### 2.0.1
-* Fixed bug: not working add new chat room button.
-* Wordpress 5.3 compatibility
-### 2.0.0
-* Added support for Android App (https://play.google.com/store/apps/details?id=pl.ordin.authorchat)
-* Security fix
-### 1.9.0
-* From now chat time stamps are in user local time (not server time like before).
-* New translation: persian (thanks to Javidnikoo).
-* New translation: italian (thanks to Fabio).
-### 1.8.2
-* Bug fix for Wordpress mobile view (chat window is now invisible in mobile view).
-* Temporary remove support for Android app.
-### 1.8.1
-* Small bug fix.
-### 1.8.0
-* Now you can create private chat rooms.
-### 1.7.5
-* Author Chat for Android - code optimization so you can send messages from smartphone
-### 1.7.0
-* Now you can download Author Chat client for Android from Google Play
-* Wordpress 4.8 compatibility
-### 1.6.0
-* Bug fix
-* Final 1.6.0 version
-### 1.5.9
-* Lot's of changes (!big thanks to [Pablo Custo](https://github.com/pablocusto) for his very hard work on this version!)
-* Now you change the interval time for the verification of new messages from the AC Settings (1 to 10 secs).
-* Incorporate the differentiation of nicknames by colors in their names as does WhatsApp.
-* Possibility to show or hide our name in the messages (AC Settings).
-* Big change of the chat window style.
-* Code optimization.
-### 1.5.1
-* Now chat can be visible everywhere (in small draggable window), so you can chat within any page inside the admin
-### 1.4.3
-* Updated for Wordpress 4.7 (replaced deprecated get_currentuserinfo function by wp_get_current_user)
-### 1.4.1
-* Support for language files (now you can translate plugin via e.g. Poedit, just add your translation file to /lang/ folder)
-* Polish translation included
-### 1.4.0
-* Simple fix - compatibility with custom user roles
-* Now you can choose how to display the authors: by Login or by Name
-### 1.3.0
-* Now you can restrict access to Author Chat and exclude Editor, Author, Contributor or Subscriber
-### 1.2.0
-* In settings you can delete chat history
-### 1.1.0
-* Added information about new messages: number of messages in browser tab title and sound signal
-### 1.0.0
-* Bugfix: now plugin supports servers with <5.5 PHP version
-### 0.9.9
-* Initial Release
+Administrators can set an age threshold and explicitly confirm manual cleanup in Author Chat settings. Each nonce-protected request deletes at most 500 eligible old messages across the current site's rooms. Zero/invalid dates, memberships and room IDs are retained. Back up the database before cleanup. The plugin has no undo facility.
+
+Historical preview, payment and deletion option values are retained but no longer control functionality.
+
+== Installation ==
+
+1. Back up the site database before updating.
+2. Install the plugin in wp-content/plugins/author-chat and activate it.
+3. Review Author Chat settings. Schema updates are additive and store their version only after verification.
+4. On large sites, allow a maintenance window for index creation and drain requests running older plugin code.
+
+Only WordPress 7.1.4, PHP 8.3 and MariaDB have been exercised in the local integration environment. Other combinations require validation. Guarded membership writes require binary logging disabled or ROW/MIXED logging.
+
+== License and credits ==
+
+This distribution is GPL version 2 or later. LICENSE contains GPLv2; license-mit.txt preserves the original MIT copyright and permission notice (Piotr Pesta, 2021). MIT-licensed source may be redistributed under GPL with that notice retained.
+
+Thanks to Pablo Custo for earlier code and interface contributions, and to the contributors of the retained Spanish, Persian, Italian, Dutch and Polish translation catalogs. Existing translation headers preserve individual credits.
+
+The former emoticons.png and notifyauthorchat.ogg had no separately documented provenance in the repository and are not distributed. Unicode emoticons use no bundled artwork. notifyauthorchat.wav is an original synthesized sine tone; its reproducible source is assets/generate-notification.cjs, distributed under the same license.
+
+== Changelog ==
+
+= 2.1.0 =
+* Remove premium, PayPal, licensing gates, SearchPreview and remote assets.
+* Android companion app support has been temporarily removed. Mobile access may return in a future release.
+* Remove the retired mobile API and its login/password authentication. Push notifications are not provided.
+* Harden AJAX authorization and safe rendering of historical messages.
+* Add durable room reservations, additive schema upgrades and indexes.
+* Add paged history and an outbox preserving unsent text.
+* Validate settings and translate the interface. Preserve data on deactivation and update; remove plugin-owned data on WordPress uninstall.
+* Replace unverified artwork/audio and provide explicit bounded manual cleanup.
+
+= 2.0.3 =
+* Historical release: minor bug fix.
+
+== Upgrade Notice ==
+
+= 2.1.0 =
+Back up the database before updating. Existing messages, room IDs and settings are retained. Push notifications, URL previews and premium/payment functions have been removed. Cleanup is manual and requires administrator confirmation.

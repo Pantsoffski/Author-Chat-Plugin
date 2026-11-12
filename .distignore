@@ -1,0 +1,15 @@
+.git
+node_modules
+tests
+.wp-env.json
+.wp-env.multisite.json
+package.json
+package-lock.json
+.gitignore
+.distignore
+readme.md
+
+dist
+.wp-env.release.json
+.wp-env.release.multisite.json
+.gitattributes
