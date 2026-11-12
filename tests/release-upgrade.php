@@ -2,7 +2,7 @@
 // Disposable release-test installations only. Never execute on a real site.
 if (PHP_SAPI !== 'cli' || !defined('AUTHOR_CHAT_SYNTHETIC_TESTS') || AUTHOR_CHAT_SYNTHETIC_TESTS !== true ||
     !defined('AUTHOR_CHAT_INTEGRATION_ALLOWED') || AUTHOR_CHAT_INTEGRATION_ALLOWED !== true ||
-    DB_HOST !== 'tests-mysql' || !in_array((int) wp_parse_url(get_option('siteurl'), PHP_URL_PORT), array(8909,8919), true)) { exit(2); }
+    DB_HOST !== 'tests-mysql' || !in_array((int) wp_parse_url(get_option('siteurl'), PHP_URL_PORT), array(8909,8919,8929), true)) { exit(2); }
 global $wpdb;
 $m = $wpdb->prefix.'author_chat'; $p = $wpdb->prefix.'author_chat_room_participants';
 if (($args[0] ?? '') === 'seed') {

@@ -13,3 +13,4 @@ dist
 .wp-env.release.json
 .wp-env.release.multisite.json
 .gitattributes
+.wp-env.compat.json

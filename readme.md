@@ -1,9 +1,9 @@
 === Author Chat ===
 Contributors: piotr-pesta
 Tags: chat, dashboard, collaboration, messages
-Requires at least: 7.1.4
-Tested up to: 7.1.4
-Requires PHP: 8.3
+Requires at least: 6.9
+Tested up to: 7.1
+Requires PHP: 8.2
 Stable tag: 2.1.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -41,7 +41,7 @@ Historical preview, payment and deletion option values are retained but no longe
 3. Review Author Chat settings. Schema updates are additive and store their version only after verification.
 4. On large sites, allow a maintenance window for index creation and drain requests running older plugin code.
 
-Only WordPress 7.1.4, PHP 8.3 and MariaDB have been exercised in the local integration environment. Other combinations require validation. Guarded membership writes require binary logging disabled or ROW/MIXED logging.
+WordPress 6.9 with PHP 8.2, and WordPress 7.1.4 with PHP 8.3, have been exercised with MariaDB in the isolated integration environment. Other combinations require validation. Guarded membership writes require binary logging disabled or ROW/MIXED logging.
 
 == License and credits ==
 
