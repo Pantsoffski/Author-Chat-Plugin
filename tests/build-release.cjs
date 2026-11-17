@@ -4,7 +4,7 @@ const path = require('node:path');
 const AdmZip = require('adm-zip');
 const root = path.resolve(__dirname, '..');
 const out = path.join(root, 'dist');
-const version = '2.1.0';
+const version = '2.1.1';
 const zip = path.join(out, `author-chat-${version}.zip`);
 if (fs.existsSync(zip)) throw new Error('Release ZIP already exists; preserve it for comparison.');
 const files = [
@@ -17,7 +17,8 @@ const files = [
 ];
 const main = fs.readFileSync(path.join(root, files[0]), 'utf8');
 const readme = fs.readFileSync(path.join(root, 'readme.txt'), 'utf8');
-if (!main.includes(`Version: ${version}`) || !main.includes(`$acppauthorchat_version = '${version}'`) || !readme.includes(`Stable tag: ${version}`)) throw new Error('Version mismatch');
+const client = fs.readFileSync(path.join(root, 'acppauthorchat_chat.js'), 'utf8');
+if (!main.includes(`Version: ${version}`) || !main.includes(`$acppauthorchat_version = '${version}'`) || !readme.includes(`Stable tag: ${version}`) || !client.includes(`Author Chat  v${version}`)) throw new Error('Version mismatch');
 const destination = path.join(out, 'author-chat');
 for (const file of files) {
     const target = path.join(destination, file);

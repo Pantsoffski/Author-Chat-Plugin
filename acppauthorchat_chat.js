@@ -2,7 +2,7 @@
 (function () {
 'use strict';
 var __ = wp.i18n.__;
-/*  Author Chat  v2.1.0  */
+/*  Author Chat  v2.1.1  */
 /**************************/
 
 /* global acppauthorchat_config */

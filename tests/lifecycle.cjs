@@ -18,14 +18,14 @@ const deactivate = () => {
     if (active.status === 0) wp('plugin','deactivate','author-chat');
     else if (active.status !== 1) throw Error('Cannot determine activation state');
 };
-run(['cp','dist/author-chat-2.1.0.zip',container+':/tmp/author-chat-2.1.0.zip']);
-wp('plugin','install','/tmp/author-chat-2.1.0.zip','--force');
+run(['cp','dist/author-chat-2.1.1.zip',container+':/tmp/author-chat-2.1.1.zip']);
+wp('plugin','install','/tmp/author-chat-2.1.1.zip','--force');
 activate(); check('seed');
 deactivate(); check('retained');
-wp('plugin','install','/tmp/author-chat-2.1.0.zip','--force');
+wp('plugin','install','/tmp/author-chat-2.1.1.zip','--force');
 activate(); check('retained');
 deactivate();
 wp('plugin','uninstall','author-chat');
 check('removed');
-wp('plugin','install','/tmp/author-chat-2.1.0.zip');
+wp('plugin','install','/tmp/author-chat-2.1.1.zip');
 activate(); check('reinstalled');

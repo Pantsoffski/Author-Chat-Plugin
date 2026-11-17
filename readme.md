@@ -4,7 +4,7 @@ Tags: chat, dashboard, collaboration, messages
 Requires at least: 6.9
 Tested up to: 7.1
 Requires PHP: 8.2
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -53,6 +53,11 @@ The former emoticons.png and notifyauthorchat.ogg had no separately documented p
 
 == Changelog ==
 
+= 2.1.1 =
+* Sanitize new messages as plain text before storage and validate them again after removing HTML. Preserve multiline text, Unicode and percent-encoded URLs.
+* Use a unique settings-page slug and a plugin-specific AJAX nonce action.
+* Preserve existing messages, settings, room IDs and memberships without a schema change.
+
 = 2.1.0 =
 * Remove premium, PayPal, licensing gates, SearchPreview and remote assets.
 * Android companion app support has been temporarily removed. Mobile access may return in a future release.
@@ -67,6 +72,9 @@ The former emoticons.png and notifyauthorchat.ogg had no separately documented p
 * Historical release: minor bug fix.
 
 == Upgrade Notice ==
+
+= 2.1.1 =
+New messages are sanitized before storage. Historical messages, settings and rooms are unchanged. Reload open chat pages after updating to refresh the AJAX nonce.
 
 = 2.1.0 =
 Back up the database before updating. Existing messages, room IDs and settings are retained. Push notifications, URL previews and premium/payment functions have been removed. Cleanup is manual and requires administrator confirmation.

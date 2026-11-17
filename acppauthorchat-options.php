@@ -78,6 +78,6 @@ function acppauthorchat_handle_prune() {
     }
     $result = acppauthorchat_prune_history(get_option('author_chat_settings', 30));
     if (is_wp_error($result)) { wp_die(esc_html($result->get_error_message()), '', array('response' => 503)); }
-    wp_safe_redirect(add_query_arg(array('page' => 'acset', 'acppauthorchat_result' => (int) $result, 'acppauthorchat_nonce' => wp_create_nonce('acppauthorchat_prune_result')), admin_url('admin.php')));
+    wp_safe_redirect(add_query_arg(array('page' => 'acppauthorchat-settings', 'acppauthorchat_result' => (int) $result, 'acppauthorchat_nonce' => wp_create_nonce('acppauthorchat_prune_result')), admin_url('admin.php')));
     exit;
 }

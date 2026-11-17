@@ -176,6 +176,23 @@ function acppauthorchat_validate_message($message) {
     return $message;
 }
 
+/**
+ * Sanitize an unslashed new message without stripping URL percent sequences.
+ *
+ * @param mixed $message Unslashed input from the authenticated AJAX dispatcher.
+ * @return string|WP_Error Plain text or a validation error.
+ */
+function acppauthorchat_sanitize_message( $message ) {
+	$message = acppauthorchat_validate_message( $message );
+	if ( is_wp_error( $message ) ) {
+		return $message;
+	}
+	// Keep internal line breaks and literal entities; never decode them into HTML.
+	$message = wp_strip_all_tags( wp_check_invalid_utf8( $message ), false );
+	// Tag removal can leave an empty message. Enforce the same limits again.
+	return acppauthorchat_validate_message( $message );
+}
+
 function acppauthorchat_store_message($room_id, $message) {
     global $wpdb;
     return acppauthorchat_with_room_lock(function ($lock) use ($room_id, $message, $wpdb) {
@@ -183,11 +200,10 @@ function acppauthorchat_store_message($room_id, $message) {
         if (is_wp_error($allowed)) {
             return $allowed;
         }
-        // Store plain text verbatim. WordPress textarea sanitization deletes %xx
-        // sequences; the web client renders text nodes, not message HTML.
-        $valid = acppauthorchat_validate_message($message);
-        if (is_wp_error($valid)) {
-            return $valid;
+        // Sanitize at the persistence boundary; historical records stay untouched.
+        $message = acppauthorchat_sanitize_message($message);
+        if (is_wp_error($message)) {
+            return $message;
         }
         $user = wp_get_current_user();
         $nickname = get_option('author_chat_settings_name') == 0 ? $user->user_login : $user->display_name;
@@ -307,7 +323,7 @@ function acppauthorchat_ajax() {
         $result = new WP_Error('author_chat_session_expired', __('Please sign in again.', 'author-chat'), array('status' => 401));
     } elseif (!acppauthorchat_can_access()) {
         $result = new WP_Error('author_chat_access_denied', __('Chat access is disabled for this user.', 'author-chat'), array('status' => 403));
-    } elseif (!isset($_POST['nonce']) || !is_string($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'ajax-nonce')) {
+    } elseif (!isset($_POST['nonce']) || !is_string($_POST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['nonce'])), 'acppauthorchat-ajax')) {
         $result = new WP_Error('author_chat_invalid_nonce', __('Please reload the page before using chat.', 'author-chat'), array('status' => 403));
     } else {
         $input = wp_unslash($_POST);

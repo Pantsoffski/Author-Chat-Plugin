@@ -138,9 +138,16 @@ function user_can($user, $cap) { return in_array($cap, $user->caps, true); }
 function is_user_member_of_blog($id) { return isset($GLOBALS['users'][$id]) && $GLOBALS['users'][$id]->member; }
 function get_user_by($field, $id) { return isset($GLOBALS['users'][$id]) ? $GLOBALS['users'][$id] : false; }
 function wp_set_current_user($id) { $GLOBALS['acting'] = $GLOBALS['users'][$id]; }
-function wp_verify_nonce($nonce, $action) { return $nonce === 'synthetic-nonce' && $action === 'ajax-nonce'; }
+function wp_verify_nonce($nonce, $action) { return $nonce === 'synthetic-nonce' && $action === 'acppauthorchat-ajax'; }
 function wp_unslash($value) { return is_array($value) ? array_map('wp_unslash', $value) : stripslashes($value); }
 function sanitize_text_field($value) { return trim(strip_tags($value)); }
+// Narrow doubles; the shared payload matrix also runs against real WordPress.
+function wp_check_invalid_utf8($value) { return preg_match('//u', $value) ? $value : ''; }
+function wp_strip_all_tags($value, $remove_breaks = false) {
+    $value = preg_replace('@<(script|style)[^>]*?>.*?</\\1>@si', '', $value);
+    $value = strip_tags($value);
+    return trim($remove_breaks ? preg_replace('/[\r\n\t ]+/', ' ', $value) : $value);
+}
 function sanitize_textarea_field($value) { throw new Exception('Do not sanitize chat messages destructively; exercise actual WP separately'); }
 function wp_send_json($value, $status = 200) { throw new Chat_Json($value, $status); }
 
@@ -360,7 +367,7 @@ run_case('incomplete participants columns are unavailable but connection errors 
 });
 
 run_case('text, encoded URLs, slashes, quotes and Unicode reach persistence unchanged', function () {
-    $message = "https://example.test/a%20b%2Fc?q=%25\nZażółć 😀 O'Reilly C:\\path\\file <svg onload=x>";
+    $message = "https://example.test/a%20b%2Fc?q=%25\nZażółć 😀 O'Reilly C:\\path\\file";
     $result = acppauthorchat_store_message(0, $message);
     check(!is_wp_error($result) && $result['row']['content'] === $message, 'message changed');
     check($GLOBALS['wpdb']->writes[0][2]['content'] === $message, 'persistence changed text');
@@ -464,4 +471,26 @@ run_case('deactivation preserves data and legacy settings', function () {
     $before = $GLOBALS['options'];
     acppauthorchat_deactivate();
     check($GLOBALS['options'] === $before && !$GLOBALS['wpdb']->writes && !$GLOBALS['wpdb']->queries, 'data or settings touched');
+});
+
+
+$message_cases = require __DIR__ . '/message-cases.php';
+foreach ($message_cases['valid'] as $label => $case) {
+    run_case('plain-text storage: ' . $label, function () use ($case) {
+        $result = acppauthorchat_store_message(0, $case[0]);
+        check(!is_wp_error($result) && $result['row']['content'] === $case[1], 'response did not use sanitized text');
+        check($GLOBALS['wpdb']->writes[0][2]['content'] === $case[1], 'database did not use sanitized text');
+        fixture();
+        $_POST = array('function' => 'send', 'nonce' => 'synthetic-nonce', 'message' => addslashes($case[0]), 'room_pressed_button_id' => '0');
+        $responded = false;
+        try { acppauthorchat_ajax(); }
+        catch (Chat_Json $response) { $responded = $response->status === 200 && $response->payload['content'] === $case[1]; }
+        check($responded && $GLOBALS['wpdb']->writes[0][2]['content'] === $case[1], 'AJAX sanitization or unslashing changed expected text');
+    });
+}
+run_case('invalid or empty-after-sanitization messages never reach INSERT', function () use ($message_cases) {
+    foreach ($message_cases['invalid'] as $message) {
+        check(is_wp_error(acppauthorchat_store_message(0, $message)), 'invalid message accepted');
+    }
+    check(!$GLOBALS['wpdb']->writes, 'invalid content reached persistence');
 });

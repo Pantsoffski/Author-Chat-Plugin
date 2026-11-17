@@ -143,6 +143,20 @@ try {
     ac_test_assert(rest_do_request(new WP_REST_Request('GET', '/wp/v2/types'))->get_status() === 200, 'Core REST disabled');
     ac_test_assert(rest_do_request(new WP_REST_Request('POST', '/author-chat/v2/chat'))->get_status() === 404, 'Retired endpoint still registered');
     echo "PASS: WordPress REST remains active; retired mobile route is absent\n";
+    $message_cases = require __DIR__ . '/message-cases.php';
+    foreach ($message_cases['valid'] as $label => $case) {
+        $sent = acppauthorchat_store_message($id, $case[0]);
+        ac_test_assert(!is_wp_error($sent) && $sent['row']['content'] === $case[1], 'Sanitized response mismatch: '.$label);
+        $persisted = $wpdb->get_var($wpdb->prepare("SELECT content FROM {$wpdb->prefix}author_chat WHERE id=%d", $sent['id']));
+        ac_test_assert($persisted === $case[1], 'Real database sanitizer mismatch: '.$label);
+    }
+    $before_invalid = ac_test_history($wpdb->prefix);
+    foreach ($message_cases['invalid'] as $message) {
+        ac_test_assert(is_wp_error(acppauthorchat_store_message($id, $message)), 'Invalid message accepted by real database path');
+    }
+    ac_test_assert(ac_test_history($wpdb->prefix) === $before_invalid, 'Invalid messages changed database rows');
+    echo "PASS: real database stores only sanitized text; HTML-only, invalid UTF-8 and oversized messages cannot write\n";
+
     ac_test_assert(!is_wp_error(acppauthorchat_ajax_operation(array('function'=>'removeUser','room_id'=>(string)$id,'user_id'=>(string)$member))), 'Remove member failed');
     wp_set_current_user($member);
     ac_test_assert(is_wp_error(acppauthorchat_read_messages($id)), 'Revoked member still reads');
@@ -274,7 +288,7 @@ try {
         $_POST = array('confirm' => '1');
         $redirected = false;
         try { acppauthorchat_handle_prune(); }
-        catch (RuntimeException $error) { $redirected = strpos($error->getMessage(), 'acppauthorchat_result=500') !== false; }
+        catch (RuntimeException $error) { $redirected = strpos($error->getMessage(), 'acppauthorchat_result=500') !== false && strpos($error->getMessage(), 'page=acppauthorchat-settings') !== false; }
         ac_test_assert($redirected && count(ac_test_history($wpdb->prefix)) === 4, 'Confirmed cleanup did not enforce 500 cap/report result');
     } finally {
         remove_filter('wp_die_handler', $die_filter, PHP_INT_MAX);

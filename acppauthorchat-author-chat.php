@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 2.1.0
+ * Version: 2.1.1
  * Author URI: https://github.com/Pantsoffski
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,7 +24,7 @@ require_once __DIR__ . '/acppauthorchat-options.php';
 // Global Vars
 global $acppauthorchat_version;
 
-$acppauthorchat_version = '2.1.0';
+$acppauthorchat_version = '2.1.1';
 
 global $acppauthorchat_db_version;
 $acppauthorchat_db_version = '2.0';
@@ -107,7 +107,7 @@ function acppauthorchat_scripts_admin_chat() {
 	wp_localize_script('acppauthorchat-author-chat-script', 'acppauthorchat_ajax', array(
          'url' => admin_url('admin-ajax.php'),
          'action' => 'acppauthorchat',
-         'nonce' => wp_create_nonce('ajax-nonce')
+         'nonce' => wp_create_nonce('acppauthorchat-ajax')
      ));
     wp_enqueue_style('acppauthorchat-author-chat-style', plugins_url('acppauthorchat_author_chat_style.css', __FILE__), array(), $acppauthorchat_version . '.' . filemtime(__DIR__ . '/acppauthorchat_author_chat_style.css'));
     wp_set_script_translations('acppauthorchat-author-chat-script', 'author-chat', __DIR__ . '/lang');
@@ -137,7 +137,7 @@ function acppauthorchat_setup_menu() {
 
     $optionsTitle = __('Author Chat Options', 'author-chat');
     $pluginName = __('Author Chat', 'author-chat');
-    add_menu_page($optionsTitle, $pluginName, 'manage_options', 'acset', 'acppauthorchat_settings_page', 'dashicons-format-chat');
+    add_menu_page($optionsTitle, $pluginName, 'manage_options', 'acppauthorchat-settings', 'acppauthorchat_settings_page', 'dashicons-format-chat');
 }
 
 function acppauthorchat_wp_dashboard() {
@@ -173,7 +173,7 @@ function acppauthorchat_sanitize_interval($value) {
 
 function acppauthorchat_plugin_action_links($links) { //Add settings link to plugins page
     $action_links = array(
-        'settings' => '<a href="' . esc_url(admin_url('admin.php?page=acset')) . '">' . esc_html__('Settings', 'author-chat') . '</a>',
+        'settings' => '<a href="' . esc_url(admin_url('admin.php?page=acppauthorchat-settings')) . '">' . esc_html__('Settings', 'author-chat') . '</a>',
     );
 
     return array_merge($action_links, $links);

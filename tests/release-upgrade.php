@@ -21,6 +21,6 @@ if (($args[0] ?? '') === 'seed') {
     $before=get_option('acppauthorchat_release_fixture');
     if ($before !== array($wpdb->get_results("SELECT * FROM $m ORDER BY id", ARRAY_A),$wpdb->get_results("SELECT * FROM $p ORDER BY id", ARRAY_A)) ||
         get_option('author_chat_db_version') !== '2.0' || (int)get_option('author_chat_settings') !== 77 || get_option('author_chat_settings_val') !== 'synthetic-legacy-value' ||
-        get_plugin_data(WP_PLUGIN_DIR.'/author-chat/acppauthorchat-author-chat.php')['Version'] !== '2.1.0') { throw new Exception('Package upgrade changed historical data/settings or wrong version'); }
+        get_plugin_data(WP_PLUGIN_DIR.'/author-chat/acppauthorchat-author-chat.php')['Version'] !== '2.1.1') { throw new Exception('Package upgrade changed historical data/settings or wrong version'); }
     echo "PASS: installed ZIP migrated schema 1.2 -> 2.0; original IDs, duplicate memberships, history and settings preserved\n";
 }
