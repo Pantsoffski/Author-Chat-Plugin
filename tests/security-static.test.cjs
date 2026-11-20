@@ -48,5 +48,9 @@ test('schema upgrade retains legacy option names and release version', () => {
     optionNames(main).filter(name => name !== 'author_chat_settings_').forEach(name => assert.ok(optionNames(baseline).includes(name), name));
     assert.doesNotMatch(main, /DROP TABLE|delete_option\(/);
     assert.match(main, /\$acppauthorchat_db_version = '2\.0'/);
-    assert.match(main, /\$acppauthorchat_version = '2\.1\.1'/);
+    const version = main.match(/\bVersion: (\d+\.\d+\.\d+)/)?.[1];
+    assert.ok(version, 'Missing plugin version');
+    assert.equal(main.match(/\$acppauthorchat_version = '([^']+)'/)?.[1], version);
+    assert.equal(read('readme.txt').match(/^Stable tag: (.+)$/m)?.[1], version);
+    assert.equal(js.match(/Author Chat  v(\d+\.\d+\.\d+)/)?.[1], version);
 });

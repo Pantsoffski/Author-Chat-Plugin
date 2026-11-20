@@ -1,0 +1,95 @@
+{
+    "translation-revision-date": "2026-11-20 00:04+0100",
+    "generator": "WP-CLI\/2.12.0",
+    "source": "acppauthorchat_chat.js",
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "lang": "de_DE",
+                "plural-forms": "nplurals=2; plural=n != 1;"
+            },
+            "Chat unavailable. Please try again.": [
+                "Der Chat ist nicht verf\u00fcgbar. Versuche es erneut."
+            ],
+            "Please sign in again or reload the page. Your unsent text is kept below.": [
+                "Melde dich erneut an oder lade die Seite neu. Deine nicht gesendeten Texte findest du unten."
+            ],
+            "This room is no longer available. Your unsent text has been kept.": [
+                "Dieser Raum ist nicht mehr verf\u00fcgbar. Dein nicht gesendeter Text wurde beibehalten."
+            ],
+            "%s Your unsent text has been kept.": [
+                "%s Dein nicht gesendeter Text wurde beibehalten."
+            ],
+            "Invalid chat response. Please reload.": [
+                "Ung\u00fcltige Antwort vom Chat. Lade die Seite neu."
+            ],
+            "Invalid history cursor. Please reload.": [
+                "Die Position im Chatverlauf ist ung\u00fcltig. Lade die Seite neu."
+            ],
+            "%d unread message": [
+                "%d ungelesene Nachricht",
+                "%d ungelesene Nachrichten"
+            ],
+            "(%1$d) %2$s": [
+                "(%1$d) %2$s"
+            ],
+            "Main room": [
+                "Hauptraum"
+            ],
+            "Room %s": [
+                "Raum %s"
+            ],
+            "Delivery unconfirmed. Check history before retrying.": [
+                "Die Zustellung wurde nicht best\u00e4tigt. Pr\u00fcfe den Verlauf, bevor du die Nachricht erneut sendest."
+            ],
+            "Sending...": [
+                "Wird gesendet\u2026"
+            ],
+            "Queued": [
+                "In der Warteschlange"
+            ],
+            "%1$s: %2$s": [
+                "%1$s: %2$s"
+            ],
+            "Retry": [
+                "Erneut versuchen"
+            ],
+            "Move to draft": [
+                "In Entwurf verschieben"
+            ],
+            "Unsent draft (%s)": [
+                "Nicht gesendeter Entwurf (%s)"
+            ],
+            "Secure request IDs are unavailable. Please use a current browser.": [
+                "Sichere Anfrage-IDs k\u00f6nnen nicht erstellt werden. Verwende einen aktuellen Browser."
+            ],
+            "Add room": [
+                "Raum hinzuf\u00fcgen"
+            ],
+            "Private chat is unavailable. The main room is still available.": [
+                "Der private Chat ist nicht verf\u00fcgbar. Der Hauptraum bleibt verf\u00fcgbar."
+            ],
+            "Add participant": [
+                "Teilnehmer hinzuf\u00fcgen"
+            ],
+            "Type a nickname...": [
+                "Spitznamen eingeben\u2026"
+            ],
+            "No matching participants.": [
+                "Keine passenden Teilnehmer gefunden."
+            ],
+            "%d matching participant. Use the up and down arrow keys to navigate.": [
+                "%d passender Teilnehmer. Verwende die Pfeiltasten nach oben und unten, um durch die Ergebnisse zu navigieren.",
+                "%d passende Teilnehmer. Verwende die Pfeiltasten nach oben und unten, um durch die Ergebnisse zu navigieren."
+            ],
+            "Remove participant: %s": [
+                "Teilnehmer entfernen: %s"
+            ],
+            "Only the room owner can remove participants.": [
+                "Nur der Rauminhaber kann Teilnehmer entfernen."
+            ]
+        }
+    }
+}

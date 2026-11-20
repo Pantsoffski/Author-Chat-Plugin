@@ -1,0 +1,381 @@
+# Copyright (C) 2026 Piotr Pesta
+# This file is distributed under the GPLv2 or later.
+# Local draft for linguistic review.
+msgid ""
+msgstr ""
+"Project-Id-Version: Author Chat 2.1.1\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/author-chat\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: de_DE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-19T22:30:58+00:00\n"
+"PO-Revision-Date: 2026-11-20 00:04+0100\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: author-chat\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#. Plugin Name of the plugin
+#: acppauthorchat-author-chat.php
+#: acppauthorchat-author-chat.php:165
+#: acppauthorchat-author-chat.php:173
+#: acppauthorchat-author-chat.php:228
+#: acppauthorchat-author-chat.php:229
+msgid "Author Chat"
+msgstr "Author Chat"
+
+#. Plugin URI of the plugin
+#: acppauthorchat-author-chat.php
+msgid "https://github.com/Pantsoffski/Author-Chat-Plugin"
+msgstr "https://github.com/Pantsoffski/Author-Chat-Plugin"
+
+#. Description of the plugin
+#: acppauthorchat-author-chat.php
+msgid "Plugin that gives your authors an easy way to communicate through back-end UI (admin panel)."
+msgstr "Das Plugin ermöglicht den Autoren deiner Website, sich direkt im WordPress-Administrationsbereich auszutauschen."
+
+#. Author of the plugin
+#: acppauthorchat-author-chat.php
+msgid "Piotr Pesta"
+msgstr "Piotr Pesta"
+
+#. Author URI of the plugin
+#: acppauthorchat-author-chat.php
+msgid "https://github.com/Pantsoffski"
+msgstr "https://github.com/Pantsoffski"
+
+#: acppauthorchat-author-chat.php:142
+msgid "Today"
+msgstr "Heute"
+
+#: acppauthorchat-author-chat.php:143
+msgid "Yesterday"
+msgstr "Gestern"
+
+#: acppauthorchat-author-chat.php:144
+msgid "Sunday"
+msgstr "Sonntag"
+
+#: acppauthorchat-author-chat.php:145
+msgid "Monday"
+msgstr "Montag"
+
+#: acppauthorchat-author-chat.php:146
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: acppauthorchat-author-chat.php:147
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: acppauthorchat-author-chat.php:148
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: acppauthorchat-author-chat.php:149
+msgid "Friday"
+msgstr "Freitag"
+
+#: acppauthorchat-author-chat.php:150
+msgid "Saturday"
+msgstr "Samstag"
+
+#: acppauthorchat-author-chat.php:164
+msgid "Author Chat Options"
+msgstr "Optionen für Author Chat"
+
+#: acppauthorchat-author-chat.php:202
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: acppauthorchat-author-chat.php:212
+msgid "Chat rooms"
+msgstr "Chaträume"
+
+#: acppauthorchat-author-chat.php:213
+msgid "Room participants"
+msgstr "Raumteilnehmer"
+
+#: acppauthorchat-author-chat.php:214
+msgid "Messages"
+msgstr "Nachrichten"
+
+#: acppauthorchat-author-chat.php:216
+msgid "Your message"
+msgstr "Deine Nachricht"
+
+#: acppauthorchat-author-chat.php:217
+msgid "Your message..."
+msgstr "Deine Nachricht…"
+
+#: acppauthorchat-author-chat.php:237
+msgid "Automatic chat cleanup is disabled."
+msgstr "Die automatische Bereinigung des Chatverlaufs ist deaktiviert."
+
+#: acppauthorchat-author-chat.php:242
+msgid "Chat deletion is disabled."
+msgstr "Das Löschen des Chats ist deaktiviert."
+
+#: acppauthorchat-options.php:7
+msgid "All users belonging to this site"
+msgstr "Alle Benutzer dieser Website"
+
+#: acppauthorchat-options.php:8
+msgid "Editors"
+msgstr "Redakteure"
+
+#: acppauthorchat-options.php:9
+msgid "Authors"
+msgstr "Autoren"
+
+#: acppauthorchat-options.php:10
+msgid "Contributors"
+msgstr "Mitarbeiter"
+
+#: acppauthorchat-options.php:11
+msgid "Subscribers"
+msgstr "Abonnenten"
+
+#: acppauthorchat-options.php:12
+msgid "Use display names instead of login names"
+msgstr "Anzeigenamen statt Benutzernamen verwenden"
+
+#: acppauthorchat-options.php:13
+msgid "Show the floating chat on other admin pages"
+msgstr "Das schwebende Chatfenster auf anderen Seiten des Administrationsbereichs anzeigen"
+
+#: acppauthorchat-options.php:14
+msgid "Show my name on my messages"
+msgstr "Meinen Namen bei meinen Nachrichten anzeigen"
+
+#: acppauthorchat-options.php:15
+msgid "Show weekday names for recent messages"
+msgstr "Bei kürzlich gesendeten Nachrichten den Wochentag anzeigen"
+
+#: acppauthorchat-options.php:19
+msgid "Author Chat settings"
+msgstr "Einstellungen für Author Chat"
+
+#. translators: %d: number of messages removed by this request.
+#: acppauthorchat-options.php:26
+#, php-format
+msgid "Removed %d old message."
+msgid_plural "Removed %d old messages."
+msgstr[0] "%d alte Nachricht wurde gelöscht."
+msgstr[1] "%d alte Nachrichten wurden gelöscht."
+
+#: acppauthorchat-options.php:30
+msgid "Private rooms require membership. Only the room owner can manage participants."
+msgstr "Private Räume sind nur für Mitglieder zugänglich. Nur der Rauminhaber kann die Teilnehmer verwalten."
+
+#: acppauthorchat-options.php:41
+msgid "Refresh interval (seconds)"
+msgstr "Aktualisierungsintervall (Sekunden)"
+
+#: acppauthorchat-options.php:43
+msgid "Age threshold for manual cleanup (days)"
+msgstr "Mindestalter der Nachrichten für die manuelle Bereinigung (Tage)"
+
+#: acppauthorchat-options.php:45
+msgid "Saving this value does not delete messages. There is no automatic retention job."
+msgstr "Beim Speichern dieses Werts werden keine Nachrichten gelöscht. Es gibt keine automatische Bereinigung."
+
+#: acppauthorchat-options.php:49
+msgid "Manual history cleanup"
+msgstr "Chatverlauf manuell bereinigen"
+
+#: acppauthorchat-options.php:50
+msgid "Each confirmed request permanently removes at most 500 messages older than the saved threshold, across all rooms on this site. Memberships and room IDs are retained. Back up the database first."
+msgstr "Bei jeder bestätigten Bereinigung werden in allen Räumen dieser Website bis zu 500 Nachrichten endgültig gelöscht, die älter als der gespeicherte Grenzwert sind. Mitgliedschaften und Raum-IDs bleiben erhalten. Sichere zuerst die Datenbank."
+
+#: acppauthorchat-options.php:54
+msgid "I understand that these messages cannot be restored by the plugin."
+msgstr "Ich verstehe, dass das Plugin diese Nachrichten nicht wiederherstellen kann."
+
+#: acppauthorchat-options.php:55
+msgid "Remove up to 500 old messages"
+msgstr "Bis zu 500 alte Nachrichten löschen"
+
+#: acppauthorchat-options.php:57
+msgid "External previews and push notifications are not used. Older preview, deletion and license options are retained in storage but are not active settings."
+msgstr "Externe Vorschauen und Push-Benachrichtigungen sind nicht in Gebrauch. Frühere Einstellungen für Vorschauen, das Löschen und Lizenzen bleiben gespeichert, sind aber inaktiv."
+
+#: acppauthorchat-options.php:74
+#: acppauthorchat-process.php:11
+msgid "Access denied."
+msgstr "Zugriff verweigert."
+
+#: acppauthorchat-options.php:77
+msgid "Explicit confirmation is required."
+msgstr "Du musst den Vorgang ausdrücklich bestätigen."
+
+#: acppauthorchat-process.php:15
+msgid "Chat is temporarily unavailable."
+msgstr "Der Chat ist vorübergehend nicht verfügbar."
+
+#: acppauthorchat-process.php:19
+msgid "Invalid chat request."
+msgstr "Ungültige Chat-Anfrage."
+
+#: acppauthorchat-process.php:23
+msgid "Private chat is unavailable. Please contact the site administrator."
+msgstr "Der private Chat ist nicht verfügbar. Wende dich an die Website-Administration."
+
+#: acppauthorchat-process.php:56
+msgid "Author Chat database upgrade is incomplete. Existing data has been retained. Please contact the site administrator."
+msgstr "Die Datenbankaktualisierung für Author Chat wurde nicht abgeschlossen. Die vorhandenen Daten bleiben erhalten. Wende dich an die Website-Administration."
+
+#: acppauthorchat-process.php:61
+msgid "Author Chat: the participants table is missing or incomplete. Database upgrade has not completed. Only the main room is available."
+msgstr "Author Chat: Die Teilnehmertabelle fehlt oder ist unvollständig. Die Datenbankaktualisierung wurde nicht abgeschlossen. Nur der Hauptraum ist verfügbar."
+
+#: acppauthorchat-process.php:159
+msgid "Chat writes are unavailable with the current database configuration. Please contact the site administrator."
+msgstr "Die aktuelle Datenbankkonfiguration verhindert das Speichern von Chatdaten. Wende dich an die Website-Administration."
+
+#: acppauthorchat-process.php:323
+msgid "Please sign in again."
+msgstr "Melde dich erneut an."
+
+#: acppauthorchat-process.php:325
+msgid "Chat access is disabled for this user."
+msgstr "Der Chat-Zugriff ist für dieses Benutzerkonto deaktiviert."
+
+#: acppauthorchat-process.php:327
+msgid "Please reload the page before using chat."
+msgstr "Lade die Seite neu, bevor du den Chat verwendest."
+
+#: acppauthorchat-schema.php:6
+msgid "Author Chat database upgrade is incomplete. Please contact the site administrator."
+msgstr "Die Datenbankaktualisierung für Author Chat wurde nicht abgeschlossen. Wende dich an die Website-Administration."
+
+#: uninstall.php:18
+msgid "Author Chat data removal failed. Check database permissions and retry deleting the plugin."
+msgstr "Die Daten von Author Chat konnten nicht vollständig gelöscht werden. Prüfe die Datenbankberechtigungen und versuche erneut, das Plugin zu löschen."
+
+#: acppauthorchat_chat.js:275
+msgid "Chat unavailable. Please try again."
+msgstr "Der Chat ist nicht verfügbar. Versuche es erneut."
+
+#: acppauthorchat_chat.js:280
+msgid "Please sign in again or reload the page. Your unsent text is kept below."
+msgstr "Melde dich erneut an oder lade die Seite neu. Deine nicht gesendeten Texte findest du unten."
+
+#: acppauthorchat_chat.js:284
+msgid "This room is no longer available. Your unsent text has been kept."
+msgstr "Dieser Raum ist nicht mehr verfügbar. Dein nicht gesendeter Text wurde beibehalten."
+
+#. translators: %s: Error message explaining why the request failed.
+#: acppauthorchat_chat.js:287
+#, js-format
+msgid "%s Your unsent text has been kept."
+msgstr "%s Dein nicht gesendeter Text wurde beibehalten."
+
+#: acppauthorchat_chat.js:385
+msgid "Invalid chat response. Please reload."
+msgstr "Ungültige Antwort vom Chat. Lade die Seite neu."
+
+#: acppauthorchat_chat.js:396
+msgid "Invalid history cursor. Please reload."
+msgstr "Die Position im Chatverlauf ist ungültig. Lade die Seite neu."
+
+#. translators: %d: Number of unread chat messages.
+#: acppauthorchat_chat.js:434
+#, js-format
+msgid "%d unread message"
+msgid_plural "%d unread messages"
+msgstr[0] "%d ungelesene Nachricht"
+msgstr[1] "%d ungelesene Nachrichten"
+
+#. translators: 1: Number of unread chat messages. 2: Original page title.
+#: acppauthorchat_chat.js:437
+#, js-format
+msgid "(%1$d) %2$s"
+msgstr "(%1$d) %2$s"
+
+#: acppauthorchat_chat.js:490
+msgid "Main room"
+msgstr "Hauptraum"
+
+#. translators: %s: Private room number.
+#: acppauthorchat_chat.js:492
+#, js-format
+msgid "Room %s"
+msgstr "Raum %s"
+
+#: acppauthorchat_chat.js:501
+msgid "Delivery unconfirmed. Check history before retrying."
+msgstr "Die Zustellung wurde nicht bestätigt. Prüfe den Verlauf, bevor du die Nachricht erneut sendest."
+
+#: acppauthorchat_chat.js:502
+msgid "Sending..."
+msgstr "Wird gesendet…"
+
+#: acppauthorchat_chat.js:502
+msgid "Queued"
+msgstr "In der Warteschlange"
+
+#. translators: 1: Room name. 2: Message delivery status.
+#: acppauthorchat_chat.js:504
+#, js-format
+msgid "%1$s: %2$s"
+msgstr "%1$s: %2$s"
+
+#: acppauthorchat_chat.js:507
+msgid "Retry"
+msgstr "Erneut versuchen"
+
+#: acppauthorchat_chat.js:512
+msgid "Move to draft"
+msgstr "In Entwurf verschieben"
+
+#. translators: %s: Room name.
+#: acppauthorchat_chat.js:530
+#, js-format
+msgid "Unsent draft (%s)"
+msgstr "Nicht gesendeter Entwurf (%s)"
+
+#: acppauthorchat_chat.js:728
+msgid "Secure request IDs are unavailable. Please use a current browser."
+msgstr "Sichere Anfrage-IDs können nicht erstellt werden. Verwende einen aktuellen Browser."
+
+#: acppauthorchat_chat.js:764
+msgid "Add room"
+msgstr "Raum hinzufügen"
+
+#: acppauthorchat_chat.js:770
+msgid "Private chat is unavailable. The main room is still available."
+msgstr "Der private Chat ist nicht verfügbar. Der Hauptraum bleibt verfügbar."
+
+#: acppauthorchat_chat.js:795
+msgid "Add participant"
+msgstr "Teilnehmer hinzufügen"
+
+#: acppauthorchat_chat.js:795
+#: acppauthorchat_chat.js:849
+msgid "Type a nickname..."
+msgstr "Spitznamen eingeben…"
+
+#: acppauthorchat_chat.js:799
+msgid "No matching participants."
+msgstr "Keine passenden Teilnehmer gefunden."
+
+#. translators: %d: Number of matching participants in the autocomplete list.
+#: acppauthorchat_chat.js:802
+#, js-format
+msgid "%d matching participant. Use the up and down arrow keys to navigate."
+msgid_plural "%d matching participants. Use the up and down arrow keys to navigate."
+msgstr[0] "%d passender Teilnehmer. Verwende die Pfeiltasten nach oben und unten, um durch die Ergebnisse zu navigieren."
+msgstr[1] "%d passende Teilnehmer. Verwende die Pfeiltasten nach oben und unten, um durch die Ergebnisse zu navigieren."
+
+#. translators: %s: Participant's display name or username.
+#: acppauthorchat_chat.js:908
+#, js-format
+msgid "Remove participant: %s"
+msgstr "Teilnehmer entfernen: %s"
+
+#: acppauthorchat_chat.js:915
+msgid "Only the room owner can remove participants."
+msgstr "Nur der Rauminhaber kann Teilnehmer entfernen."

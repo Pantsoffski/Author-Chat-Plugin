@@ -2,7 +2,10 @@
 (function () {
 'use strict';
 var __ = wp.i18n.__;
-/*  Author Chat  v2.1.1  */
+var _n = wp.i18n._n;
+var sprintf = wp.i18n.sprintf;
+var wpDate = wp.date;
+/*  Author Chat  v2.1.2  */
 /**************************/
 
 /* global acppauthorchat_config */
@@ -17,7 +20,6 @@ var acppauthorchat_Chat = function ()
     $this.interval_id = null;
     $this.interval_secs = parseInt(acppauthorchat_config.set_interval); /* interval time in seconds to check for some new message */
     $this.last_date = '';
-    $this.today_date = new Date(Date.now());
     $this.last_id = '0';
     $this.total_rows = 0;
     $this.scroll_id = null;
@@ -40,6 +42,7 @@ var acppauthorchat_Chat = function ()
     $this.show_my_name = String(acppauthorchat_config.set_show_my_name) === '1';
     $this.show_weekdays = String(acppauthorchat_config.set_weekdays) === '1';
     $this.room_pressed_button_id = '0';
+    $this.room_numbers = Object.create(null);
     $this.is_room_owner = false;
 
     /* list of ASCII Emoticons to detect */
@@ -224,6 +227,7 @@ _proto_.clearCount = function ()
 {
     this.count = 0;
     jQuery('#author-chat-count').text('').css('display', 'none');
+    jQuery('#acppauthorchat-unread-label').text('');
     jQuery('#acppauthorchat-toggle').attr('data-acppauthorchat-unread', 'false');
     document.title = this.title;
 };
@@ -279,7 +283,8 @@ _proto_.request = function (options)
             chat.selectRoom('0');
             jQuery('#author-chat .ac-request-status').text(__("This room is no longer available. Your unsent text has been kept.", 'author-chat'));
         } else {
-            jQuery('#author-chat .ac-request-status').text(message + __(" Unsent text has been kept.", 'author-chat'));
+            /* translators: %s: Error message explaining why the request failed. */
+            jQuery('#author-chat .ac-request-status').text(sprintf(__("%s Your unsent text has been kept.", 'author-chat'), message));
         }
     };
     options.complete = function () {
@@ -368,10 +373,10 @@ _proto_.loadHistory = function (initial)
     var cursor = chat.last_id;
     var more = false;
     chat.history_request = token;
-    chat.today_date = new Date(Date.now());
+    var requestOffset = -(new Date().getTimezoneOffset() / 60);
     chat.request({
         data: {'function': initial ? 'initiate' : 'update', room_pressed_button_id: token.room,
-            after_id: cursor, user_time_zone: -(new Date().getTimezoneOffset() / 60)},
+            after_id: cursor, user_time_zone: requestOffset},
         dataType: 'json',
         success: function (data) {
             if (!data || !Array.isArray(data.id) || !['id', 'uid', 'nick', 'msg', 'date'].every(function (field) {
@@ -393,7 +398,7 @@ _proto_.loadHistory = function (initial)
             }
             data.id.forEach(function (id, index) {
                 if (chat.compareIds(id, chat.last_id) <= 0) { return; }
-                chat.showMsg(data.uid[index], data.nick[index], data.msg[index], data.date[index], !initial);
+                chat.showMsg(data.uid[index], data.nick[index], data.msg[index], data.date[index], !initial, requestOffset);
                 chat.last_id = String(id);
                 if (!initial) { chat.notify(); }
             });
@@ -425,8 +430,11 @@ _proto_.notify = function ()
     if (dialog.length && dialog.is(':hidden')) {
         jQuery('#acppauthorchat-toggle').attr('data-acppauthorchat-unread', 'true');
         jQuery('#author-chat-count').text(this.count).show();
+        /* translators: %d: Number of unread chat messages. */
+        jQuery('#acppauthorchat-unread-label').text(sprintf(_n('%d unread message', '%d unread messages', this.count, 'author-chat'), this.count));
     }
-    document.title = '(' + this.count + ')' + this.title;
+    /* translators: 1: Number of unread chat messages. 2: Original page title. */
+    document.title = sprintf(__('(%1$d) %2$s', 'author-chat'), this.count, this.title);
     var sound = document.getElementById('author-chat-sound');
     if (sound) {
         var playing = sound.play();
@@ -477,6 +485,13 @@ _proto_.flushOutbox = function ()
     });
 };
 
+_proto_.roomLabel = function (id)
+{
+    if (id === '0') { return __('Main room', 'author-chat'); }
+    /* translators: %s: Private room number. */
+    return sprintf(__('Room %s', 'author-chat'), this.room_numbers[id] || id);
+};
+
 _proto_.renderOutbox = function ()
 {
     var chat = this, generation = chat.request_generation;
@@ -485,7 +500,8 @@ _proto_.renderOutbox = function ()
         var row = jQuery('<div>').addClass('ac-outbox-message wp-exclude-emoji');
         var status = item.status === 'failed' ? __("Delivery unconfirmed. Check history before retrying.", 'author-chat') :
             (item.status === 'sending' ? __("Sending...", 'author-chat') : __("Queued", 'author-chat'));
-        row.append(jQuery('<div>').text(__("Room ", 'author-chat') + item.room + ': ' + status));
+        /* translators: 1: Room name. 2: Message delivery status. */
+        row.append(jQuery('<div>').text(sprintf(__('%1$s: %2$s', 'author-chat'), chat.roomLabel(item.room), status)));
         row.append(jQuery('<pre>').addClass('wp-exclude-emoji').css({whiteSpace: 'pre-wrap', overflowWrap: 'anywhere'}).text(item.message));
         if (item.status === 'failed') {
             row.append(jQuery('<button>').attr('type', 'button').text(__("Retry", 'author-chat')).on('click', function () {
@@ -510,7 +526,8 @@ _proto_.renderOutbox = function ()
         // visible for copying before the user reloads or signs in again.
         Object.keys(chat.drafts).forEach(function (room) {
             if (room === chat.room_pressed_button_id || !chat.drafts[room]) { return; }
-            panel.append(jQuery('<div>').text(__("Unsent draft - Room ", 'author-chat') + room));
+            /* translators: %s: Room name. */
+            panel.append(jQuery('<div>').text(sprintf(__('Unsent draft (%s)', 'author-chat'), chat.roomLabel(room))));
             panel.append(jQuery('<pre>').css({whiteSpace: 'pre-wrap', overflowWrap: 'anywhere'}).text(chat.drafts[room]));
         });
     }
@@ -540,25 +557,35 @@ _proto_.scrollToBottom = function ()
 };
 
 /* Add the menssage to chat area */
-_proto_.showMsg = function (uid, nick, msg, date, is_new)
+_proto_.showMsg = function (uid, nick, msg, date, is_new, requestOffset = 0)
 {
     var $this = this;
 
-    var full_date = String(date).split(',');
+    // The legacy response carries a fixed-offset wall time. Recover the UTC instant
+    // using that request's offset, then format it with the site's timezone.
+    var legacyDate = String(date);
+    var timestamp = /^\d{4}-\d{2}-\d{2},\d{2}:\d{2}:\d{2}$/.test(legacyDate) ?
+        Date.parse(legacyDate.replace(',', 'T') + 'Z') - Math.round(requestOffset * 3600) * 1000 : NaN;
+    var validDate = Number.isFinite(timestamp);
+    var formats = wpDate.getSettings().formats;
+    var declined = acppauthorchat_config.declined_formats;
+    var month = validDate && declined ? wpDate.date('n', timestamp) : null;
+    var calendarDay = validDate ? wpDate.date('Y-m-d', timestamp) : '';
     uid = String(uid);
     var own_message = uid === String(acppauthorchat_config.user_id);
 
     /* add the date label of current message if it's different from the last */
-    if (full_date[0] !== $this.last_date)
+    if (validDate && calendarDay !== $this.last_date)
     {
-        $this.last_date = full_date[0];
-        var msg_date = acppStringToDate($this.last_date);
-        var show_date = msg_date.toLocaleDateString().replace(/\//g, '-').replace(/\-(\d)\-/g, '-0$1-');
+        $this.last_date = calendarDay;
+        var show_date = wpDate.dateI18n((month && declined.date[month]) || formats.date, timestamp);
 
         /* change the recent dates to weekday names */
         if ($this.show_weekdays)
         {
-            var days = acppDayDiff($this.today_date, msg_date);
+            var messageDay = Date.parse(calendarDay + 'T00:00:00Z');
+            var today = Date.parse(wpDate.date('Y-m-d', Date.now()) + 'T00:00:00Z');
+            var days = (today - messageDay) / 86400000;
             if (days === 0)
             {
                 show_date = acppauthorchat_config.today;
@@ -567,30 +594,8 @@ _proto_.showMsg = function (uid, nick, msg, date, is_new)
                 show_date = acppauthorchat_config.yesterday;
             } else if (days > 1 && days < 7)
             {
-                switch (msg_date.getDay())
-                {
-                    case 0:
-                        show_date = acppauthorchat_config.sunday;
-                        break;
-                    case 1:
-                        show_date = acppauthorchat_config.monday;
-                        break;
-                    case 2:
-                        show_date = acppauthorchat_config.tuesday;
-                        break;
-                    case 3:
-                        show_date = acppauthorchat_config.wednesday;
-                        break;
-                    case 4:
-                        show_date = acppauthorchat_config.thursday;
-                        break;
-                    case 5:
-                        show_date = acppauthorchat_config.friday;
-                        break;
-                    case 6:
-                        show_date = acppauthorchat_config.saturday;
-                        break;
-                }
+                var weekday = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'][new Date(messageDay).getUTCDay()];
+                show_date = acppauthorchat_config[weekday];
             }
         }
 
@@ -619,7 +624,7 @@ _proto_.showMsg = function (uid, nick, msg, date, is_new)
     /* Data-derived values enter the DOM as text or validated attributes. */
     // Prevent core's mutation observer from fetching remote emoji artwork.
     var $_bubble = jQuery('<li>').addClass('wp-exclude-emoji');
-    $_bubble.append(jQuery('<div>').addClass('ac-time').text(full_date[1] || ''));
+    $_bubble.append(jQuery('<div>').addClass('ac-time').text(validDate ? wpDate.dateI18n((month && declined.time[month]) || formats.time, timestamp) : ''));
     $_bubble.append(jQuery('<div>').addClass(nick_class).append(jQuery('<span>').addClass('wp-exclude-emoji').text(String(nick))));
     $_bubble.append(jQuery('<div>').addClass('ac-msg wp-exclude-emoji').append(jQuery('<span>').addClass('wp-exclude-emoji').append($this.processMsg(msg))));
     $_bubble.append(jQuery('<div>').addClass('ac-arrow'));
@@ -755,9 +760,10 @@ _proto_.getRoomsForUser = function ()
         dataType: 'json',
         success: function (data) {
             var rooms = jQuery('#author-chat #ac-rooms').empty();
-            rooms.append(jQuery('<button>').attr('type', 'button').attr('id', '0').text(__("Main room", 'author-chat')));
+            rooms.append(jQuery('<button>').attr('type', 'button').attr('id', '0').text($this.roomLabel('0')));
+            var addRoomLabel = __('Add room', 'author-chat');
             jQuery('#author-chat #ac-private-conversation').empty().append(
-                jQuery('<button>').attr('type', 'button').addClass('ac-add-room-button').attr('title', __("Add room", 'author-chat')).attr('disabled', data.can_create_rooms ? null : 'disabled').text('+')
+                jQuery('<button>').attr('type', 'button').addClass('ac-add-room-button').attr('title', addRoomLabel).attr('aria-label', addRoomLabel).attr('disabled', data.can_create_rooms ? null : 'disabled').text('+')
                     .on('click', function () { $this.addRoom(); })
             );
             jQuery('#author-chat .ac-schema-status').text(data.private_chat_available === false ?
@@ -765,7 +771,8 @@ _proto_.getRoomsForUser = function ()
             data.chat_room_id.forEach(function (id, index) {
                 id = String(id);
                 if (/^[1-9][0-9]*$/.test(id)) {
-                    rooms.append(jQuery('<button>').attr('type', 'button').attr('id', id).text(__("Room ", 'author-chat') + (index + 1)));
+                    $this.room_numbers[id] = index + 1;
+                    rooms.append(jQuery('<button>').attr('type', 'button').attr('id', id).text($this.roomLabel(id)));
                 }
             });
             var current = $this.room_pressed_button_id;
@@ -788,6 +795,17 @@ _proto_.showSearchUserBar = function ()
     jQuery('#author-chat #ac-search-user').empty().append(jQuery('<label>').attr('for', 'search-user-bar').text(__('Add participant', 'author-chat')), jQuery('<input>').attr('type','text').attr('id','search-user-bar').attr('placeholder', __('Type a nickname...', 'author-chat')));
     var search = jQuery('#search-user-bar').autocomplete({
         appendTo: '#author-chat #ac-search-user',
+        messages: {
+            noResults: __('No matching participants.', 'author-chat'),
+            results: function (count) {
+                /* translators: %d: Number of matching participants in the autocomplete list. */
+                return sprintf(_n(
+                    '%d matching participant. Use the up and down arrow keys to navigate.',
+                    '%d matching participants. Use the up and down arrow keys to navigate.',
+                    count, 'author-chat'
+                ), count);
+            }
+        },
 
         source: function (request, response) {
             if (generation !== $this.request_generation) { response([]); return; }
@@ -886,7 +904,9 @@ _proto_.getUsersForRoom = function ()
                 id = String(id);
                 if (!/^[1-9][0-9]*$/.test(id)) { return; }
                 var name = jQuery('<span>').addClass('room-user-name wp-exclude-emoji').attr('id', id).append(jQuery('<span>').addClass('wp-exclude-emoji').text(String(data.nickname[index])));
-                var remove = jQuery('<button>').attr('type','button').addClass('rem-user-button').attr('id', 'rem-user-' + id).attr('title', __('Remove participant', 'author-chat')).attr('aria-label', __('Remove participant', 'author-chat') + ': ' + String(data.nickname[index])).text('×');
+                /* translators: %s: Participant's display name or username. */
+                var removeLabel = sprintf(__('Remove participant: %s', 'author-chat'), String(data.nickname[index]));
+                var remove = jQuery('<button>').attr('type','button').addClass('rem-user-button').attr('id', 'rem-user-' + id).attr('title', removeLabel).attr('aria-label', removeLabel).text('×');
                 remove.on('click', function () {
                     if (generation !== $this.request_generation || currentRoom !== $this.room_pressed_button_id) { return; }
                     if ($this.is_room_owner === true) {
@@ -955,25 +975,6 @@ _proto_.whoIsChannelOwner = function ()
 /** Keep both ends of long link labels without changing their destination. */
 function acppauthorchat_truncate_link(text, leading, trailing) {
     return text.length > leading + trailing + 3 ? text.slice(0, leading) + '...' + text.slice(-trailing) : text;
-}
-
-/* Convert string date format to date */
-function acppStringToDate(_date, _format, _delimiter)
-{
-    var format = (_format || 'yyyy-mm-dd').toLowerCase(),
-            delimiter = _delimiter || '-',
-            formatItems = format.split(delimiter),
-            dateItems = _date.split(delimiter),
-            monthIndex = formatItems.indexOf('mm'),
-            dayIndex = formatItems.indexOf('dd'),
-            yearIndex = formatItems.indexOf('yyyy'),
-            month = parseInt(dateItems[ monthIndex ]);
-    month -= 1;
-    return new Date(dateItems[ yearIndex ], month, dateItems[ dayIndex ]);
-}
-
-function acppDayDiff(first_date, second_date) {
-    return Math.floor((first_date - second_date) / (1000 * 60 * 60 * 24));
 }
 
 window.acppauthorchat_Chat = acppauthorchat_Chat;

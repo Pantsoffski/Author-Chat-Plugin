@@ -3,8 +3,10 @@ const fs = require('node:fs');
 const path = require('node:path');
 const AdmZip = require('adm-zip');
 const root = path.resolve(__dirname, '..');
-const out = path.join(root, 'dist');
-const version = '2.1.1';
+const out = process.env.AUTHOR_CHAT_RELEASE_DIR
+    ? path.resolve(process.env.AUTHOR_CHAT_RELEASE_DIR)
+    : path.join(root, 'dist');
+const version = '2.1.2';
 const zip = path.join(out, `author-chat-${version}.zip`);
 if (fs.existsSync(zip)) throw new Error('Release ZIP already exists; preserve it for comparison.');
 const files = [
@@ -13,7 +15,9 @@ const files = [
     'acppauthorchat_chat.js', 'acppauthorchat_author_chat_style.css',
     'index.php', 'uninstall.php', 'readme.txt', 'LICENSE', 'license-mit.txt', 'notifyauthorchat.wav',
     'assets/generate-notification.cjs',
-    ...fs.readdirSync(path.join(root, 'lang')).filter(f => /\.(po|mo)$/.test(f)).map(f => 'lang/' + f)
+    ...fs.readdirSync(path.join(root, 'lang'))
+        .filter(f => /\.(po|mo)$/.test(f) || /^author-chat-[\w]+-(?:acppauthorchat-author-chat-script|[a-f0-9]{32})\.json$/.test(f))
+        .map(f => 'lang/' + f)
 ];
 const main = fs.readFileSync(path.join(root, files[0]), 'utf8');
 const readme = fs.readFileSync(path.join(root, 'readme.txt'), 'utf8');
@@ -27,5 +31,5 @@ for (const file of files) {
 }
 const archive = new AdmZip();
 for (const file of files) archive.addFile('author-chat/' + file, fs.readFileSync(path.join(root, file)));
-archive.writeZip(zip);
+fs.writeFileSync(zip, archive.toBuffer(), {flag: 'wx'});
 console.log('Built ' + zip + ': ' + files.length + ' files; basename author-chat/acppauthorchat-author-chat.php');

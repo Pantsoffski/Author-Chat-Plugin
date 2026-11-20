@@ -14,6 +14,7 @@ function acppauthorchat_owns_key($key) {
 
 /** Abort deletion when DB permissions/connectivity prevent complete cleanup. */
 function acppauthorchat_uninstall_failed() {
+    load_plugin_textdomain('author-chat', false, dirname(plugin_basename(__FILE__)) . '/lang/');
     wp_die(esc_html__('Author Chat data removal failed. Check database permissions and retry deleting the plugin.', 'author-chat'));
 }
 

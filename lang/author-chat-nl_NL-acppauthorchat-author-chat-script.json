@@ -1,0 +1,95 @@
+{
+    "translation-revision-date": "2026-11-20 00:04+0100",
+    "generator": "WP-CLI\/2.12.0",
+    "source": "acppauthorchat_chat.js",
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "lang": "nl_NL",
+                "plural-forms": "nplurals=2; plural=n != 1;"
+            },
+            "Chat unavailable. Please try again.": [
+                "De chat is niet beschikbaar. Probeer het opnieuw."
+            ],
+            "Please sign in again or reload the page. Your unsent text is kept below.": [
+                "Meld je opnieuw aan of laad de pagina opnieuw. Je niet-verzonden tekst staat hieronder."
+            ],
+            "This room is no longer available. Your unsent text has been kept.": [
+                "Deze ruimte is niet meer beschikbaar. Je niet-verzonden tekst is bewaard."
+            ],
+            "%s Your unsent text has been kept.": [
+                "%s De niet-verzonden tekst is bewaard."
+            ],
+            "Invalid chat response. Please reload.": [
+                "Het antwoord van de chat is ongeldig. Laad de pagina opnieuw."
+            ],
+            "Invalid history cursor. Please reload.": [
+                "De positie in de chatgeschiedenis is ongeldig. Laad de pagina opnieuw."
+            ],
+            "%d unread message": [
+                "%d ongelezen bericht",
+                "%d ongelezen berichten"
+            ],
+            "(%1$d) %2$s": [
+                "(%1$d) %2$s"
+            ],
+            "Main room": [
+                "Hoofdruimte"
+            ],
+            "Room %s": [
+                "Ruimte %s"
+            ],
+            "Delivery unconfirmed. Check history before retrying.": [
+                "De bezorging is niet bevestigd. Controleer de chatgeschiedenis voordat je het bericht opnieuw verstuurt."
+            ],
+            "Sending...": [
+                "Wordt verzonden\u2026"
+            ],
+            "Queued": [
+                "In de wachtrij"
+            ],
+            "%1$s: %2$s": [
+                "%1$s: %2$s"
+            ],
+            "Retry": [
+                "Opnieuw proberen"
+            ],
+            "Move to draft": [
+                "Naar concepten verplaatsen"
+            ],
+            "Unsent draft (%s)": [
+                "Niet-verzonden concept (%s)"
+            ],
+            "Secure request IDs are unavailable. Please use a current browser.": [
+                "Er kunnen geen veilige aanvraag-ID\u2019s worden gemaakt. Gebruik een actuele browser."
+            ],
+            "Add room": [
+                "Ruimte toevoegen"
+            ],
+            "Private chat is unavailable. The main room is still available.": [
+                "Priv\u00e9chats zijn niet beschikbaar. De hoofdruimte blijft beschikbaar."
+            ],
+            "Add participant": [
+                "Deelnemer toevoegen"
+            ],
+            "Type a nickname...": [
+                "Typ een bijnaam\u2026"
+            ],
+            "No matching participants.": [
+                "Geen deelnemers gevonden die aan de zoekopdracht voldoen."
+            ],
+            "%d matching participant. Use the up and down arrow keys to navigate.": [
+                "%d deelnemer voldoet aan de zoekopdracht. Gebruik Pijl omhoog en Pijl omlaag om door de resultaten te gaan.",
+                "%d deelnemers voldoen aan de zoekopdracht. Gebruik Pijl omhoog en Pijl omlaag om door de resultaten te gaan."
+            ],
+            "Remove participant: %s": [
+                "Deelnemer verwijderen: %s"
+            ],
+            "Only the room owner can remove participants.": [
+                "Alleen de eigenaar van de ruimte kan deelnemers verwijderen."
+            ]
+        }
+    }
+}

@@ -23,7 +23,7 @@ function acppauthorchat_settings_page() {
             $removed = filter_var(wp_unslash($_GET['acppauthorchat_result']), FILTER_VALIDATE_INT, array('options' => array('min_range' => 0, 'max_range' => 500)));
             if (false !== $removed) {
                 /* translators: %d: number of messages removed by this request. */
-                echo '<div class="notice notice-success"><p>' . esc_html(sprintf(__('Removed %d old message(s).', 'author-chat'), $removed)) . '</p></div>';
+                echo '<div class="notice notice-success"><p>' . esc_html(sprintf(_n('Removed %d old message.', 'Removed %d old messages.', $removed, 'author-chat'), $removed)) . '</p></div>';
             }
         }
         ?>

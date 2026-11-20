@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/Pantsoffski/Author-Chat-Plugin
  * Description: Plugin that gives your authors an easy way to communicate through back-end UI (admin panel).
  * Author: Piotr Pesta
- * Version: 2.1.1
+ * Version: 2.1.2
  * Author URI: https://github.com/Pantsoffski
  * License: GPLv2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -24,7 +24,7 @@ require_once __DIR__ . '/acppauthorchat-options.php';
 // Global Vars
 global $acppauthorchat_version;
 
-$acppauthorchat_version = '2.1.1';
+$acppauthorchat_version = '2.1.2';
 
 global $acppauthorchat_db_version;
 $acppauthorchat_db_version = '2.0';
@@ -96,6 +96,28 @@ function acppauthorchat_deactivate() {
     // Deactivation retains historical settings and all chat data.
 }
 
+// wp-date uses the nominative month names. Apply the core PHP date
+// declension to the format's day/month pair before sending it to the script.
+function acppauthorchat_declined_date_formats($format) {
+    global $wp_locale;
+    $formats = array();
+    if (!str_contains($format, 'F')) { return $formats; }
+
+    foreach (array_values($wp_locale->month) as $index => $month) {
+        $translated = preg_replace_callback('~\\\\.|([dj]\.? F|F [dj]S?)~', static function ($part) use ($month) {
+            if (!isset($part[1])) { return $part[0]; }
+            $sample = strtr($part[1], array('d' => '11', 'j' => '11', 'S' => 'th', 'F' => $month));
+            $declined = wp_maybe_decline_date($sample, $part[1]);
+            if ($declined === $sample) { return $part[0]; }
+
+            // Keep the day token live and escape the month name as a literal.
+            return preg_replace('/^11/', strpbrk($part[1], 'dj')[0], addcslashes($declined, 'A..Za..z\\'), 1);
+        }, $format);
+        if ($translated !== $format) { $formats[$index + 1] = $translated; }
+    }
+    return $formats;
+}
+
 // Enqueue JavaScript & CSS files
 function acppauthorchat_scripts_admin_chat() {
     if (!acppauthorchat_can_access() || (get_current_screen()->base !== 'dashboard' && get_option('author_chat_settings_window') != 1)) {
@@ -103,7 +125,7 @@ function acppauthorchat_scripts_admin_chat() {
     }
     global $acppauthorchat_version;
     $script_version = $acppauthorchat_version . '.' . filemtime(__DIR__ . '/acppauthorchat_chat.js');
-    wp_enqueue_script('acppauthorchat-author-chat-script', plugins_url('acppauthorchat_chat.js', __FILE__), array('jquery', 'wp-i18n', 'jquery-ui-autocomplete'), $script_version, true);
+    wp_enqueue_script('acppauthorchat-author-chat-script', plugins_url('acppauthorchat_chat.js', __FILE__), array('jquery', 'wp-i18n', 'wp-date', 'jquery-ui-autocomplete'), $script_version, true);
 	wp_localize_script('acppauthorchat-author-chat-script', 'acppauthorchat_ajax', array(
          'url' => admin_url('admin-ajax.php'),
          'action' => 'acppauthorchat',
@@ -126,6 +148,10 @@ function acppauthorchat_scripts_admin_chat() {
         'thursday' => __('Thursday', 'author-chat'),
         'friday' => __('Friday', 'author-chat'),
         'saturday' => __('Saturday', 'author-chat'),
+        'declined_formats' => array(
+            'date' => acppauthorchat_declined_date_formats((string) get_option('date_format')),
+            'time' => acppauthorchat_declined_date_formats((string) get_option('time_format')),
+        ),
         'set_interval' => max(1, min(10, (int) get_option('author_chat_settings_interval', 2))),
         'set_show_my_name' => (int) (get_option('author_chat_settings_show_my_name') == 1),
         'set_weekdays' => (int) (get_option('author_chat_settings_weekdays') == 1)
@@ -183,9 +209,9 @@ function acppauthorchat_author_chat() {
     if (!acppauthorchat_can_access()) { return; }
     ?>
     <div id="author-chat" class="wp-exclude-emoji">
-        <div id="ac-rooms-add-btn-wrapper" aria-label="<?php esc_attr_e('Chat rooms', 'author-chat'); ?>"><span id="ac-rooms"></span><span id="ac-private-conversation"></span></div>
-        <div id="ac-search-user"></div><div id="ac-room-users-list"></div>
-        <div class="ac-wrap"><div id="author-chat-area" tabindex="0" aria-label="<?php esc_attr_e('Messages', 'author-chat'); ?>"><ul aria-live="polite" aria-relevant="additions"></ul></div></div>
+        <div id="ac-rooms-add-btn-wrapper" role="group" aria-label="<?php esc_attr_e('Chat rooms', 'author-chat'); ?>"><span id="ac-rooms"></span><span id="ac-private-conversation"></span></div>
+        <div id="ac-search-user"></div><div id="ac-room-users-list" role="group" aria-label="<?php esc_attr_e('Room participants', 'author-chat'); ?>"></div>
+        <div class="ac-wrap"><div id="author-chat-area" tabindex="0" role="region" aria-label="<?php esc_attr_e('Messages', 'author-chat'); ?>"><ul aria-live="polite" aria-relevant="additions"></ul></div></div>
         <form class="ac-text-form">
             <label class="screen-reader-text" for="acppauthorchat-message"><?php esc_html_e('Your message', 'author-chat'); ?></label>
             <textarea id="acppauthorchat-message" class="ac-textarea" maxlength="1000" placeholder="<?php esc_attr_e('Your message...', 'author-chat'); ?>"></textarea>
@@ -200,7 +226,7 @@ function acppauthorchat_chat_on_top() {
     if (!acppauthorchat_can_access() || get_option('author_chat_settings_window') != 1 || get_current_screen()->base === 'dashboard') { return; }
     ?>
     <aside id="acppauthorchat-floating" aria-label="<?php esc_attr_e('Author Chat', 'author-chat'); ?>">
-        <button type="button" id="acppauthorchat-toggle" aria-expanded="false" aria-controls="acppauthorchat-panel"><?php esc_html_e('Author Chat', 'author-chat'); ?> <span id="author-chat-count" aria-label="<?php esc_attr_e('Unread messages', 'author-chat'); ?>"></span></button>
+        <button type="button" id="acppauthorchat-toggle" aria-expanded="false" aria-controls="acppauthorchat-panel"><?php esc_html_e('Author Chat', 'author-chat'); ?> <span id="author-chat-count" aria-hidden="true"></span><span id="acppauthorchat-unread-label" class="screen-reader-text"></span></button>
         <div id="acppauthorchat-panel" hidden><?php acppauthorchat_author_chat(); ?></div>
     </aside>
     <?php

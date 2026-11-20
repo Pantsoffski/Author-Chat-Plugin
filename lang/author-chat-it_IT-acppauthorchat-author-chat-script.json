@@ -1,0 +1,95 @@
+{
+    "translation-revision-date": "2026-11-20 00:04+0100",
+    "generator": "WP-CLI\/2.12.0",
+    "source": "acppauthorchat_chat.js",
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "lang": "it_IT",
+                "plural-forms": "nplurals=2; plural=n != 1;"
+            },
+            "Chat unavailable. Please try again.": [
+                "La chat non \u00e8 disponibile. Riprova."
+            ],
+            "Please sign in again or reload the page. Your unsent text is kept below.": [
+                "Accedi di nuovo o ricarica la pagina. Qui sotto trovi il testo che non hai inviato."
+            ],
+            "This room is no longer available. Your unsent text has been kept.": [
+                "Questa stanza non \u00e8 pi\u00f9 disponibile. Il testo non inviato \u00e8 stato conservato."
+            ],
+            "%s Your unsent text has been kept.": [
+                "%s Il testo non inviato \u00e8 stato conservato."
+            ],
+            "Invalid chat response. Please reload.": [
+                "La risposta della chat non \u00e8 valida. Ricarica la pagina."
+            ],
+            "Invalid history cursor. Please reload.": [
+                "La posizione nella cronologia non \u00e8 valida. Ricarica la pagina."
+            ],
+            "%d unread message": [
+                "%d messaggio non letto",
+                "%d messaggi non letti"
+            ],
+            "(%1$d) %2$s": [
+                "(%1$d) %2$s"
+            ],
+            "Main room": [
+                "Stanza principale"
+            ],
+            "Room %s": [
+                "Stanza %s"
+            ],
+            "Delivery unconfirmed. Check history before retrying.": [
+                "La consegna non \u00e8 stata confermata. Controlla la cronologia prima di inviare di nuovo il messaggio."
+            ],
+            "Sending...": [
+                "Invio in corso\u2026"
+            ],
+            "Queued": [
+                "In coda"
+            ],
+            "%1$s: %2$s": [
+                "%1$s: %2$s"
+            ],
+            "Retry": [
+                "Riprova"
+            ],
+            "Move to draft": [
+                "Sposta nelle bozze"
+            ],
+            "Unsent draft (%s)": [
+                "Bozza non inviata (%s)"
+            ],
+            "Secure request IDs are unavailable. Please use a current browser.": [
+                "Non \u00e8 possibile generare ID sicuri per le richieste. Usa un browser aggiornato."
+            ],
+            "Add room": [
+                "Aggiungi stanza"
+            ],
+            "Private chat is unavailable. The main room is still available.": [
+                "La chat privata non \u00e8 disponibile. Puoi continuare a usare la stanza principale."
+            ],
+            "Add participant": [
+                "Aggiungi partecipante"
+            ],
+            "Type a nickname...": [
+                "Digita un soprannome\u2026"
+            ],
+            "No matching participants.": [
+                "Nessun partecipante corrisponde alla ricerca."
+            ],
+            "%d matching participant. Use the up and down arrow keys to navigate.": [
+                "%d partecipante corrisponde alla ricerca. Usa i tasti freccia Su e Gi\u00f9 per scorrere i risultati.",
+                "%d partecipanti corrispondono alla ricerca. Usa i tasti freccia Su e Gi\u00f9 per scorrere i risultati."
+            ],
+            "Remove participant: %s": [
+                "Rimuovi partecipante: %s"
+            ],
+            "Only the room owner can remove participants.": [
+                "Solo chi possiede la stanza pu\u00f2 rimuovere i partecipanti."
+            ]
+        }
+    }
+}

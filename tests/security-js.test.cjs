@@ -20,7 +20,7 @@ class Element {
     get textContent() { return this.text + this.children.map(node => node.textContent).join(''); }
 }
 
-function harness(flags = {}) {
+function harness(flags = {}, overrides = {}) {
     const selections = new Map();
     const requests = [];
     class Selection {
@@ -76,8 +76,23 @@ function harness(flags = {}) {
         createDocumentFragment: () => new Element('#fragment'),
         getElementById: () => null,
     };
+    const i18n = {
+        __: text => text,
+        _n: (singular, plural, count) => count === 1 ? singular : plural,
+        sprintf(template, ...args) {
+            let index = 0;
+            return template.replace(/%(?:(\d+)\$)?[sd]/g, (_, position) => String(args[position ? Number(position) - 1 : index++]));
+        },
+        ...overrides.i18n,
+    };
+    const date = {
+        getSettings: () => ({formats: {date: 'Y-m-d', time: 'H:i:s'}}),
+        date: (_format, time) => new Date(time).toISOString().slice(0, 10),
+        dateI18n: (format, time) => new Date(time).toISOString().slice(...(format === 'Y-m-d' ? [0, 10] : [11, 19])),
+        ...overrides.date,
+    };
     const context = vm.createContext({
-        wp: {i18n: {__: text => text}}, document, jQuery, window: {localStorage: {}, crypto: require('node:crypto').webcrypto}, console,
+        wp: {i18n, date}, document, jQuery, window: {localStorage: {}, crypto: require('node:crypto').webcrypto}, console,
         acppauthorchat_config: {user_id: '7', set_interval: '2', set_show_my_name: '0', set_weekdays: '0', ...flags},
         acppauthorchat_ajax: {url: '/wp-admin/admin-ajax.php', action: 'acppauthorchat', nonce: 'test-nonce'},
         setTimeout: () => 1, clearTimeout() {}, setInterval: () => 1, clearInterval() {},
@@ -85,7 +100,7 @@ function harness(flags = {}) {
     vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'acppauthorchat_chat.js'), 'utf8'), context);
     const chat = new context.window.acppauthorchat_Chat();
     chat.scrollToBottom = () => {};
-    return {chat, jQuery, requests, selections};
+    return {chat, document, jQuery, requests, selections};
 }
 
 function walk(node) { return [node, ...node.children.flatMap(walk)]; }
@@ -425,8 +440,7 @@ test('drafts survive room changes and failed-message editing preserves the next 
 });
 
 test('localized flags as WordPress strings control nickname visibility and weekday labels', () => {
-    const now = new Date();
-    const date = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+    const date = new Date().toISOString().slice(0, 10);
     for (const flag of ['1', 1]) {
         const {chat, jQuery} = harness({set_weekdays: flag, set_show_my_name: '0', today: 'Localized today'});
         chat.showMsg('7', 'Nickname', 'Message', date + ',12:00:00');
@@ -437,6 +451,39 @@ test('localized flags as WordPress strings control nickname visibility and weekd
     const {chat, jQuery} = harness({set_show_my_name: '1'});
     chat.showMsg('7', 'Nickname', 'Message', date + ',12:00:00');
     assert.ok(walk(jQuery('#author-chat-area ul').nodes[0]).some(node => node.className === 'ac-nick'));
+});
+
+test('history passes its request offset to presentation and uses site date and time formats', () => {
+    const {chat, jQuery, requests} = harness({}, {
+        date: {
+            getSettings: () => ({formats: {date: 'j F Y', time: 'H\u00b7i'}}),
+            dateI18n(format, time) {
+                assert.equal(time, Date.UTC(2026, 10, 11, 23, 30));
+                return {'j F Y': '12 listopada 2026', 'H\u00b7i': '00·30'}[format];
+            },
+        },
+    });
+    chat.loadHistory(true);
+    const request = requests.pop();
+    const legacyDate = new Date(Date.UTC(2026, 10, 11, 23, 30) + request.data.user_time_zone * 3600000)
+        .toISOString().slice(0, 19).replace('T', ',');
+    request.success({id: ['1'], uid: ['7'], nick: ['Nick'], msg: ['Message'], date: [legacyDate]});
+    const rendered = jQuery('#author-chat-area ul').nodes[0].textContent;
+    assert.match(rendered, /12 listopada 2026/);
+    assert.match(rendered, /00·30/);
+});
+
+test('translated templates can reorder room labels and preserve private room numbering', () => {
+    const messages = {'Room %s': 'Pokój %s', 'Main room': 'Pokój główny', 'Queued': 'W kolejce', '%1$s: %2$s': '%2$s (%1$s)'};
+    const {chat, jQuery, requests} = harness({}, {i18n: {__: text => messages[text] || text}});
+    chat.getRoomsForUser();
+    requests.pop().success({chat_room_id: ['12000000000000001'], can_create_rooms: true});
+    const buttons = walk(jQuery('#author-chat #ac-rooms').nodes[0]).filter(node => node.tag === 'button');
+    assert.deepEqual(buttons.map(node => node.text), ['Pokój główny', 'Pokój 1']);
+    chat.outbox = [{room: '12000000000000001', status: 'queued', message: 'A'}];
+    chat.renderOutbox();
+    assert.match(jQuery('#author-chat .ac-outbox').nodes[0].textContent, /W kolejce \(Pokój 1\)/);
+    assert.equal(chat.outbox[0].room, '12000000000000001');
 });
 
 test('URL encoding, Unicode, quotes, newlines and slashes survive sending and safe rendering', () => {

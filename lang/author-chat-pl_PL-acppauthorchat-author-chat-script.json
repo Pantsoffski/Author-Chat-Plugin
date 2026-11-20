@@ -1,0 +1,97 @@
+{
+    "translation-revision-date": "2026-11-19 23:20+0100",
+    "generator": "WP-CLI\/2.12.0",
+    "source": "acppauthorchat_chat.js",
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "lang": "pl_PL",
+                "plural-forms": "nplurals=3; plural=(n == 1 ? 0 : n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 10 || n % 100 >= 20) ? 1 : 2);"
+            },
+            "Chat unavailable. Please try again.": [
+                "Czat jest niedost\u0119pny. Spr\u00f3buj ponownie."
+            ],
+            "Please sign in again or reload the page. Your unsent text is kept below.": [
+                "Zaloguj si\u0119 ponownie lub od\u015bwie\u017c stron\u0119. Niewys\u0142any tekst znajdziesz poni\u017cej."
+            ],
+            "This room is no longer available. Your unsent text has been kept.": [
+                "Ten pok\u00f3j jest ju\u017c niedost\u0119pny. Niewys\u0142any tekst zosta\u0142 zachowany."
+            ],
+            "%s Your unsent text has been kept.": [
+                "%s Niewys\u0142any tekst zosta\u0142 zachowany."
+            ],
+            "Invalid chat response. Please reload.": [
+                "Nieprawid\u0142owa odpowied\u017a czatu. Od\u015bwie\u017c stron\u0119."
+            ],
+            "Invalid history cursor. Please reload.": [
+                "Nieprawid\u0142owy wska\u017anik historii. Od\u015bwie\u017c stron\u0119."
+            ],
+            "%d unread message": [
+                "%d nieprzeczytana wiadomo\u015b\u0107",
+                "%d nieprzeczytane wiadomo\u015bci",
+                "%d nieprzeczytanych wiadomo\u015bci"
+            ],
+            "(%1$d) %2$s": [
+                "(%1$d) %2$s"
+            ],
+            "Main room": [
+                "Pok\u00f3j g\u0142\u00f3wny"
+            ],
+            "Room %s": [
+                "Pok\u00f3j %s"
+            ],
+            "Delivery unconfirmed. Check history before retrying.": [
+                "Brak potwierdzenia dostarczenia. Sprawd\u017a histori\u0119 przed ponowieniem."
+            ],
+            "Sending...": [
+                "Wysy\u0142anie\u2026"
+            ],
+            "Queued": [
+                "W kolejce"
+            ],
+            "%1$s: %2$s": [
+                "%1$s: %2$s"
+            ],
+            "Retry": [
+                "Pon\u00f3w"
+            ],
+            "Move to draft": [
+                "Przenie\u015b do szkicu"
+            ],
+            "Unsent draft (%s)": [
+                "Niewys\u0142any szkic: %s"
+            ],
+            "Secure request IDs are unavailable. Please use a current browser.": [
+                "Nie mo\u017cna wygenerowa\u0107 bezpiecznego identyfikatora \u017c\u0105dania. U\u017cyj aktualnej przegl\u0105darki."
+            ],
+            "Add room": [
+                "Dodaj pok\u00f3j"
+            ],
+            "Private chat is unavailable. The main room is still available.": [
+                "Czat prywatny jest niedost\u0119pny. Mo\u017cesz nadal korzysta\u0107 z pokoju g\u0142\u00f3wnego."
+            ],
+            "Add participant": [
+                "Dodaj uczestnika"
+            ],
+            "Type a nickname...": [
+                "Wpisz nazw\u0119 u\u017cytkownika\u2026"
+            ],
+            "No matching participants.": [
+                "Brak pasuj\u0105cych uczestnik\u00f3w."
+            ],
+            "%d matching participant. Use the up and down arrow keys to navigate.": [
+                "%d pasuj\u0105ca osoba. U\u017cyj strza\u0142ek w g\u00f3r\u0119 i w d\u00f3\u0142, aby si\u0119 porusza\u0107 po wynikach.",
+                "%d pasuj\u0105ce osoby. U\u017cyj strza\u0142ek w g\u00f3r\u0119 i w d\u00f3\u0142, aby si\u0119 porusza\u0107 po wynikach.",
+                "%d pasuj\u0105cych os\u00f3b. U\u017cyj strza\u0142ek w g\u00f3r\u0119 i w d\u00f3\u0142, aby si\u0119 porusza\u0107 po wynikach."
+            ],
+            "Remove participant: %s": [
+                "Usu\u0144 uczestnika: %s"
+            ],
+            "Only the room owner can remove participants.": [
+                "Tylko w\u0142a\u015bciciel pokoju mo\u017ce usuwa\u0107 uczestnik\u00f3w."
+            ]
+        }
+    }
+}

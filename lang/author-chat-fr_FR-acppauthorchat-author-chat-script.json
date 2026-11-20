@@ -1,0 +1,95 @@
+{
+    "translation-revision-date": "2026-11-20 00:04+0100",
+    "generator": "WP-CLI\/2.12.0",
+    "source": "acppauthorchat_chat.js",
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=n > 1;"
+            },
+            "Chat unavailable. Please try again.": [
+                "La discussion est indisponible. R\u00e9essayez."
+            ],
+            "Please sign in again or reload the page. Your unsent text is kept below.": [
+                "Reconnectez-vous ou actualisez la page. Votre texte non envoy\u00e9 figure ci-dessous."
+            ],
+            "This room is no longer available. Your unsent text has been kept.": [
+                "Cette salle n\u2019est plus accessible. Votre texte non envoy\u00e9 a \u00e9t\u00e9 conserv\u00e9."
+            ],
+            "%s Your unsent text has been kept.": [
+                "%s Le texte non envoy\u00e9 a \u00e9t\u00e9 conserv\u00e9."
+            ],
+            "Invalid chat response. Please reload.": [
+                "La r\u00e9ponse du serveur de discussion est invalide. Actualisez la page."
+            ],
+            "Invalid history cursor. Please reload.": [
+                "La position dans l\u2019historique est invalide. Actualisez la page."
+            ],
+            "%d unread message": [
+                "%d message non lu",
+                "%d messages non lus"
+            ],
+            "(%1$d) %2$s": [
+                "(%1$d) %2$s"
+            ],
+            "Main room": [
+                "Salle principale"
+            ],
+            "Room %s": [
+                "Salle %s"
+            ],
+            "Delivery unconfirmed. Check history before retrying.": [
+                "L\u2019envoi n\u2019a pas \u00e9t\u00e9 confirm\u00e9. V\u00e9rifiez l\u2019historique avant de renvoyer le message."
+            ],
+            "Sending...": [
+                "Envoi en cours\u2026"
+            ],
+            "Queued": [
+                "En attente d\u2019envoi"
+            ],
+            "%1$s: %2$s": [
+                "%1$s\u202f: %2$s"
+            ],
+            "Retry": [
+                "R\u00e9essayer"
+            ],
+            "Move to draft": [
+                "D\u00e9placer dans les brouillons"
+            ],
+            "Unsent draft (%s)": [
+                "Brouillon non envoy\u00e9 (%s)"
+            ],
+            "Secure request IDs are unavailable. Please use a current browser.": [
+                "Impossible de g\u00e9n\u00e9rer des identifiants de requ\u00eate s\u00e9curis\u00e9s. Utilisez un navigateur \u00e0 jour."
+            ],
+            "Add room": [
+                "Ajouter une salle"
+            ],
+            "Private chat is unavailable. The main room is still available.": [
+                "Les discussions priv\u00e9es sont indisponibles. La salle principale reste accessible."
+            ],
+            "Add participant": [
+                "Ajouter un participant"
+            ],
+            "Type a nickname...": [
+                "Saisissez un pseudonyme\u2026"
+            ],
+            "No matching participants.": [
+                "Aucun participant ne correspond \u00e0 la recherche."
+            ],
+            "%d matching participant. Use the up and down arrow keys to navigate.": [
+                "%d participant correspond \u00e0 la recherche. Utilisez les fl\u00e8ches Haut et Bas pour parcourir les r\u00e9sultats.",
+                "%d participants correspondent \u00e0 la recherche. Utilisez les fl\u00e8ches Haut et Bas pour parcourir les r\u00e9sultats."
+            ],
+            "Remove participant: %s": [
+                "Retirer de la salle\u202f: %s"
+            ],
+            "Only the room owner can remove participants.": [
+                "Seul le propri\u00e9taire de la salle peut retirer des participants."
+            ]
+        }
+    }
+}
